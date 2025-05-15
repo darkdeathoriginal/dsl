@@ -29,7 +29,8 @@ interface PageParams { // Define an interface for params for clarity
   sectionSlug: string;
 }
 
-export default async function SectionPage({ params }: { params: PageParams }) {
+
+export default async function SectionPage({ params }: { params: Promise<PageParams> }) {
     const { unitSlug, sectionSlug } = await params;
     const filePath = path.join(contentDir, unitSlug, `${sectionSlug}.mdx`);
   
@@ -39,7 +40,7 @@ export default async function SectionPage({ params }: { params: PageParams }) {
   
     const source = fs.readFileSync(filePath, 'utf8');
   
-    const { content, frontmatter } = await compileMDX<{ title?: string }>({
+    const { content } = await compileMDX<{ title?: string }>({
       source,
       components: {
         CodeBlock,

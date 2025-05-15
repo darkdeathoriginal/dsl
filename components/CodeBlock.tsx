@@ -3,7 +3,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react'; // Added useCallback
 import { usePyodide } from './PyodideProvider';
 import { Button } from '@/components/ui/button';
-import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Terminal } from "lucide-react";
@@ -13,7 +12,7 @@ import Editor from '@monaco-editor/react';
 function dedent(str: string): string {
     const lines = str.split('\n');
     if (lines.length === 0) return '';
-    let firstLineTrimmed = lines[0].trimStart();
+    const firstLineTrimmed = lines[0].trimStart();
     if (lines.length === 1 && lines[0] === firstLineTrimmed) return lines[0]; // single line, no leading indent
 
     let minIndent: number | null = null;
@@ -119,7 +118,7 @@ img_str
         }
       } else {
         // console.log("--- Regular Script --- \n", processedCode, "\n--- End Regular Script ---");
-        let result = await pyodide.runPythonAsync(processedCode);
+        const result = await pyodide.runPythonAsync(processedCode);
         if (result !== undefined && result !== null) { // Avoid printing 'None' or 'undefined'
             // setOutput((prev) => prev + String(result) + '\n'); // Pyodide's runPythonAsync often prints result itself if it's the last expr
         }
@@ -134,7 +133,7 @@ img_str
       if (prevStdout) pyodide.setStdout({ batched: prevStdout });
       else if (originalStdout) pyodide.setStdout({ batched: originalStdout }); // Fallback to originally captured
       else pyodide.setStdout({
-          batched: function (msg: string): void {
+          batched: function (): void {
               throw new Error('Function not implemented.');
           }
       }); // Or set to no-op / default if nothing was captured
@@ -142,7 +141,7 @@ img_str
       if (prevStderr) pyodide.setStderr({ batched: prevStderr });
       else if (originalStderr) pyodide.setStderr({ batched: originalStderr }); // Fallback
       else pyodide.setStderr({
-          batched: function (msg: string): void {
+          batched: function (): void {
               throw new Error('Function not implemented.');
           }
       });
@@ -183,7 +182,7 @@ img_str
          height={Math.max(200, initialCode.split('\n').length * 20)} // Adjust height based on lines
       defaultLanguage="python"
       defaultValue={initialCode}
-      onChange={(value, event) =>{setCode(value as string)}}
+      onChange={(value) =>{setCode(value as string)}}
           theme='vs-dark'
     />
       </CardContent>

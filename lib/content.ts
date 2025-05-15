@@ -1,7 +1,6 @@
 // lib/content.ts
 import fs from 'fs';
 import path from 'path';
-import { compileMDX } from 'next-mdx-remote/rsc';
 
 export interface SectionMeta {
   slug: string;

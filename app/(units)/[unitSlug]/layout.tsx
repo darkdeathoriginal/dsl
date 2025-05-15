@@ -1,14 +1,13 @@
 // app/(units)/[unitSlug]/layout.tsx
 import { ReactNode } from 'react';
-import { getSectionsForUnit, SectionMeta } from '@/lib/content'; // Adjust path
+import { getSectionsForUnit } from '@/lib/content'; // Adjust path
 import { UnitSidebarNav } from '@/components/UnitSidebarNav'; // Adjust path
-import { notFound } from 'next/navigation';
 
 interface UnitLayoutProps {
   children: ReactNode;
-  params: {
+  params: Promise<{
     unitSlug: string;
-  };
+  }>;
 }
 
 export default async function UnitLayout({ children, params }: UnitLayoutProps) {

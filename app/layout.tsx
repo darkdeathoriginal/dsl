@@ -5,7 +5,6 @@ import { PyodideProvider } from '@/components/PyodideProvider'
 import { ThemeProvider } from '@/components/ThemeProvider'
 import Link from 'next/link'
 import { ThemeToggle } from '@/components/ThemeToggle'
-import { Button } from '@/components/ui/button' // Import Button
 
 
 export const metadata: Metadata = {
