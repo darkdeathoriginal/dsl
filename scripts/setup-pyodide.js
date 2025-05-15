@@ -78,60 +78,7 @@ async function setupPyodide() {
     });
     console.log('Extraction complete.');
 
-    // Pyodide archives usually extract into a folder like `pyodide/`
-    // or `dist/` or `pyodide-vX.Y.Z/pyodide/` within the tempExtractDir.
-    // We need to find the actual 'pyodide' content directory.
-    // Common structures are:
-    // 1. pyodide-vX.Y.Z.tar.bz2 -> extracts to ./pyodide/* (files like pyodide.js directly in pyodide folder)
-    // 2. pyodide-vX.Y.Z-full.tar.bz2 -> extracts to ./dist/* or some other top level before pyodide/*
-
-    // Let's assume the key 'pyodide' directory is what we want
-    let extractedPyodideSourceDir;
-    const potentialPath1 = path.join(tempExtractDir, 'pyodide'); // e.g. if tar extracts 'pyodide/*'
-    const potentialPath2 = path.join(tempExtractDir, `pyodide-v${PYODIDE_VERSION}`, 'pyodide'); // if versioned folder
-    const potentialPathDist = path.join(tempExtractDir, 'dist'); // some versions have a 'dist' folder
-
-    if (await fs.pathExists(potentialPath1) && (await fs.readdir(potentialPath1)).includes('pyodide.js')) {
-        extractedPyodideSourceDir = potentialPath1;
-    } else if (await fs.pathExists(potentialPath2) && (await fs.readdir(potentialPath2)).includes('pyodide.js')) {
-        extractedPyodideSourceDir = potentialPath2;
-    } else if (await fs.pathExists(potentialPathDist) && (await fs.readdir(potentialPathDist)).includes('pyodide.js')) {
-        extractedPyodideSourceDir = potentialPathDist; // If pyodide.js is directly in dist/
-    } else if (await fs.pathExists(potentialPathDist) && await fs.pathExists(path.join(potentialPathDist, 'pyodide')) && (await fs.readdir(path.join(potentialPathDist, 'pyodide'))).includes('pyodide.js')) {
-        extractedPyodideSourceDir = path.join(potentialPathDist, 'pyodide'); // If it's dist/pyodide/
-    }
-     else {
-      // Scan tempExtractDir for a directory named 'pyodide' that contains 'pyodide.js'
-      const entries = await fs.readdir(tempExtractDir, { withFileTypes: true });
-      for (const entry of entries) {
-        if (entry.isDirectory()) {
-          const subDirPath = path.join(tempExtractDir, entry.name);
-          const pyodideSubDir = path.join(subDirPath, 'pyodide');
-          if (await fs.pathExists(path.join(subDirPath, 'pyodide.js'))) {
-            extractedPyodideSourceDir = subDirPath;
-            break;
-          } else if (await fs.pathExists(pyodideSubDir) && (await fs.readdir(pyodideSubDir)).includes('pyodide.js')) {
-             extractedPyodideSourceDir = pyodideSubDir;
-             break;
-          }
-        }
-      }
-    }
-
-
-    if (!extractedPyodideSourceDir || !(await fs.pathExists(extractedPyodideSourceDir))) {
-      console.error('Could not find the "pyodide" content directory within the extracted archive.');
-      console.error('Please check the archive structure or the extraction path logic in the script.');
-      console.log('Contents of tempExtractDir:', await fs.readdir(tempExtractDir));
-      throw new Error('Pyodide content directory not found after extraction.');
-    }
-
-    console.log(`Found Pyodide source content at: ${extractedPyodideSourceDir}`);
-    console.log(`Moving Pyodide content from ${extractedPyodideSourceDir} to ${PYODIDE_TARGET_DIR}...`);
-    await fs.move(extractedPyodideSourceDir, PYODIDE_TARGET_DIR, { overwrite: true });
-    console.log('Pyodide successfully moved to public/pyodide.');
-
-    // 6. Clean up downloaded archive and temporary extraction folder
+    // 6. Move the extracted 'pyodide' folder to the target directory
     console.log('Cleaning up temporary files...');
     await fs.remove(DOWNLOAD_TARGET_PATH);
     await fs.remove(tempExtractDir); // Remove the parent temp extraction dir
