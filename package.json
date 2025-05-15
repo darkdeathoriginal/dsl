@@ -19,6 +19,7 @@
     "@radix-ui/react-navigation-menu": "^1.2.12",
     "@radix-ui/react-slot": "^1.2.2",
     "@types/mdx": "^2.0.13",
+    "adm-zip": "^0.5.16",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "lucide-react": "^0.510.0",
@@ -46,6 +47,7 @@
     "tailwindcss": "^4",
     "tar": "^7.4.3",
     "tw-animate-css": "^1.2.9",
-    "typescript": "^5"
+    "typescript": "^5",
+    "unbzip2-stream": "^1.4.3"
   }
 }
