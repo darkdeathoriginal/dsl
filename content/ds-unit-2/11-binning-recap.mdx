@@ -1,0 +1,43 @@
+---
+title: Binning (Recap and Practice)
+---
+import { CodeBlock } from '@/components/CodeBlock';
+
+# 10. Binning (Discretization - Recap and Practice)
+
+Binning, or discretization, is the process of grouping continuous numerical variables into a smaller number of discrete "bins" or intervals. This can simplify data, make it easier to work with for certain models, or reveal patterns by converting it into a categorical form.
+
+## Why Use Binning?
+-   **Reduce noise:** Smooth out minor fluctuations in data.
+-   **Handle outliers:** By grouping extreme values into a bin.
+-   **Improve model performance:** Some models (like decision trees) can benefit from binned data or handle categorical features more naturally.
+-   **Data understanding and visualization:** Easier to see distributions and relationships when continuous data is grouped.
+-   **Convert numerical data to categorical:** For algorithms that require categorical input.
+
+## Types of Binning (Recap from Data Transformation Techniques)
+
+1.  **Equal-width (Uniform) Binning:**
+    -   Divides the range of the variable (`max_value - min_value`) into `k` intervals of equal size.
+    -   **Pandas:** `pd.cut(data, bins=k)` where `k` is the number of bins.
+    -   Sensitive to outliers, as they can stretch the range and lead to sparse bins or bins dominated by outliers.
+
+2.  **Equal-frequency (Quantile) Binning:**
+    -   Divides the sorted data into `k` intervals, each containing approximately the same number of observations (N/k, where N is total observations).
+    -   **Pandas:** `pd.qcut(data, q=k)` where `q` is the number of quantiles (e.g., `q=4` for quartiles, `q=10` for deciles).
+    -   Handles outliers better as bin boundaries are determined by data distribution.
+
+3.  **Custom Binning:**
+    -   User defines the exact bin edges based on domain knowledge, specific thresholds, or data exploration.
+    -   **Pandas:** `pd.cut(data, bins=[edge1, edge2, edge3, ...], labels=[label1, label2, ...])`.
+
+## Practice with Pandas
+
+<CodeBlock
+  initialCode={`import pandas as pd\nimport numpy as np\n\n# Generate sample data - e.g., exam scores\nnp.random.seed(42) # for reproducibility\nscores = pd.Series(np.random.randint(40, 101, size=30))\nprint("Sample Exam Scores (first 10):\\n", scores.head(10).values)\nprint(f"Min score: {scores.min()}, Max score: {scores.max()}")\n\n# 1. Equal-width binning\n# Let's create 5 bins of equal width\nscores_eq_width = pd.cut(scores, bins=5)\nprint("\\nEqual-width Bins (counts):\\n", scores_eq_width.value_counts().sort_index())\n\n# 2. Equal-frequency binning\n# Let's create 4 bins (quartiles)\nscores_eq_freq = pd.qcut(scores, q=4, labels=['Q1 Poor', 'Q2 Fair', 'Q3 Good', 'Q4 Excellent'])\nprint("\\nEqual-frequency Bins (counts):\\n", scores_eq_freq.value_counts().sort_index())\n\n# 3. Custom binning for letter grades\ngrade_bins = [0, 59, 69, 79, 89, 101] # Bin edges (0-59 F, 60-69 D, etc.)\n                                     # Note: 101 to include score of 100 if right=True (default for pd.cut)\ngrade_labels = ['F', 'D', 'C', 'B', 'A']\n# right=True by default means bins are (edge1, edge2], (edge2, edge3]\n# To make it [edge1, edge2), use right=False and adjust upper bounds accordingly\n# For grades, usually a score of 90 is an A, so (89, 100] is for A if right=True\n# If we use right=False, then [90, 101) for A. Let's use right=True as it's common.\nscores_custom_grades = pd.cut(scores, bins=grade_bins, labels=grade_labels, right=True, include_lowest=True)\n# include_lowest=True is important if the lowest score might be exactly on a bin edge (e.g. 0)\nprint("\\nCustom Bins for Letter Grades (counts):\\n", scores_custom_grades.value_counts().sort_index())\n\n# Displaying some results with the bins\nresult_df = pd.DataFrame({'Score': scores, 'Grade': scores_custom_grades, 'Quantile': scores_eq_freq})\nprint("\\nDataFrame with Scores and Binned Categories:\\n", result_df.head())`}
+/>
+
+**Considerations for Binning:**
+-   **Number of Bins:** Choosing the right number of bins (`k`) is important. Too few bins can oversimplify and lose information. Too many can be noisy and defeat the purpose of generalization.
+-   **Interpretability:** Labeled bins (like 'Low', 'Medium', 'High' or grade letters) improve understanding.
+-   **Impact on Models:** Binning can sometimes help linear models capture non-linear relationships, but it can also lead to information loss.
+-   **Domain Knowledge:** Often, the best binning strategy is informed by understanding the data and the problem domain.

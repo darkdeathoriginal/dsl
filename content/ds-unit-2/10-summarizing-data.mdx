@@ -1,0 +1,85 @@
+---
+title: Summarizing Data
+---
+import { CodeBlock } from '@/components/CodeBlock';
+
+# 9. Summarizing Data
+
+Summarizing data involves using descriptive statistics to understand its main features. This includes measures of central tendency, dispersion (spread), and the shape of its distribution. Pandas provides easy ways to calculate these.
+
+## Centrality (Measures of Central Tendency)
+These statistics describe the "center" or "typical" value of a dataset.
+
+-   **Mean:** The arithmetic average of the data.
+    -   Calculated as the sum of all values divided by the number of values.
+    -   Sensitive to outliers.
+    -   Pandas: `series.mean()`, `dataframe.mean()`
+
+-   **Median:** The middle value of a dataset when it is sorted.
+    -   If there's an even number of observations, it's the average of the two middle values.
+    -   Less sensitive to outliers than the mean (more robust).
+    -   Pandas: `series.median()`, `dataframe.median()`
+
+-   **Mode:** The value that appears most frequently in a dataset.
+    -   A dataset can have one mode (unimodal), multiple modes (multimodal), or no mode.
+    -   Applicable to both numerical and categorical data.
+    -   Pandas: `series.mode()`, `dataframe.mode()` (returns a Series of modes, as there can be multiple).
+
+<CodeBlock
+  initialCode={`import pandas as pd\nimport numpy as np\n\ndata_numeric = pd.Series([1, 2, 2, 3, 4, 5, 5, 5, 6, 100]) # 100 is an outlier\ndata_categorical = pd.Series(['A', 'B', 'A', 'C', 'A', 'B', 'D'])\n\nprint("Numeric Data:\\n", data_numeric)\nprint(f"Mean: {data_numeric.mean()}")\nprint(f"Median: {data_numeric.median()}")\nprint(f"Mode:\\n{data_numeric.mode()}") # Will show 5\n\nprint("\\nCategorical Data:\\n", data_categorical)\nprint(f"Mode:\\n{data_categorical.mode()}") # Will show 'A'`}
+/>
+
+## Dispersion (Measures of Spread or Variability)
+These statistics describe how spread out or varied the data points are.
+
+-   **Range:** The difference between the maximum and minimum values.
+    -   `max_value - min_value`
+    -   Highly sensitive to outliers.
+    -   Pandas: `series.max() - series.min()`
+
+-   **Variance:** The average of the squared differences from the Mean.
+    -   Measures how far each number in the set is from the mean and thus from every other number in the set.
+    -   Units are squared (e.g., if data is in meters, variance is in meters squared).
+    -   Pandas: `series.var()`, `dataframe.var()` (uses N-1 denominator for sample variance by default).
+
+-   **Standard Deviation (Std Dev):** The square root of the variance.
+    -   Provides a measure of dispersion in the same units as the original data.
+    -   A low standard deviation indicates that values tend to be close to the mean (also called the expected value) of the set, while a high standard deviation indicates that values are spread out over a wider range.
+    -   Pandas: `series.std()`, `dataframe.std()` (uses N-1 denominator by default).
+
+-   **Interquartile Range (IQR):** The difference between the 75th percentile (Q3) and the 25th percentile (Q1).
+    -   `IQR = Q3 - Q1`
+    -   Represents the spread of the middle 50% of the data.
+    -   More robust to outliers than range, variance, or standard deviation.
+    -   Pandas: `series.quantile(0.75) - series.quantile(0.25)`
+
+<CodeBlock
+  initialCode={`import pandas as pd\n\ndata = pd.Series([10, 12, 15, 11, 13, 14, 12, 25]) # 25 is a bit of an outlier\nprint("Data:\\n", data)\n\nprint(f"Range: {data.max() - data.min()}")\nprint(f"Variance: {data.var():.2f}")\nprint(f"Standard Deviation: {data.std():.2f}")\n\nQ1 = data.quantile(0.25)\nQ3 = data.quantile(0.75)\nIQR = Q3 - Q1\nprint(f"Q1 (25th percentile): {Q1}")\nprint(f"Q3 (75th percentile): {Q3}")\nprint(f"Interquartile Range (IQR): {IQR}")`}
+/>
+
+## Sample Distribution (Shape of Data)
+These statistics describe the shape of the data's distribution.
+
+-   **Histogram:** A graphical representation of the distribution of numerical data.
+    -   Divides data into bins and shows the frequency (count) or relative frequency of observations in each bin.
+    -   Pandas: `series.hist()` or `dataframe.hist()` (uses Matplotlib). Seaborn's `sns.histplot()` or `sns.displot()` are often preferred for more advanced features.
+
+-   **Tally (Frequency Count):** Simple counting of occurrences of each unique value.
+    -   Pandas: `series.value_counts()` for categorical or discrete numerical data.
+
+-   **Skewness:** A measure of the asymmetry of the probability distribution of a real-valued random variable about its mean.
+    -   **Positive Skew (Right-skewed):** Tail on the right side is longer or fatter; mean > median > mode.
+    -   **Negative Skew (Left-skewed):** Tail on the left side is longer or fatter; mean < median < mode.
+    -   **Zero Skew:** Symmetrical distribution (e.g., normal distribution).
+    -   Pandas: `series.skew()`
+
+-   **Kurtosis:** A measure of the "tailedness" or "peakedness" of the probability distribution. It describes the shape of the distribution's tails in relation to its overall shape.
+    -   **Leptokurtic (Positive Kurtosis > 0 for excess kurtosis):** Sharper peak and heavier/fatter tails than a normal distribution. More outliers.
+    -   **Platykurtic (Negative Kurtosis < 0 for excess kurtosis):** Flatter peak and lighter/thinner tails. Fewer outliers.
+    -   **Mesokurtic (Zero Kurtosis for excess kurtosis):** Similar tailedness to a normal distribution (kurtosis = 3, excess kurtosis = 0).
+    -   Pandas: `series.kurt()` (calculates excess kurtosis by default, where normal distribution has kurtosis of 0).
+
+<CodeBlock
+  initialCode={`import pandas as pd\nimport numpy as np\n\n# Data skewed to the right\ndata_skewed_right = pd.Series(np.concatenate([np.random.normal(loc=5, scale=1, size=80), \n                                            np.random.normal(loc=10, scale=1, size=20)]))\n\n# Data somewhat symmetric\ndata_symmetric = pd.Series(np.random.normal(loc=0, scale=2, size=100))\n\nprint(f"Skewness (Right Skewed Data): {data_skewed_right.skew():.2f}")\nprint(f"Kurtosis (Right Skewed Data - Excess): {data_skewed_right.kurt():.2f}")\n\nprint(f"\\nSkewness (Symmetric Data): {data_symmetric.skew():.2f}")\nprint(f"Kurtosis (Symmetric Data - Excess): {data_symmetric.kurt():.2f}")\n\n# Tally example\ncategorical_data = pd.Series(['cat', 'dog', 'cat', 'mouse', 'cat', 'dog'])\nprint("\\nValue Counts (Tally):\\n", categorical_data.value_counts())`}
+/>
+**(Note: Histograms would typically be shown with plotting libraries like Matplotlib/Seaborn, which will be covered in Unit 3. The `CodeBlock` here focuses on the numerical stats.)**

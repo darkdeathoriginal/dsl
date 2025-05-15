@@ -1,0 +1,42 @@
+---
+title: Data Types & Facets of Data
+---
+import { CodeBlock } from '@/components/CodeBlock';
+
+# 2. Data Types & Facets of Data
+
+Understanding the different types of data is fundamental in Data Science.
+
+## Types of Data:
+
+-   **Structured Data:** Organized in rows/columns (databases, spreadsheets).
+    ```
+    Example: A table of customer information with columns like Name, Age, City.
+    ```
+
+-   **Unstructured Data:** Lacks a clear, predefined structure.
+    ```
+    Examples: Text documents, emails, social media posts, images, audio files, video files.
+    ```
+    <CodeBlock
+      initialCode={`# Example of handling a simple string (unstructured text)\ntext_data = "Data Science is fascinating."\nword_count = len(text_data.split())\nprint(f"The text is: '{text_data}'")\nprint(f"Number of words: {word_count}")`}
+    />
+
+-   **Natural Language:** Human languages (e.g., English, Spanish, Chinese). Analyzing this requires Natural Language Processing (NLP) techniques.
+
+-   **Machine-generated Data:** Produced automatically by systems or sensors.
+    ```
+    Examples: Server logs, sensor readings (temperature, location), clickstream data from websites.
+    ```
+
+-   **Graph-based/Network Data:** Models relationships between entities.
+    ```
+    Examples: Social networks (users and their connections), knowledge graphs, protein interaction networks.
+    ```
+
+-   **Audio, Video, Image Data:** Multimedia data that often requires specialized processing techniques (e.g., computer vision, speech recognition).
+
+-   **Streaming Data:** Data that is generated continuously in real-time.
+    ```
+    Examples: Stock market tickers, IoT sensor data streams, live social media feeds, transaction data.
+    ```

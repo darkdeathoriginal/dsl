@@ -1,0 +1,88 @@
+---
+title: Index Objects and Operations in Pandas
+---
+import { CodeBlock } from '@/components/CodeBlock';
+
+# 9. Index Objects and Operations in Pandas
+
+Pandas `Index` objects are a crucial part of its data structures (Series and DataFrame). They are responsible for holding the axis labels and other metadata (like name or names).
+
+## Index Objects
+-   Each Series and DataFrame has an `index` attribute (for row labels) and DataFrames also have a `columns` attribute (for column labels), both of which are Index objects.
+-   **Immutability:** Index objects are immutable. This makes them safer to share among data structures. You cannot modify an Index object in place; to change labels, you typically create a new Series/DataFrame with a new Index.
+-   **Homogeneous Data Type:** An Index typically holds data of a single type (e.g., all integers, all strings, all datetimes).
+-   **Functionality:** They behave somewhat like fixed-size sets or ordered sets, providing efficient membership testing and set operations.
+
+<CodeBlock
+  initialCode={`import pandas as pd\nimport numpy as np\n\ns = pd.Series([10, 20, 30], index=['a', 'b', 'c'])\nidx = s.index\nprint("Index object from Series:\\n", idx)\nprint("Is 'b' in index?", 'b' in idx) # Membership testing\n\n# Index objects are array-like\nprint("First element of index:", idx[0])\nprint("Slice of index:", idx[1:])\n\n# Attempting to modify an index element will raise an error\n# try:\n#    idx[0] = 'z' # This will cause a TypeError\n# except TypeError as e:\n#    print(f"\\nError when trying to modify index: {e}")`}
+/>
+
+### Types of Indexes
+Pandas has several types of Index objects:
+-   **`Index`:** The most general type, typically for string labels or mixed-type labels (though mixed-type is less common/performant).
+-   **`Int64Index`:** For integer labels.
+-   **`Float64Index`:** For floating-point labels.
+-   **`DatetimeIndex`:** For time series data (timestamps).
+-   **`TimedeltaIndex`:** For differences between datetimes.
+-   **`PeriodIndex`:** For time periods (e.g., monthly, quarterly).
+-   **`MultiIndex`:** For hierarchical indexing (multiple levels of labels on an axis), which we'll cover separately.
+
+## Creating an Index Explicitly
+While often created implicitly when you create a Series or DataFrame, you can create Index objects directly.
+
+<CodeBlock
+  initialCode={`import pandas as pd\n\nlabels = ['row1', 'row2', 'row3']\ncustom_index = pd.Index(labels)\nprint("Custom Index created explicitly:\\n", custom_index)\n\ndf = pd.DataFrame({'A': [1,2,3], 'B': [4,5,6]}, index=custom_index)\nprint("\\nDataFrame with the custom index:\\n", df)\nprint("\\nDataFrame's index object:\\n", df.index)`}
+/>
+
+## Reindex
+The `reindex` method conforms a Series or DataFrame to a new index, optionally with logic for filling or dropping values.
+
+-   Creates a new object with data conformed to a new index.
+-   If an index value from the new index is not already present, `NaN` is introduced.
+-   If an index value from the old index is not in the new index, it's dropped.
+
+<CodeBlock
+  initialCode={`import pandas as pd\n\ns = pd.Series([10.5, 20.2, 30.8], index=['a', 'c', 'e'])\nprint("Original Series s:\\n", s)\n\nnew_index = ['a', 'b', 'c', 'd', 'e']\ns_reindexed = s.reindex(new_index)\nprint("\\nSeries reindexed to new_index:\\n", s_reindexed) # b and d will be NaN\n\n# Reindexing with fill_value\ns_reindexed_fill = s.reindex(new_index, fill_value=0)\nprint("\\nSeries reindexed with fill_value=0:\\n", s_reindexed_fill)\n\n# Reindexing with forward fill (ffill) method\n# For ordered data like time series, this can be useful\nseries_ordered = pd.Series([0, 1, 2], index=[0, 2, 4])\nprint("\\nOrdered Series:\\n", series_ordered)\nreindexed_ffill = series_ordered.reindex(range(6), method='ffill')\nprint("\\nReindexed with ffill:\\n", reindexed_ffill)`}
+/>
+
+### Reindexing Columns in a DataFrame
+You can also reindex the columns of a DataFrame.
+<CodeBlock
+  initialCode={`import pandas as pd\nimport numpy as np\n\ndf = pd.DataFrame(np.arange(9).reshape((3, 3)),\n                  index=['r1', 'r2', 'r3'],\n                  columns=['A', 'B', 'C'])\nprint("Original DataFrame:\\n", df)\n\nnew_columns = ['A', 'X', 'C', 'Y']\ndf_reindexed_cols = df.reindex(columns=new_columns)\nprint("\\nDataFrame with reindexed columns:\\n", df_reindexed_cols)\n\n# Can also reindex both index and columns simultaneously using .loc or reindex\ndf_reindexed_both = df.reindex(index=['r1', 'r4'], columns=['B', 'Y'], fill_value=100)\nprint("\\nReindexing both rows and columns with fill_value:\\n", df_reindexed_both)`}
+/>
+
+## Drop Entry
+Removing one or more entries (rows or columns) from an axis.
+-   `series.drop(labels)`
+-   `dataframe.drop(labels, axis=0)` for rows (default)
+-   `dataframe.drop(labels, axis=1)` for columns
+-   `inplace=True` modifies the object in place.
+
+<CodeBlock
+  initialCode={`import pandas as pd\n\ns = pd.Series(np.arange(4), index=['a', 'b', 'c', 'd'])\nprint("Original Series s:\\n", s)\n\ns_dropped = s.drop(['b', 'd'])\nprint("\\nSeries after dropping 'b' and 'd':\\n", s_dropped)\n\ndf = pd.DataFrame(np.arange(9).reshape((3, 3)),\n                  index=['r1', 'r2', 'r3'],\n                  columns=['A', 'B', 'C'])\nprint("\\nOriginal DataFrame:\\n", df)\n\n# Drop row 'r2'\ndf_dropped_row = df.drop('r2') # axis=0 is default\nprint("\\nDataFrame after dropping row 'r2':\\n", df_dropped_row)\n\n# Drop column 'B'\ndf_dropped_col = df.drop('B', axis=1)\nprint("\\nDataFrame after dropping column 'B':\\n", df_dropped_col)\n\n# Drop multiple columns\ndf_dropped_cols = df.drop(['A', 'C'], axis='columns') # 'columns' is an alias for axis=1\nprint("\\nDataFrame after dropping columns 'A' and 'C':\\n", df_dropped_cols)`}
+/>
+
+## Selecting Entries (Recap from Intro)
+-   **By position:** `.iloc[]`
+-   **By label:** `.loc[]`
+-   **By condition (Boolean indexing):** `df[df['column'] > value]`
+
+<CodeBlock
+  initialCode={`import pandas as pd\n\ndata = {'Name': ['John', 'Alice', 'Bob'], 'Age': [25, 30, 35], 'City': ['NY', 'LDN', 'PRS']}\ndf = pd.DataFrame(data, index=['p1', 'p2', 'p3'])\nprint("DataFrame df:\\n", df)\n\n# By position (row at index 1, which is Alice)\nprint("\\nRow at iloc[1]:\\n", df.iloc[1])\n\n# By label (row with index 'p3', which is Bob)\nprint("\\nRow at loc['p3']:\\n", df.loc['p3'])\n\n# By condition (Age > 30)\nprint("\\nRows where Age > 30:\\n", df[df['Age'] > 30])`}
+/>
+
+## Data Alignment
+A critical feature of Pandas is automatic data alignment when performing arithmetic operations between objects (Series or DataFrames).
+-   Operations align on index (and columns for DataFrames).
+-   The result is the **union** of the indexes.
+-   If any index labels are not found in both objects, the result for that label will be `NaN`.
+-   You can use `fill_value` in arithmetic methods (e.g., `df1.add(df2, fill_value=0)`) to substitute a value for missing elements during the operation.
+
+<CodeBlock
+  initialCode={`import pandas as pd\n\ndf1 = pd.DataFrame(np.arange(9.).reshape((3, 3)),\n                   columns=list('bcd'),\n                   index=['Ohio', 'Texas', 'Colorado'])\ndf2 = pd.DataFrame(np.arange(12.).reshape((4, 3)),\n                   columns=list('bde'),\n                   index=['Utah', 'Ohio', 'Texas', 'Oregon'])\n\nprint("DataFrame df1:\\n", df1)\nprint("\\nDataFrame df2:\\n", df2)\n\n# Adding DataFrames aligns on both index and columns\nsum_df = df1 + df2\nprint("\\nSum of df1 and df2 (NaN where labels don't overlap):\\n", sum_df)\n\n# Using .add() method with fill_value\nsum_df_filled = df1.add(df2, fill_value=0)\nprint("\\nSum of df1 and df2 with fill_value=0:\\n", sum_df_filled)`}
+/>
+
+The `.align()` method explicitly aligns two objects on their axes with optional join method.
+<CodeBlock
+  initialCode={`import pandas as pd\n\ndf1 = pd.DataFrame({'A': [1, 2], 'B': [3, 4]}, index=['x', 'y'])\ndf2 = pd.DataFrame({'B': [5, 6], 'C': [7, 8]}, index=['y', 'z'])\n\nprint("df1:\\n", df1)\nprint("\\ndf2:\\n", df2)\n\n# Default align is outer join\naligned_df1, aligned_df2 = df1.align(df2)\nprint("\\nAligned df1 (outer join):\\n", aligned_df1)\nprint("\\nAligned df2 (outer join):\\n", aligned_df2)\n\n# Align with inner join and fill_value for non-overlapping parts\naligned_df1_inner, aligned_df2_inner = df1.align(df2, join='inner', fill_value=0)\nprint("\\nAligned df1 (inner join, fill_value=0):\\n", aligned_df1_inner)\nprint("\\nAligned df2 (inner join, fill_value=0):\\n", aligned_df2_inner)`}
+/>

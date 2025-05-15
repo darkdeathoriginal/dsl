@@ -1,0 +1,109 @@
+---
+title: Outliers, Noise & Anomalies
+---
+import { CodeBlock } from '@/components/CodeBlock';
+
+# 12. Outliers, Noise & Anomalies
+
+Understanding and handling outliers, noise, and anomalies are crucial steps in data preprocessing to ensure the quality and reliability of data analysis and model building.
+
+## Definitions
+
+-   **Outliers:**
+    -   Data points or observations that deviate significantly from the rest of the data in a dataset.
+    -   They are values that are unusually far from the central tendency (mean, median) or general pattern of the data.
+    -   **Global Outlier (Point Outlier):** A data point that is far from the *entire* dataset. Example: A person's age recorded as 150 years.
+    -   **Contextual Outlier (Conditional Outlier):** A data point that is unusual only within a specific *context* or condition, but not otherwise. Example: A temperature of 25°C might be normal in summer but an outlier in winter for a specific region.
+    -   **Collective Outlier:** A *subset* of data points that is collectively anomalous with respect to the entire dataset, even though individual points within the subset may not be outliers on their own. Example: A period of unusually low, flat stock trading activity when high volatility is expected.
+
+-   **Noise:**
+    -   Random errors, inaccuracies, or variabilities in measured data.
+    -   It can obscure underlying patterns or introduce spurious correlations.
+    -   Noise is often assumed to be random and unstructured.
+    -   Examples: Measurement errors from sensors, typos in data entry, random fluctuations in a signal.
+    -   **Difference from Outliers:** Noise generally affects many data points to a small degree, while outliers are specific data points that are significantly different. Smoothing techniques are often used to reduce noise.
+
+-   **Anomalies:**
+    -   A broader term that often encompasses outliers.
+    -   Refers to data points or patterns that do not conform to an expected behavior or pattern.
+    -   Anomalies can indicate:
+        -   Data errors (like outliers or noise).
+        -   Interesting or critical rare events (e.g., fraud detection, system intrusion, medical condition onset).
+    -   **Anomaly Detection** is the task of identifying these unusual patterns.
+
+**Relationship:** Outliers are a type of anomaly. Noise can sometimes create apparent outliers or make true outliers harder to detect.
+
+## Detection of Outliers/Anomalies
+
+Various methods can be used to detect outliers:
+
+1.  **Visualizations (Graphical Methods):**
+    -   **Box Plots (Box-and-Whisker Plots):** Excellent for visualizing the distribution and identifying potential outliers. Points beyond the "whiskers" (typically 1.5 * IQR above Q3 or below Q1) are often flagged as outliers.
+    -   **Scatter Plots:** Can reveal points that are far from the general cluster of data in 2D or 3D.
+    -   **Histograms:** Can show isolated bars or data points at the extremes of the distribution.
+    -   **Distribution Plots (e.g., QQ-plots):** Comparing data distribution to a theoretical distribution (like normal) can highlight deviations.
+
+    <CodeBlock
+      isPlot={true}
+      initialCode={`import pandas as pd\nimport numpy as np\nimport matplotlib.pyplot as plt\nimport seaborn as sns\n\nnp.random.seed(42)\ndata_normal = np.random.normal(loc=50, scale=10, size=100)\n# Add some outliers\ndata_with_outliers = np.concatenate([data_normal, [5, 10, 90, 95, 150]])\ndf_outliers = pd.DataFrame({'Value': data_with_outliers})\n\nplt.figure(figsize=(10, 4))\n\nplt.subplot(1, 2, 1)\nsns.boxplot(y=df_outliers['Value'])\nplt.title('Box Plot of Value')\n\nplt.subplot(1, 2, 2)\nsns.histplot(df_outliers['Value'], kde=True)\nplt.title('Histogram of Value')\n\nplt.tight_layout()\n# plt.show() is handled by Pyodide CodeBlock`}
+    />
+
+2.  **Statistical Methods:**
+    -   **Z-score (Standard Score):**
+        -   Measures how many standard deviations a data point is from the mean.
+        -   A common threshold is a Z-score greater than 3 or less than -3 to flag an outlier.
+        -   Assumes data is approximately normally distributed. Not robust if there are many extreme outliers influencing the mean and standard deviation.
+        ```python
+        # Z-score = (X - mean) / std_dev
+        ```
+    -   **Interquartile Range (IQR) Method:**
+        -   More robust to extreme values than the Z-score method.
+        -   Outliers are typically defined as observations that fall below `Q1 - 1.5 * IQR` or above `Q3 + 1.5 * IQR`.
+        -   `Q1` = 25th percentile, `Q3` = 75th percentile, `IQR = Q3 - Q1`.
+    -   **Grubbs' Test, Dixon's Q Test:** Statistical tests for detecting single outliers in univariate datasets assuming normality.
+
+    <CodeBlock
+      initialCode={`import pandas as pd\nimport numpy as np\n\ndata = pd.Series([10, 12, 11, 13, 14, 10, 12, 11, 50, 8, 9]) # 50 is an outlier\nprint("Data:\\n", data)\n\n# Z-score method\nmean = data.mean()\nstd = data.std()\nz_scores = (data - mean) / std\nprint("\\nZ-scores:\\n", z_scores.round(2))\noutliers_z = data[np.abs(z_scores) > 2] # Example threshold: |Z| > 2\nprint("Outliers based on Z-score > 2:\\n", outliers_z)\n\n# IQR method\nQ1 = data.quantile(0.25)\nQ3 = data.quantile(0.75)\nIQR = Q3 - Q1\nlower_bound = Q1 - 1.5 * IQR\nupper_bound = Q3 + 1.5 * IQR\nprint(f"\\nQ1: {Q1}, Q3: {Q3}, IQR: {IQR}")\nprint(f"Lower Bound (IQR): {lower_bound}, Upper Bound (IQR): {upper_bound}")\noutliers_iqr = data[(data < lower_bound) | (data > upper_bound)]\nprint("Outliers based on IQR method:\\n", outliers_iqr)`}
+    />
+
+3.  **Machine Learning-Based Methods (Anomaly Detection Algorithms):**
+    -   **Clustering-based (e.g., DBSCAN):** Points that do not belong to any cluster or belong to very small clusters can be considered outliers.
+    -   **Density-based (e.g., Local Outlier Factor - LOF):** Identifies outliers based on the local density of data points. Outliers are points in low-density regions.
+    -   **Distance-based (e.g., k-Nearest Neighbors):** Outliers are points that are far from their k-nearest neighbors.
+    -   **Isolation Forest:** An ensemble method that isolates anomalies by randomly partitioning the data. Anomalies are easier to isolate and thus have shorter path lengths in the random trees.
+    -   **One-Class SVM:** Learns a boundary that encompasses the "normal" data; points outside this boundary are outliers.
+
+## Handling Outliers/Anomalies
+
+The strategy for handling outliers depends on their cause and the goals of the analysis:
+
+1.  **Investigate:** Always try to understand *why* an outlier exists.
+    -   Is it a data entry error? (If so, try to correct it).
+    -   Is it a measurement error?
+    -   Is it a genuinely extreme but valid observation?
+    -   Is it indicative of a different underlying process or a rare event?
+
+2.  **Deletion/Removal:**
+    -   If the outlier is confirmed to be an error (e.g., typo, instrument malfunction) and cannot be corrected, it can be removed.
+    -   Be cautious: Removing outliers, especially if they are genuine extreme values, can lead to loss of information and biased results.
+
+3.  **Transformation:**
+    -   Applying mathematical transformations (e.g., log, square root, Box-Cox) can reduce the skewness of the data and pull in extreme values, making them less influential.
+
+4.  **Imputation:**
+    -   Treat the outlier as a missing value and impute it using methods discussed earlier (mean, median, model-based). This is generally not recommended unless the outlier is clearly an error.
+
+5.  **Capping/Winsorizing:**
+    -   Replace outliers with the nearest "acceptable" value. For example, cap values above the 99th percentile at the 99th percentile value, and values below the 1st percentile at the 1st percentile value.
+
+6.  **Use Robust Statistical Methods:**
+    -   Employ analytical techniques that are less sensitive to outliers (e.g., use median instead of mean, use robust regression methods).
+
+7.  **Keep and Analyze Separately (if anomalies are of interest):**
+    -   If the outliers represent genuinely interesting or rare events (e.g., fraud, system failure), they should not be removed but rather flagged and studied as part of an anomaly detection task.
+
+## Importance of Context
+-   The "correct" way to handle outliers, noise, and anomalies is highly **context-dependent**.
+-   Domain knowledge is crucial in deciding whether a data point is truly erroneous or a significant, albeit rare, piece of information.
+-   Outliers can severely skew statistical analyses (like mean, standard deviation, correlations) and model results (especially for algorithms sensitive to data magnitude or variance).
+-   However, sometimes the outliers *are* the most important data points (e.g., detecting fraudulent transactions, identifying a patient with a rare disease). In such cases, the goal is anomaly detection, not outlier removal.

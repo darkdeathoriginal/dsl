@@ -1,0 +1,45 @@
+---
+title: Standardization (Recap and Practice)
+---
+import { CodeBlock } from '@/components/CodeBlock';
+
+# 11. Standardization (Feature Scaling - Recap and Practice)
+
+Standardization (and Normalization) are feature scaling techniques used to transform numerical features to a common scale. This is essential for many machine learning algorithms that are sensitive to the magnitude of feature values.
+
+**Why Scale Features?**
+-   **Algorithm Compatibility:** Algorithms that compute distances (e.g., k-NN, SVM, K-Means) or rely on gradient descent (e.g., linear regression, logistic regression, neural networks) can perform poorly or converge slowly if features are on vastly different scales.
+-   **Equal Contribution:** Ensures that all features contribute more or less equally to the model training process, preventing features with larger values from dominating.
+-   **Improved Model Performance:** Often leads to better model accuracy and faster convergence.
+
+## Recap of Techniques (from Data Transformation Techniques)
+
+1.  **Standardization (Z-score Scaling):**
+    -   **Action:** Rescales data to have a mean of 0 and a standard deviation of 1.
+    -   **Formula:** `z = (x - μ) / σ`
+        -   `x`: original feature value
+        -   `μ`: mean of the feature
+        -   `σ`: standard deviation of the feature
+    -   **Characteristics:** Does not bind values to a specific range. Less affected by outliers than Min-Max scaling. Often preferred when the data approximates a normal (Gaussian) distribution.
+
+2.  **Normalization (Min-Max Scaling):**
+    -   **Action:** Rescales data to a fixed range, typically [0, 1] or [-1, 1].
+    -   **Formula (for [0,1] range):** `x_norm = (x - min(x)) / (max(x) - min(x))`
+    -   **Characteristics:** Output is bounded. Useful for algorithms that require input in a specific range (e.g., some image processing, certain neural network activation functions). Sensitive to outliers because `min(x)` and `max(x)` are used in the formula.
+
+## Practice with Scikit-learn
+Scikit-learn's `preprocessing` module provides easy-to-use scalers.
+
+<CodeBlock
+  initialCode={`import pandas as pd\nimport numpy as np\nfrom sklearn.preprocessing import StandardScaler, MinMaxScaler\n\n# Sample data with features on different scales\nnp.random.seed(10) # For reproducibility\ndata = pd.DataFrame({\n    'Age': np.random.randint(20, 65, size=10),          # e.g., 20-64\n    'Salary': np.random.randint(30000, 120000, size=10), # e.g., 30k-120k\n    'Experience': np.random.uniform(1, 20, size=10)     # e.g., 1-20\n})\nprint("Original Data:\\n", data)\nprint("\\nOriginal Data - Descriptive Stats:\\n", data.describe().round(2))\n\n# --- Standardization (Z-score) --- \nscaler_std = StandardScaler()\n# fit_transform learns parameters (mean, std) from data and then transforms it\ndata_standardized_array = scaler_std.fit_transform(data)\ndf_standardized = pd.DataFrame(data_standardized_array, columns=data.columns)\nprint("\\nData after Standardization (Z-score):\\n", df_standardized.round(2))\nprint("\\nStandardized Data - Descriptive Stats (Mean should be ~0, Std ~1):\\n", \n      df_standardized.describe().round(2))\n\n# --- Normalization (Min-Max to [0,1]) --- \nscaler_mm = MinMaxScaler() # Default range is [0,1]\n# scaler_mm_neg = MinMaxScaler(feature_range=(-1,1)) # For [-1,1] range\ndata_normalized_array = scaler_mm.fit_transform(data)\ndf_normalized = pd.DataFrame(data_normalized_array, columns=data.columns)\nprint("\\nData after Min-Max Normalization (to [0,1]):\\n", df_normalized.round(2))\nprint("\\nNormalized Data - Descriptive Stats (Min should be 0, Max should be 1):\\n", \n      df_normalized.describe().round(2))\n\n# Important: In a real ML workflow, you fit the scaler ONLY on the training data\n# and then use that fitted scaler to .transform() both the training and test data.\n# This prevents data leakage from the test set into the training process.\n# Example (conceptual):\n# scaler = StandardScaler()\n# X_train_scaled = scaler.fit_transform(X_train)\n# X_test_scaled = scaler.transform(X_test) # Note: only .transform() here`}
+/>
+
+**Z-Score vs. Min-Max:**
+-   **Z-Score (Standardization):**
+    -   **Pros:** Handles outliers somewhat better as it doesn't compress them into a narrow range as much. Useful if your algorithm assumes normally distributed data or data centered around zero.
+    -   **Cons:** Doesn't produce data in a bounded range, which might be an issue for some algorithms.
+-   **Min-Max (Normalization):**
+    -   **Pros:** Guarantees data is within a specific range (e.g., [0,1]). Good for algorithms requiring bounded input.
+    -   **Cons:** Highly sensitive to outliers. A single outlier can drastically affect the scaling of all other data points.
+
+**Choosing the right scaling technique depends on the data distribution and the requirements of the algorithm you plan to use.** It's often a good idea to experiment with both if unsure.

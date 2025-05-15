@@ -1,0 +1,49 @@
+---
+title: Scatterplot, Lineplot, Histogram, and Boxplot Summary
+---
+
+# 11. Scatterplot, Lineplot, Histogram, and Boxplot Summary
+
+These four plot types are fundamental for data exploration and visualization. Let's recap their primary uses and characteristics.
+
+## Summary
+
+1.  **Scatterplot:**
+    -   **Purpose:** Compares two numerical variables to show their relationship (e.g., correlation, clusters, outliers).
+    -   **How it works:** Each dot (marker) on the plot represents a single observation (data point) defined by its values on the x and y axes.
+    -   **Key Insights:** Strength and direction of correlation, presence of clusters, identification of outliers.
+    -   **Matplotlib:** `ax.scatter(x, y, ...)`
+    -   **Seaborn:** `sns.scatterplot(data=df, x='col_x', y='col_y', hue='category', ...)` or `sns.relplot(kind='scatter', ...)`
+
+2.  **Line Plot (Line Graph):**
+    -   **Purpose:** Shows trends or relationships between variables, often over a continuous interval like time.
+    -   **How it works:** Data points are connected by straight line segments. The x-axis typically represents a continuous variable (often time or an ordered sequence).
+    -   **Key Insights:** Trends (increasing, decreasing, cyclical), patterns over time, comparison of multiple series.
+    -   **Matplotlib:** `ax.plot(x, y, ...)`
+    -   **Seaborn:** `sns.lineplot(data=df, x='col_x', y='col_y', hue='category', ...)` or `sns.relplot(kind='line', ...)`
+
+3.  **Histogram:**
+    -   **Purpose:** Displays the distribution (frequency or density) of a single numerical variable.
+    -   **How it works:** The range of the variable is divided into a series of intervals (bins). Rectangular bars are drawn above each bin, with the height of the bar proportional to the number (or proportion) of data points falling into that bin.
+    -   **Key Insights:** Shape of the distribution (e.g., normal, skewed, bimodal), central tendency, spread, presence of outliers or gaps.
+    -   **Matplotlib:** `ax.hist(data, bins=N, ...)`
+    -   **Seaborn:** `sns.histplot(data=df, x='col_name', kde=True, bins=N, ...)` or `sns.displot(kind='hist', ...)`
+
+4.  **Box Plot (Box-and-Whisker Plot):**
+    -   **Purpose:** Summarizes the distribution of a numerical variable, often used for comparing distributions across different categories.
+    -   **How it works:** Displays the five-number summary: minimum, first quartile (Q1 - 25th percentile), median (Q2 - 50th percentile), third quartile (Q3 - 75th percentile), and maximum.
+        -   The "box" represents the interquartile range (IQR = Q3 - Q1).
+        -   A line inside the box marks the median.
+        -   "Whiskers" extend from the box to show the range of the data (typically up to 1.5 * IQR from Q1 and Q3).
+        -   Points beyond the whiskers are often considered outliers and plotted individually.
+    -   **Key Insights:** Central tendency (median), spread (IQR), skewness (by looking at median position within the box and whisker lengths), identification of potential outliers.
+    -   **Matplotlib:** `ax.boxplot(data_array_or_list_of_arrays, ...)`
+    -   **Seaborn:** `sns.boxplot(data=df, x='category_col', y='numeric_col', hue='another_category', ...)` or `sns.catplot(kind='box', ...)`
+
+**Choosing the Right Plot:**
+-   To see **relationship between two numerical variables**: Scatter plot.
+-   To see **trend over time/sequence**: Line plot.
+-   To see **distribution of one numerical variable**: Histogram (or KDE plot, violin plot).
+-   To **compare distributions of a numerical variable across categories**: Box plot (or violin plot, stripplot, swarmplot).
+
+These plots are foundational, and understanding when and how to use them is a key skill in data analysis.

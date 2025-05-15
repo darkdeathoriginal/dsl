@@ -1,0 +1,36 @@
+---
+title: Quick Reference Table - Common Plot Types
+---
+
+# 14. Quick Reference Table: Common Plot Types
+
+This table provides a quick reference for common plot types and their typical creation commands in Matplotlib (`plt` or `ax` methods) and Seaborn (`sns` functions).
+
+| Plot Type         | Matplotlib Command(s)                      | Seaborn Command(s)                                  | Primary Usage Example                                   |
+|-------------------|--------------------------------------------|-----------------------------------------------------|---------------------------------------------------------|
+| **Line Plot**     | `plt.plot()`, `ax.plot()`                  | `sns.lineplot()`, `sns.relplot(kind='line')`        | Trends over time/sequence, relationship between ordered variables |
+| **Scatter Plot**  | `plt.scatter()`, `ax.scatter()`            | `sns.scatterplot()`, `sns.relplot(kind='scatter')`  | Relationship/correlation between two numerical variables |
+| **Histogram**     | `plt.hist()`, `ax.hist()`                  | `sns.histplot()`, `sns.displot(kind='hist')`        | Distribution of a single numerical variable             |
+| **Bar Chart**     | `plt.bar()`, `ax.bar()` (vertical)<br>`plt.barh()`, `ax.barh()` (horizontal) | `sns.barplot()`, `sns.countplot()`, `sns.catplot(kind='bar')` | Comparing quantities across categories                  |
+| **Box Plot**      | `plt.boxplot()`, `ax.boxplot()`            | `sns.boxplot()`, `sns.catplot(kind='box')`          | Comparing distributions of a numerical variable across categories, outlier detection |
+| **Violin Plot**   | `plt.violinplot()`, `ax.violinplot()`      | `sns.violinplot()`, `sns.catplot(kind='violin')`    | Similar to box plot, but also shows probability density |
+| **Pie Chart**     | `plt.pie()`, `ax.pie()`                    | (Generally not a primary Seaborn plot, use Matplotlib) | Proportions of a whole for a few categories           |
+| **Heatmap**       | `plt.imshow()`, `ax.imshow()` (for matrix data) | `sns.heatmap()`                                     | Visualizing matrix data, correlation matrices           |
+| **Pair Plot**     | (Manual subplot grid with scatter/hist)    | `sns.pairplot()`                                    | Pairwise relationships between multiple numerical variables |
+| **Joint Plot**    | (Manual subplot grid with scatter/hist)    | `sns.jointplot()`, `sns.JointGrid()`                | Joint and marginal distributions of two variables       |
+| **KDE Plot**      | (Manual, e.g., via `scipy.stats.gaussian_kde`) | `sns.kdeplot()`, `sns.displot(kind='kde')`          | Smoothed distribution of a numerical variable(s)        |
+| **Regression Plot**| `plt.scatter()` + manual regression line  | `sns.lmplot()`, `sns.regplot()`                     | Scatter plot with a linear regression model fit         |
+| **Facet Grid**    | (Manual subplot creation and iteration)    | `sns.FacetGrid().map()`                             | Grid of same plot type for subsets of data              |
+| **3D Scatter**    | `ax3d.scatter()` (from `mpl_toolkits.mplot3d`) | (Seaborn primarily focuses on 2D)                   | Points in 3D space                                      |
+| **3D Line**       | `ax3d.plot()` (from `mpl_toolkits.mplot3d`)    | (Seaborn primarily focuses on 2D)                   | Lines in 3D space                                       |
+| **3D Surface**    | `ax3d.plot_surface()` (from `mpl_toolkits.mplot3d`) | (Seaborn primarily focuses on 2D)                   | Surface defined by X, Y, Z grids                        |
+| **Save Plot**     | `fig.savefig()`                            | (Use `fig.savefig()` on the underlying Matplotlib figure) | Exporting plot to a file                                |
+
+**General Notes:**
+-   **`ax`**: Refers to a Matplotlib `Axes` object (e.g., obtained from `fig, ax = plt.subplots()`).
+-   **`plt`**: Refers to the `matplotlib.pyplot` module.
+-   **`sns`**: Refers to the `seaborn` module.
+-   Seaborn often provides "figure-level" functions (like `relplot`, `displot`, `catplot`, `pairplot`, `jointplot`) that create a figure with one or more subplots and manage the layout. They typically return a `FacetGrid` or `JointGrid` object.
+-   Seaborn also has "axes-level" functions (like `scatterplot`, `lineplot`, `histplot`, `boxplot`) that draw onto a specific Matplotlib `Axes` (passed via the `ax=` parameter).
+
+This table should serve as a helpful starting point when deciding which plotting function to use.

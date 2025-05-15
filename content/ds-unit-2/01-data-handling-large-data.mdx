@@ -1,0 +1,34 @@
+---
+title: Data Handling - Challenges with Large Data
+---
+
+# 1. Data Handling: Challenges with Large Data
+
+Working with large datasets presents unique challenges that can overwhelm traditional data processing techniques and hardware.
+
+## Challenges in Handling Large Volumes of Data
+
+-   **Memory Limitations (RAM):**
+    -   The entire dataset may not fit into the computer's Random Access Memory (RAM).
+    -   When RAM is exhausted, the operating system resorts to "swapping" data to disk (virtual memory), which is significantly slower and drastically degrades processing performance.
+    -   This can lead to processes becoming unresponsive or crashing.
+
+-   **Algorithm Scalability:**
+    -   Many standard algorithms are designed with the assumption that the entire dataset can be held in memory.
+    -   When applied to large data, these algorithms can lead to "out-of-memory" errors or become impractically slow.
+    -   The computational complexity (e.g., O(n²)) of an algorithm becomes a critical factor with large 'n'.
+
+-   **Performance Issues (I/O and CPU):**
+    -   **Input/Output (I/O) Bottlenecks:** Reading from and writing to disk is much slower than accessing RAM. Large data means more I/O operations, which can become the primary bottleneck.
+    -   **CPU Processing Time:** Even if data fits in RAM, complex computations on large datasets can take a very long time, tying up CPU resources.
+
+## Main Problems Encountered
+
+-   **Out-of-memory errors:** The most direct consequence of trying to load too much data into RAM.
+-   **Algorithms running indefinitely (or for impractically long periods):** Due to non-scalable algorithms or excessive I/O wait times.
+-   **I/O and CPU starvation:**
+    -   **I/O Starvation:** Processes spend most of their time waiting for data to be read from or written to slow storage.
+    -   **CPU Starvation:** While I/O operations are happening, the CPU might be idle. Conversely, CPU-intensive tasks can make the system unresponsive to I/O.
+    -   This often occurs when processes are waiting on slow hardware resources or inefficient data access patterns.
+
+Addressing these challenges requires specialized techniques, tools, and often a shift in how algorithms are designed and implemented.

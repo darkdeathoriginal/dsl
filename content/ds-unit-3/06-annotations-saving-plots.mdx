@@ -1,0 +1,85 @@
+---
+title: Annotations and Saving Plots
+---
+import { CodeBlock } from '@/components/CodeBlock';
+
+# 7. Annotations and Saving Plots
+
+Adding annotations can greatly enhance the readability and information content of your plots. Once a plot is ready, you'll often need to save it to a file.
+
+## Annotations
+Annotations are used to add text, arrows, or shapes to specific points or regions of a plot to highlight important features or provide explanations.
+
+### Basic Text (`ax.text()`)
+-   `ax.text(x, y, s, **kwargs)`: Adds text `s` at data coordinates `(x, y)`.
+-   Common `kwargs`:
+    -   `fontsize`, `color`
+    -   `ha` (horizontalalignment): `'center'`, `'right'`, `'left'`
+    -   `va` (verticalalignment): `'center'`, `'top'`, `'bottom'`
+    -   `rotation`
+    -   `bbox`: A dictionary of properties for a bounding box around the text (e.g., `bbox=dict(facecolor='yellow', alpha=0.5, pad=5)`).
+
+### Arrows and Advanced Annotations (`ax.annotate()`)
+-   `ax.annotate(s, xy, xytext=None, xycoords='data', textcoords='data', arrowprops=None, **kwargs)`: More powerful for creating annotations, especially those with arrows.
+    -   `s`: The text of the annotation.
+    -   `xy`: The point `(x, y)` to annotate (in `xycoords`).
+    -   `xytext`: The position `(x, y)` to place the text (in `textcoords`). If `None`, text is placed at `xy`.
+    -   `xycoords`, `textcoords`: Specify the coordinate system for `xy` and `xytext`. Common values:
+        -   `'data'`: Use the data coordinate system of the Axes (default).
+        -   `'axes fraction'`: `(0,0)` is bottom-left of Axes, `(1,1)` is top-right.
+        -   `'figure fraction'`: `(0,0)` is bottom-left of Figure, `(1,1)` is top-right.
+    -   `arrowprops`: A dictionary of properties to draw an arrow from `xytext` to `xy`.
+        -   Example: `arrowprops=dict(facecolor='black', shrink=0.05, width=1, headwidth=5)`
+        -   `arrowstyle`: e.g., `'->'`, `'-|>'`, `'fancy'`.
+
+<CodeBlock
+  isPlot={true}
+  initialCode={`import matplotlib.pyplot as plt\nimport numpy as np\n\nfig, ax = plt.subplots(figsize=(7,5))\nx = np.linspace(0, 2 * np.pi, 100)\ny = np.sin(x)\nax.plot(x, y)\nax.set_title('Annotating a Sine Wave')\n\n# Simple text annotation (data coordinates)\nax.text(np.pi/2 + 0.1, 1.0, 'Peak Value',\n        fontsize=10, color='green',\n        bbox=dict(facecolor='wheat', alpha=0.3, boxstyle='round,pad=0.3'))\n\n# Annotation with an arrow\npeak_x = np.pi / 2\npeak_y = np.sin(peak_x)\nax.annotate('Max Point', \n            xy=(peak_x, peak_y), # Point to annotate\n            xytext=(peak_x + 1, peak_y + 0.3), # Text position\n            arrowprops=dict(facecolor='black', shrink=0.05, \n                            arrowstyle='->', connectionstyle='arc3,rad=.2'),\n            fontsize=12)\n\n# Text in axes fraction coordinates\nax.text(0.05, 0.05, 'Plot Start (Axes Fraction Coords)', \n        transform=ax.transAxes, fontsize=9, color='blue')\n\n# plt.show() handled by CodeBlock`}
+/>
+
+**Bounding Boxes and Custom Arrows:**
+-   The `bbox` argument in `ax.text()` and `ax.annotate()` can be used to draw a box around the text.
+-   `arrowprops` in `ax.annotate()` offers extensive customization for arrows.
+
+## Saving Plots (`fig.savefig()`)
+Once your plot is complete, you can save it to various file formats.
+-   `fig.savefig(fname, dpi=None, facecolor='w', edgecolor='w', orientation='portrait', papertype=None, format=None, transparent=False, bbox_inches=None, pad_inches=0.1, metadata=None)`
+-   **Key Parameters:**
+    -   `fname`: A string (filename or path) or a Python file-like object. The format is inferred from the extension (e.g., `.png`, `.pdf`, `.svg`, `.jpg`).
+    -   `dpi`: Dots per inch (resolution). Higher DPI means higher resolution. Common values: 100, 300, 600.
+    -   `format`: Explicitly specify the file format (e.g., `'png'`, `'pdf'`).
+    -   `transparent=True`: Saves the figure with a transparent background (if supported by the format, like PNG).
+    -   `bbox_inches='tight'`: Often very useful. It attempts to adjust the bounding box of the saved figure to include all artists, removing unnecessary whitespace.
+    -   `pad_inches`: Amount of padding around the figure when `bbox_inches='tight'`.
+    -   `facecolor`: The facecolor of the figure. `'w'` (white) is default.
+
+**Example :**
+```python
+# Conceptual save - this would normally be run in a local Python environment
+# import matplotlib.pyplot as plt
+# import numpy as np
+#
+# fig, ax = plt.subplots()
+# ax.plot(np.random.rand(10))
+# ax.set_title("Random Data")
+#
+# # Save as PNG
+# fig.savefig('my_plot.png', dpi=300, bbox_inches='tight')
+# print("Saved my_plot.png")
+#
+# # Save as PDF (vector format, good for publications)
+# fig.savefig('my_plot.pdf', bbox_inches='tight')
+# print("Saved my_plot.pdf")
+#
+# # Save as SVG (Scalable Vector Graphics)
+# fig.savefig('my_plot.svg', transparent=True)
+# print("Saved my_plot.svg with transparent background")
+```
+**Common File Types:**
+-   `.png`: Raster format, good for web, loses quality on scaling.
+-   `.jpg` or `.jpeg`: Raster format, lossy compression, good for photographs, not ideal for line art/plots.
+-   `.pdf`: Vector format, excellent for publications, scales without loss of quality.
+-   `.svg`: Scalable Vector Graphics, XML-based vector format, good for web and editing in vector graphics software.
+-   `.eps`: Encapsulated PostScript, another vector format often used in LaTeX documents.
+
+Choose the format and DPI based on your needs (e.g., web display, print publication, presentation).

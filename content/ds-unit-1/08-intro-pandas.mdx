@@ -1,0 +1,140 @@
+---
+title: Introduction to Pandas
+---
+import { CodeBlock } from '@/components/CodeBlock';
+
+# 8. Introduction to Pandas
+
+**Pandas** is a fast, powerful, flexible, and easy-to-use open-source data analysis and manipulation tool, built on top of the Python programming language (and NumPy). It's a cornerstone of the Python Data Science ecosystem.
+
+## What is Pandas?
+-   Provides high-performance, easy-to-use data structures and data analysis tools.
+-   Introduces two primary data structures:
+    1.  **Series (1D):** A one-dimensional labeled array capable of holding any data type (integers, strings, floating point numbers, Python objects, etc.). The axis labels are collectively referred to as the **index**.
+    2.  **DataFrame (2D):** A two-dimensional, size-mutable, potentially heterogeneous tabular data structure with labeled axes (rows and columns). You can think of it like a spreadsheet, a SQL table, or a dictionary of Series objects.
+-   Widely used in data science for data cleaning, exploration, transformation, and analysis.
+
+It's conventional to import Pandas like this:
+<CodeBlock
+  initialCode={`import pandas as pd\nimport numpy as np # Often used with Pandas\nprint("Pandas and NumPy imported successfully!")`}
+/>
+
+## Series
+A Series is like a single column in a table or a 1D NumPy array with an explicit index.
+
+### Definition and Creation
+-   1D labeled array.
+-   Creatable from lists, NumPy arrays, dictionaries, scalar values, etc.
+
+<CodeBlock
+  initialCode={`import pandas as pd\n\n# From a list (default integer index)\ns1 = pd.Series([10, 20, 30, 40])\nprint("Series s1 (from list, default index):\\n", s1)\nprint("\\nIndex of s1:", s1.index)\nprint("Values of s1:", s1.values)\n\n# From a list with custom index\ns2 = pd.Series([1, 2, 3], index=['a', 'b', 'c'])\nprint("\\nSeries s2 (from list, custom index):\\n", s2)\nprint("Accessing element by label s2['b']:", s2['b'])\n\n# From a dictionary\ndata_dict = {'Ohio': 35000, 'Texas': 71000, 'Oregon': 16000, 'Utah': 5000}\ns3 = pd.Series(data_dict)\nprint("\\nSeries s3 (from dictionary):\\n", s3)\n\n# You can also specify an index for a dictionary to reorder or subset\nstates = ['California', 'Ohio', 'Oregon', 'Texas']\ns4 = pd.Series(data_dict, index=states)\nprint("\\nSeries s4 (from dict, specified index):\\n", s4)`}
+/>
+
+### Key Series Attributes and Methods
+-   `series.values`: Returns the data as a NumPy array.
+-   `series.index`: Returns the Index object.
+-   `series.dtype`: Returns the data type of the elements.
+-   `series.name`: A name for the Series.
+-   `series.index.name`: A name for the index.
+
+### Vectorized Operations
+Pandas Series support vectorized operations, similar to NumPy arrays. Operations are performed element-wise.
+<CodeBlock
+  initialCode={`import pandas as pd\n\ns = pd.Series([10, 20, 30], index=['x', 'y', 'z'])\nprint("Original Series s:\\n", s)\n\n# Scalar multiplication\nprint("\\ns * 2:\\n", s * 2)\n\n# Applying a NumPy function\nimport numpy as np\nprint("\\nnp.exp(s/10):\\n", np.exp(s/10)) # Example operation\n\n# Filtering\nprint("\\ns[s > 15]:\\n", s[s > 15])`}
+/>
+
+### Automatic Alignment
+When performing operations between Series, Pandas automatically aligns data by index labels.
+<CodeBlock
+  initialCode={`import pandas as pd\n\ns_a = pd.Series([1, 2, 3], index=['a', 'b', 'c'])\ns_b = pd.Series([10, 20, 30, 40], index=['c', 'd', 'e', 'a'])\n\nprint("Series s_a:\\n", s_a)\nprint("\\nSeries s_b:\\n", s_b)\n\n# Addition aligns on index labels\n# 'b', 'd', 'e' will have NaN because they don't exist in both\nresult = s_a + s_b\nprint("\\ns_a + s_b (aligned by index):\\n", result)`}
+/>
+
+### NaN Handling (Not a Number)
+Missing data in Pandas is typically represented by `NaN` (Not a Number), which is a special floating-point value.
+-   `pd.isnull(series)` or `series.isnull()`: Returns a boolean Series indicating which values are NaN.
+-   `pd.notnull(series)` or `series.notnull()`: The opposite of `isnull()`.
+
+<CodeBlock
+  initialCode={`import pandas as pd\n\nseries_with_nan = pd.Series([1, np.nan, 3, np.nan], index=['a', 'b', 'c', 'd'])\nprint("Series with NaN:\\n", series_with_nan)\n\nprint("\\nseries_with_nan.isnull():\\n", series_with_nan.isnull())\n\n# Operations with NaN often result in NaN\nprint("\\nseries_with_nan + 1:\\n", series_with_nan + 1)`}
+/>
+
+## DataFrame
+A DataFrame represents a rectangular table of data and contains an ordered collection of columns, each of which can be a different value type (numeric, string, boolean, etc.).
+
+### Definition and Creation
+-   2D tabular data, like a spreadsheet or SQL table.
+-   Can be created from:
+    -   Dict of 1D ndarrays, lists, dicts, or Series.
+    -   2D NumPy array.
+    -   A Series.
+    -   Another DataFrame.
+
+<CodeBlock
+  initialCode={`import pandas as pd\n\n# From a dictionary of lists (or NumPy arrays)\ndata = {'Name': ['John', 'Alice', 'Bob', 'Eve'],\n        'Age': [25, 30, 35, 22],\n        'City': ['New York', 'London', 'Paris', 'Tokyo']}\ndf = pd.DataFrame(data)\nprint("DataFrame df (from dict of lists):\\n", df)\n\n# Specifying column order\ndf_ordered = pd.DataFrame(data, columns=['Name', 'City', 'Age'])\nprint("\\nDataFrame df_ordered (specified column order):\\n", df_ordered)\n\n# Specifying index and columns\ndf_custom_index = pd.DataFrame(data, columns=['Name', 'Age', 'City'], index=['p1', 'p2', 'p3', 'p4'])\nprint("\\nDataFrame df_custom_index (custom index):\\n", df_custom_index)`}
+/>
+
+<CodeBlock
+  initialCode={`import pandas as pd\nimport numpy as np\n\n# From a 2D NumPy array\ndata_np = np.array([[1, 'A'], [2, 'B'], [3, 'C']])\ndf_from_np = pd.DataFrame(data_np, columns=['Number', 'Letter'], index=['r1', 'r2', 'r3'])\nprint("DataFrame from NumPy array:\\n", df_from_np)\nprint("\\nData types:\\n", df_from_np.dtypes) # Note: NumPy array forces a common dtype if possible`}
+/>
+
+### Indexing and Selection
+
+#### Selecting Columns
+-   `df['column_name']`: Selects a single column as a Series.
+-   `df[['col1', 'col2']]`: Selects multiple columns as a DataFrame.
+-   Dot notation `df.column_name` (works if column name is a valid Python variable name and doesn't conflict with DataFrame methods).
+
+<CodeBlock
+  initialCode={`import pandas as pd\ndata = {'Name': ['John', 'Alice', 'Bob'], 'Age': [25, 30, 35]}\ndf = pd.DataFrame(data)\nprint("Original DataFrame:\\n", df)\n\n# Select 'Name' column as Series\nnames = df['Name']\nprint("\\nColumn 'Name' (Series):\\n", names)\nprint("Type of names:", type(names))\n\n# Select 'Age' column using dot notation\nages_dot = df.Age\nprint("\\nColumn 'Age' (using dot notation):\\n", ages_dot)\n\n# Select multiple columns\nsubset_df = df[['Name', 'Age']] # Note the double brackets\nprint("\\nSubset DataFrame ['Name', 'Age']:\\n", subset_df)`}
+/>
+
+#### Selecting Rows
+-   **`.loc[]` (Label-based indexing):** Selects rows (and columns) by labels/index names.
+-   **`.iloc[]` (Integer-location based indexing):** Selects rows (and columns) by integer positions (like Python list slicing).
+-   **`.at[]`:** Fast label-based scalar lookup.
+-   **`.iat[]`:** Fast integer-location based scalar lookup.
+
+<CodeBlock
+  initialCode={`import pandas as pd\ndata = {'Name': ['John', 'Alice', 'Bob'], 'Age': [25, 30, 35]}\ndf = pd.DataFrame(data, index=['id1', 'id2', 'id3'])\nprint("Original DataFrame with custom index:\\n", df)\n\n# Using .loc[]\nprint("\\nRow with label 'id2' (df.loc['id2']):\\n", df.loc['id2'])\nprint("\\nRows 'id1' and 'id3', columns 'Name' and 'Age':\\n", df.loc[['id1', 'id3'], ['Name', 'Age']])\n\n# Using .iloc[]\nprint("\\nRow at integer position 0 (df.iloc[0]):\\n", df.iloc[0])\nprint("\\nRows at position 0 and 2, column at position 1 (Age):\\n", df.iloc[[0, 2], 1])\nprint("\\nFirst 2 rows, first 2 columns:\\n", df.iloc[:2, :2])\n\n# Using .at[] and .iat[] for single values\nprint("\\nValue at ('id1', 'Name') using .at[]:", df.at['id1', 'Name'])\nprint("Value at (0, 0) using .iat[]:", df.iat[0, 0])`}
+/>
+
+#### Boolean Indexing (Filtering)
+Select rows based on a boolean condition.
+<CodeBlock
+  initialCode={`import pandas as pd\ndata = {'Name': ['John', 'Alice', 'Bob'], 'Age': [25, 30, 22], 'Salary': [50000, 60000, 45000]}\ndf = pd.DataFrame(data)\nprint("Original DataFrame:\\n", df)\n\n# People older than 25\nolder_than_25 = df[df['Age'] > 25]\nprint("\\nPeople older than 25:\\n", older_than_25)\n\n# Multiple conditions (use & for AND, | for OR, wrap conditions in parentheses)\n# People older than 20 AND salary > 48000\nfiltered_df = df[(df['Age'] > 20) & (df['Salary'] > 48000)]\nprint("\\nAge > 20 AND Salary > 48000:\\n", filtered_df)`}
+/>
+
+### Column Operations
+-   **Adding a new column:**
+    -   `df['new_column_name'] = values` (where `values` can be a Series, list, array, or scalar).
+-   **Modifying an existing column:** Same assignment syntax.
+-   **Deleting a column:**
+    -   `del df['column_name']`
+    -   `df.drop(columns=['col1', 'col2'], inplace=False)` (use `inplace=True` to modify df directly)
+
+<CodeBlock
+  initialCode={`import pandas as pd\ndata = {'Name': ['John', 'Alice'], 'Age': [25, 30]}\ndf = pd.DataFrame(data)\nprint("Original DataFrame:\\n", df)\n\n# Adding a new column 'Salary'\ndf['Salary'] = [50000, 60000]\nprint("\\nDataFrame after adding 'Salary':\\n", df)\n\n# Adding a column derived from others\ndf['Age_in_5_years'] = df['Age'] + 5\nprint("\\nDataFrame with 'Age_in_5_years':\\n", df)\n\n# Adding a column with a scalar value\ndf['Country'] = 'USA'\nprint("\\nDataFrame with 'Country':\\n", df)\n\n# Deleting a column\ndel df['Age_in_5_years']\nprint("\\nDataFrame after deleting 'Age_in_5_years':\\n", df)\n\ndf_dropped = df.drop(columns=['Country']) # Returns a new DF by default\nprint("\\nDataFrame after df.drop(columns=['Country']):\\n", df_dropped)\nprint("Original df is unchanged unless inplace=True is used:\\n", df)`}
+/>
+
+### Handling NaN (Missing Values) in DataFrames
+-   `df.dropna(axis=0, how='any', thresh=None, subset=None, inplace=False)`: Drop rows (axis=0) or columns (axis=1) with missing values.
+    -   `how='any'`: Drop if any NaN are present.
+    -   `how='all'`: Drop if all values are NaN.
+    -   `thresh=N`: Keep only rows/columns with at least N non-NaN values.
+-   `df.fillna(value, method=None, axis=None, inplace=False, limit=None)`: Fill NaN values using a specified method or value.
+    -   `value`: Scalar, dict, Series, or DataFrame to fill missing values.
+    -   `method='ffill'` (forward fill) or `'bfill'` (backward fill).
+
+<CodeBlock
+  initialCode={`import pandas as pd\nimport numpy as np\n\ndata_nan = {'col1': [1, np.nan, 3, 4],\n            'col2': [np.nan, 'b', 'c', np.nan],\n            'col3': [5, 6, np.nan, 8]}\ndf_nan = pd.DataFrame(data_nan)\nprint("DataFrame with NaN:\\n", df_nan)\n\n# Drop rows with any NaN\ndf_dropped_rows = df_nan.dropna() # Default axis=0, how='any'\nprint("\\nAfter df_nan.dropna():\\n", df_dropped_rows)\n\n# Fill NaN with a scalar value (e.g., 0)\ndf_filled_zero = df_nan.fillna(0)\nprint("\\nAfter df_nan.fillna(0):\\n", df_filled_zero)\n\n# Fill NaN in specific columns with different values\nfill_values = {'col1': df_nan['col1'].mean(), 'col2': 'Unknown', 'col3': 99}\ndf_filled_specific = df_nan.fillna(value=fill_values)\nprint("\\nAfter filling specific columns:\\n", df_filled_specific)\n\n# Forward fill\ndf_ffill = df_nan.fillna(method='ffill')\nprint("\\nAfter forward fill (ffill):\\n", df_ffill)`}
+/>
+
+### Grouping and Aggregation (`.groupby()`)
+A powerful operation for splitting data into groups, applying a function to each group independently, and then combining the results.
+-   **Split:** Data is grouped based on criteria (e.g., values in a column).
+-   **Apply:** A function is applied to each group (e.g., `sum()`, `mean()`, `count()`, custom functions).
+-   **Combine:** The results of the function applications are combined into a new data structure.
+
+<CodeBlock
+  initialCode={`import pandas as pd\n\ndata = {'Company': ['GOOG', 'GOOG', 'MSFT', 'MSFT', 'FB', 'FB'],\n        'Person': ['Sam', 'Charlie', 'Amy', 'Vanessa', 'Carl', 'Sarah'],\n        'Sales': [200, 120, 340, 124, 243, 350]}\ndf_company = pd.DataFrame(data)\nprint("Company Sales DataFrame:\\n", df_company)\n\n# Group by 'Company' and calculate mean sales\nmean_sales_by_company = df_company.groupby('Company')['Sales'].mean()\nprint("\\nMean sales by company:\\n", mean_sales_by_company)\n\n# Group by 'Company' and calculate sum of sales\nsum_sales_by_company = df_company.groupby('Company')['Sales'].sum()\nprint("\\nSum of sales by company:\\n", sum_sales_by_company)\n\n# Count occurrences in each group\ncount_by_company = df_company.groupby('Company').count()\nprint("\\nCount of records by company (all columns):\\n", count_by_company)\n\n# Multiple aggregations\naggs = df_company.groupby('Company')['Sales'].agg(['mean', 'std', 'count'])\nprint("\\nMultiple aggregations for Sales by Company:\\n", aggs)`}
+/>

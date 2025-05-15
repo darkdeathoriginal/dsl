@@ -1,0 +1,57 @@
+---
+title: Data Acquisition (Gathering Data)
+---
+
+# 5. Data Acquisition (Gathering Data)
+
+Data acquisition is the process of obtaining the data needed for your Data Science project.
+
+## Sources of Data
+
+### Internal Company Sources
+Many organizations have vast amounts of internal data:
+-   **Databases:** Relational databases (SQL Server, MySQL, PostgreSQL, Oracle) storing transactional data, customer information, etc. NoSQL databases (MongoDB, Cassandra) for less structured data.
+-   **Data Warehouses (DWH):** Central repositories of integrated data from one or more disparate sources, primarily used for reporting and data analysis. They store historical, structured data. ETL (Extract, Transform, Load) processes are complex.
+-   **Data Lakes:** Store vast amounts of raw data in its native format, including structured, semi-structured, and unstructured data. Highly scalable and flexible.
+-   **Data Marts:** A subset of a data warehouse, focused on a specific business line or department (e.g., sales, marketing). Simpler and faster to build than a full DWH.
+-   Log files, application data, CRM systems, ERP systems.
+
+### External Sources
+Data can also be acquired from outside the organization:
+-   **Web APIs (Application Programming Interfaces):** Allow programmatic access to data from web services (e.g., Twitter API, Google Maps API, weather APIs). Common formats are REST (with JSON) or SOAP (with XML).
+-   **Open Datasets:** Publicly available datasets from government agencies (e.g., data.gov), research institutions, organizations like Kaggle, World Bank, WHO.
+-   **Web Scraping:** Extracting data from websites when an API is not available. Requires parsing HTML content (e.g., using libraries like BeautifulSoup or Scrapy in Python). *Always respect `robots.txt` and website terms of service.*
+-   Third-party data providers (paid services).
+
+## Definitions Recap:
+
+-   **Data Warehouse (DWH):**
+    -   Central repository for **structured data**.
+    -   Optimized for querying and analysis (OLAP).
+    -   Data is cleaned, transformed, and integrated (often via complex ETL).
+    -   Schema-on-write: Data structure is defined before data is loaded.
+    -   Complex, often large-scale, serves all departments, can be slow to build.
+
+-   **Data Mart:**
+    -   A **subset** of a data warehouse.
+    -   Focused on the needs of a specific business unit or department.
+    -   Simpler, smaller, and faster to implement than a DWH.
+
+-   **Data Lake:**
+    -   Stores **all types of data** (structured, semi-structured, unstructured) in its raw/native format.
+    -   Highly scalable and cost-effective for large volumes.
+    -   Schema-on-read: Data structure is applied when data is read/queried.
+    -   Better for unstructured data exploration and advanced analytics where data flexibility is key.
+
+### Comparisons: Data Lake vs. Data Warehouse
+| Feature         | Data Lake                                  | Data Warehouse                             |
+|-----------------|--------------------------------------------|--------------------------------------------|
+| **Data Type**   | All (raw, structured, unstructured)        | Primarily structured, processed            |
+| **Schema**      | Schema-on-read (flexible)                  | Schema-on-write (predefined, rigid)        |
+| **Users**       | Data scientists, data engineers             | Business analysts, business users          |
+| **Processing**  | ELT (Extract, Load, Transform) often       | ETL (Extract, Transform, Load)             |
+| **Agility**     | High, easy to add new data sources         | Lower, changes can be complex              |
+| **Cost**        | Generally lower for storage (uses commodity hardware) | Higher, specialized hardware/software often |
+| **Use Cases**   | Big data analytics, ML, data exploration   | BI reporting, dashboards, standard queries |
+
+Data Lakes are often better for unstructured data, while DWHs excel with structured data for traditional business intelligence. Modern architectures often use both in conjunction.

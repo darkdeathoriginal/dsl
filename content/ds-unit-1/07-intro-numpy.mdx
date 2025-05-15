@@ -1,0 +1,133 @@
+---
+title: Introduction to NumPy
+---
+import { CodeBlock } from '@/components/CodeBlock';
+
+# 7. Introduction to NumPy
+
+**NumPy (Numerical Python)** is a fundamental package for scientific computing in Python. It provides:
+
+-   A powerful N-dimensional array object (`ndarray`).
+-   Sophisticated (broadcasting) functions.
+-   Tools for integrating C/C++ and Fortran code.
+-   Useful linear algebra, Fourier transform, and random number capabilities.
+
+NumPy arrays are more efficient for numerical operations than standard Python lists, especially for large datasets.
+
+## What is NumPy?
+
+-   **High-performance array processing library for Python.**
+-   Provides the `ndarray` object for multidimensional arrays and functions for their manipulation.
+-   Supports advanced scientific computing (linear algebra, Fast Fourier Transform (FFT), random number generation, etc.).
+
+## Creating Arrays
+The first step is usually to import NumPy:
+
+<CodeBlock
+  initialCode={`import numpy as np\nprint("NumPy imported successfully!")`}
+/>
+
+### From Python Lists or Tuples
+<CodeBlock
+  initialCode={`import numpy as np\n\n# 1D Array from a list\na = np.array([1, 2, 3, 4, 5])\nprint("1D Array a:\\n", a)\nprint("Type of a:", type(a))\nprint("Data type of elements in a:", a.dtype)\n\n# 2D Array from a list of lists\nb = np.array([[1.5, 2.2, 3.1], [4.0, 5.5, 6.9]])\nprint("\\n2D Array b:\\n", b)\nprint("Data type of elements in b:", b.dtype)`}
+/>
+
+### Using `arange` and `reshape`
+-   `np.arange()`: Similar to Python's `range()`, creates an array with regularly incrementing values.
+-   `.reshape()`: Changes the shape of an array without changing its data.
+
+<CodeBlock
+  initialCode={`import numpy as np\n\n# Array from 0 to 19 (20 elements)\nc = np.arange(20)\nprint("Array c (0-19):\\n", c)\n\n# Reshape c into a 4x5 matrix\nd = c.reshape(4, 5)\nprint("\\nArray d (4x5 reshaped from c):\\n", d)\n\n# Create and reshape in one step\ne = np.arange(15).reshape(3, 5)\nprint("\\nArray e (3x5):\\n", e)`}
+/>
+
+### Special Arrays: Zeros, Ones, Full, Eye, Identity
+-   `np.zeros()`: Creates an array filled with zeros.
+-   `np.ones()`: Creates an array filled with ones.
+-   `np.full()`: Creates an array filled with a specified value.
+-   `np.eye()`: Creates a 2D identity matrix (1s on the diagonal, 0s elsewhere).
+-   `np.identity()`: Similar to `np.eye()`, creates an identity matrix (always square).
+
+<CodeBlock
+  initialCode={`import numpy as np\n\nzeros_arr = np.zeros((2, 4)) # 2 rows, 4 columns of zeros\nprint("Zeros array (2x4):\\n", zeros_arr)\n\nones_arr = np.ones((3, 2), dtype=np.int16) # Specify data type\nprint("\\nOnes array (3x2, int16):\\n", ones_arr)\n\nfull_arr = np.full((2, 2), 7) # 2x2 array filled with 7\nprint("\\nFull array (2x2, filled with 7):\\n", full_arr)\n\neye_matrix = np.eye(3) # 3x3 identity matrix\nprint("\\nEye matrix (3x3):\\n", eye_matrix)\n\nidentity_matrix = np.identity(4)\nprint("\\nIdentity matrix (4x4):\\n", identity_matrix)`}
+/>
+
+### Other Array Creation Functions
+NumPy offers many other ways to create arrays:
+-   `empty_like(prototype_array)`: New array with same shape and type as `prototype_array`, but uninitialized.
+-   `full_like(prototype_array, fill_value)`: New array with same shape and type, filled with `fill_value`.
+-   `asarray(input_data)`: Convert input (list, tuple, etc.) to an ndarray.
+-   `diag(v, k=0)`: Extract a diagonal or construct a diagonal array.
+-   `fromfunction(function, shape, **kwargs)`: Construct an array by executing a function over each coordinate.
+-   `linspace(start, stop, num=50)`: Return evenly spaced numbers over a specified interval.
+-   `logspace(start, stop, num=50, base=10.0)`: Return numbers spaced evenly on a log scale.
+
+<CodeBlock
+  initialCode={`import numpy as np\n\n# linspace example\nlinear_spaced = np.linspace(0, 10, 5) # 5 numbers from 0 to 10 (inclusive)\nprint("Linearly spaced array:\\n", linear_spaced)\n\n# logspace example\nlog_spaced = np.logspace(0, 2, 3) # 10^0, 10^1, 10^2\nprint("\\nLogarithmically spaced array:\\n", log_spaced)`}
+/>
+
+## Array Attributes and Operations
+
+### Key Attributes
+-   `ndarray.ndim`: The number of axes (dimensions) of the array.
+-   `ndarray.shape`: A tuple of integers indicating the size of the array in each dimension.
+-   `ndarray.size`: The total number of elements in the array.
+-   `ndarray.dtype`: An object describing the type of the elements in the array (e.g., `int64`, `float64`).
+-   `ndarray.itemsize`: The size in bytes of each element of the array.
+
+<CodeBlock
+  initialCode={`import numpy as np\n\narr = np.arange(12).reshape(3, 4)\nprint("Array arr:\\n", arr)\nprint("ndim (dimensions):", arr.ndim)\nprint("shape (rows, cols):", arr.shape)\nprint("size (total elements):", arr.size)\nprint("dtype (data type):", arr.dtype)\nprint("itemsize (bytes per element):", arr.itemsize)`}
+/>
+
+### Reshaping
+-   `ndarray.reshape(new_shape)`: Returns an array containing the same data with a new shape.
+    (We saw this in array creation.)
+
+## Indexing and Slicing
+
+Similar to Python lists, but can be extended to multiple dimensions.
+
+### 1D Array Indexing and Slicing
+<CodeBlock
+  initialCode={`import numpy as np\n\narr = np.array([10, 11, 12, 13, 14, 15])\nprint("Original array:", arr)\n\n# Get a single element\nprint("Element at index 2:", arr[2]) # Output: 12\n\n# Slice: elements from index 1 up to (but not including) index 4\nprint("Slice arr[1:4]:", arr[1:4]) # Output: [11 12 13]\n\n# Slice from the beginning up to index 3\nprint("Slice arr[:3]:", arr[:3]) # Output: [10 11 12]\n\n# Slice from index 3 to the end\nprint("Slice arr[3:]:", arr[3:]) # Output: [13 14 15]\n\n# Assign a new value to a slice\narr[2:5] = 99\nprint("Array after assigning 99 to slice [2:5]:", arr)`}
+/>
+**Important Note:** Slices on NumPy arrays are *views* not *copies*. Modifying a slice will modify the original array.
+
+### 2D Array Indexing and Slicing
+You can use comma-separated indices for each dimension.
+
+<CodeBlock
+  initialCode={`import numpy as np\n\narr2d = np.array([[1, 2, 3], [4, 5, 6], [7, 8, 9]])\nprint("Original 2D array:\\n", arr2d)\n\n# Accessing an element (row 1, column 2)\nprint("Element at [1, 2]:", arr2d[1, 2]) # Output: 6\n# Alternative: arr2d[1][2]\n\n# Slicing a row (row 0)\nprint("Row 0 (arr2d[0, :]):\\n", arr2d[0, :]) # Output: [1 2 3]\n# Or: arr2d[0]\n\n# Slicing a column (column 1)\nprint("Column 1 (arr2d[:, 1]):\\n", arr2d[:, 1]) # Output: [2 5 8]\n\n# Slicing a sub-matrix (first 2 rows, columns 1 and 2)\nprint("Sub-matrix arr2d[:2, 1:]:\\n", arr2d[:2, 1:])\n# Output:\n# [[2 3]\n#  [5 6]]`}
+/>
+
+## Copying Arrays
+Since slices are views, if you need a true copy, use the `.copy()` method.
+-   `np.copy(arr)` or `arr.copy()`: Makes a deep copy.
+-   Assignment (`b = a`): Just copies the reference (both `a` and `b` point to the same data).
+
+<CodeBlock
+  initialCode={`import numpy as np\n\na = np.array([1, 2, 3])\nb = a # b is just another name for a's data\nc = a.copy() # c is a new array with a copy of a's data\n\nprint("Original a:", a)\nb[0] = 99\nprint("a after modifying b:", a) # a is changed\nprint("c (copy):", c) # c is not changed`}
+/>
+
+-   `np.empty_like(arr)`: Creates an empty array with the same shape and type as `arr`. The contents are uninitialized.
+
+## Iterating Over Arrays
+
+### 1D Arrays
+Iteration is similar to Python lists.
+<CodeBlock
+  initialCode={`import numpy as np\n\narr = np.array([10, 20, 30])\nprint("Iterating over 1D array:")\nfor x in arr:\n    print(x)`}
+/>
+
+### Multidimensional Arrays
+Iterating over a multidimensional array is done with respect to the first axis (rows).
+<CodeBlock
+  initialCode={`import numpy as np\n\narr2d = np.array([[1, 2], [3, 4]])\nprint("Iterating over 2D array (iterates over rows):")\nfor row in arr2d:\n    print("Row:", row)\n    for element in row:\n        print(" Element:", element)`}
+/>
+
+### `np.nditer()`
+For more fine-grained control over iteration, especially for element-wise iteration regardless of dimension, use `np.nditer`.
+<CodeBlock
+  initialCode={`import numpy as np\n\narr2d = np.array([[1, 2, 3], [4, 5, 6]])\nprint("Iterating element-wise using np.nditer:")\nfor x in np.nditer(arr2d):\n    print(x, end=" ") # Prints: 1 2 3 4 5 6`}
+/>
+
+This covers the basics of NumPy array creation, attributes, indexing, slicing, and iteration as outlined in your notes. We'll delve into more advanced operations later.

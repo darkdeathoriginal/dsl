@@ -1,0 +1,81 @@
+---
+title: Data Cleaning and Preparation (Pandas)
+---
+import { CodeBlock } from '@/components/CodeBlock';
+
+# 4. Data Cleaning and Preparation with Pandas
+
+Pandas is the primary tool in Python for data cleaning and preparation. This section covers common tasks like handling missing values, duplicates, inconsistencies, and transforming data.
+
+## 1. Cleaning
+
+### Handling Missing Values (`NaN`)
+Missing data is a common problem. Pandas represents missing data with `NaN` (Not a Number).
+
+**Identifying Missing Values:**
+-   `df.isnull()`: Returns a DataFrame of booleans indicating where data is missing.
+-   `df.notnull()`: The opposite of `isnull()`.
+-   `df.isnull().sum()`: Counts missing values per column.
+
+<CodeBlock
+  initialCode={`import pandas as pd\nimport numpy as np\n\ndata = {'A': [1, 2, np.nan, 4, np.nan],\n        'B': [5, np.nan, np.nan, 8, 9],\n        'C': ['x', 'y', 'z', 'x', 'y']}\ndf = pd.DataFrame(data)\n\nprint("Original DataFrame:\\n", df)\nprint("\\nIs null? (df.isnull()):\\n", df.isnull())\nprint("\\nSum of nulls per column (df.isnull().sum()):\\n", df.isnull().sum())`}
+/>
+
+**Dropping Missing Values (`.dropna()`):**
+<CodeBlock
+  initialCode={`import pandas as pd\nimport numpy as np\n\ndf = pd.DataFrame({'A': [1, np.nan, 3], 'B': [np.nan, 5, 6], 'C': [7,8,np.nan]})\nprint("Original DataFrame:\\n", df)\n\n# Drop rows with ANY NaN values (default behavior)\ndf_dropped_rows_any = df.dropna()\nprint("\\nAfter df.dropna() (rows with any NaN):\\n", df_dropped_rows_any)\n\n# Drop columns with ANY NaN values\ndf_dropped_cols_any = df.dropna(axis=1)\nprint("\\nAfter df.dropna(axis=1) (columns with any NaN):\\n", df_dropped_cols_any)\n\n# Drop rows where ALL values are NaN\ndf_all_nan_row = pd.DataFrame({'A': [1, np.nan], 'B': [2, np.nan]})\ndf_all_nan_row.loc[1] = np.nan # Make second row all NaN\nprint("\\nDataFrame with an all-NaN row:\\n", df_all_nan_row)\nprint("\\nAfter df.dropna(how='all'):\\n", df_all_nan_row.dropna(how='all'))\n\n# Keep rows with at least N non-NaN values (thresh)\nprint("\\nOriginal DataFrame df:\\n", df)\nprint("\\nKeep rows with at least 2 non-NaN values (df.dropna(thresh=2)):\\n", df.dropna(thresh=2))`}
+/>
+
+**Filling Missing Values (`.fillna()`):**
+<CodeBlock
+  initialCode={`import pandas as pd\nimport numpy as np\n\ndf = pd.DataFrame({'A': [1, np.nan, 3], 'B': [np.nan, 5, 6], 'C': [7,8,np.nan]})\nprint("Original DataFrame:\\n", df)\n\n# Fill all NaN with 0\ndf_filled_zero = df.fillna(0)\nprint("\\nAfter df.fillna(0):\\n", df_filled_zero)\n\n# Fill NaN in column 'A' with its mean, 'B' with its median\nfill_values = {'A': df['A'].mean(), 'B': df['B'].median(), 'C': 'Unknown'}\ndf_filled_specific = df.fillna(value=fill_values)\nprint("\\nAfter filling with specific values/stats per column:\\n", df_filled_specific)\n\n# Forward fill (propagates last valid observation forward)\ndf_ffill = df.fillna(method='ffill')\nprint("\\nAfter df.fillna(method='ffill'):\\n", df_ffill)\n\n# Backward fill\ndf_bfill = df.fillna(method='bfill')\nprint("\\nAfter df.fillna(method='bfill'):\\n", df_bfill)`}
+/>
+
+### Remove Duplicates (`.duplicated()`, `.drop_duplicates()`)
+-   `df.duplicated()`: Returns a boolean Series indicating whether each row is a duplicate of a previous row.
+-   `df.drop_duplicates()`: Returns a DataFrame with duplicate rows removed.
+
+<CodeBlock
+  initialCode={`import pandas as pd\n\ndata = {'col1': ['A', 'B', 'A', 'C', 'B'],\n        'col2': [1, 2, 1, 3, 2]}\ndf_dups = pd.DataFrame(data)\nprint("DataFrame with duplicates:\\n", df_dups)\n\nprint("\\nWhich rows are duplicates? (df_dups.duplicated()):\\n", df_dups.duplicated())\n\n# Drop duplicates, keeping the first occurrence by default\ndf_no_dups_first = df_dups.drop_duplicates()\nprint("\\nAfter drop_duplicates (keep='first'):\\n", df_no_dups_first)\n\n# Keep the last occurrence\ndf_no_dups_last = df_dups.drop_duplicates(keep='last')\nprint("\\nAfter drop_duplicates (keep='last'):\\n", df_no_dups_last)\n\n# Consider duplicates based on specific columns\n# If only 'col1' is considered, ('A',1) and ('A',1) are dups,\n# but also ('B',2) and ('B',2) from original. Let's add a true dup for this.\ndf_subset_dups = pd.DataFrame({'K1': ['one', 'two', 'one', 'two'],\n                               'K2': ['a', 'b', 'a', 'c']})\nprint("\\nDataFrame for subset duplicate check:\\n", df_subset_dups)\nprint("\\nDuplicates based on 'K1' only (df_subset_dups.duplicated(['K1'])):\\n", \n      df_subset_dups.duplicated(subset=['K1']))\nprint("\\nDrop duplicates based on 'K1' only:\\n", \n      df_subset_dups.drop_duplicates(subset=['K1']))`}
+/>
+
+### Resolve Inconsistencies (e.g., capitalization, data types)
+This often involves string methods, mapping, or custom functions.
+
+**Example: Standardizing Capitalization**
+<CodeBlock
+  initialCode={`import pandas as pd\n\ndf = pd.DataFrame({'City': ['New York', 'new york', 'london', 'London', 'Paris']})\nprint("Original cities:\\n", df)\n\n# Convert to lowercase\ndf['City_Lower'] = df['City'].str.lower()\nprint("\\nCities in lowercase:\\n", df)\n\n# Convert to title case\ndf['City_Title'] = df['City'].str.title()\nprint("\\nCities in title case:\\n", df)`}
+/>
+
+**Example: Mapping Values**
+Replace values in a Series using a dictionary (mapping).
+<CodeBlock
+  initialCode={`import pandas as pd\n\ndf = pd.DataFrame({'Gender': ['M', 'F', 'male', 'female', 'M']})\nprint("Original Genders:\\n", df)\n\ngender_map = {'M': 'Male', 'F': 'Female', 'male': 'Male', 'female': 'Female'}\ndf['Gender_Standardized'] = df['Gender'].map(gender_map)\nprint("\\nStandardized Genders:\\n", df)`}
+/>
+
+## 2. Transformation
+
+### Change Data Types (`.astype()`)
+<CodeBlock
+  initialCode={`import pandas as pd\nimport numpy as np\n\ndf = pd.DataFrame({'A': ['1', '2', '3'], 'B': [4.0, 5.5, 6.1]})\nprint("Original DataFrame and dtypes:\\n", df)\nprint(df.dtypes)\n\n# Convert column 'A' from object (string) to int\ndf['A'] = df['A'].astype(int)\n\n# Convert column 'B' from float to int (truncates decimal)\ndf['B_int'] = df['B'].astype(np.int32) # Can specify NumPy dtype\n\nprint("\\nDataFrame after astype and new dtypes:\\n", df)\nprint(df.dtypes)`}
+/>
+
+### Apply Functions (`.apply()`, `.map()`, `.applymap()`)
+-   `.map()`: Element-wise for Series.
+-   `.apply()`: Can be applied row-wise or column-wise for DataFrames, or element-wise on a Series.
+-   `.applymap()`: Element-wise for DataFrames (for functions that return a scalar).
+
+<CodeBlock
+  initialCode={`import pandas as pd\nimport numpy as np\n\ndf = pd.DataFrame(np.random.randn(3, 3), columns=['A', 'B', 'C'])\nprint("Original DataFrame:\\n", df)\n\n# Apply a function to each column (e.g., get range max-min)\ncolumn_ranges = df.apply(lambda x: x.max() - x.min(), axis=0) # axis=0 for columns\nprint("\\nRange (max-min) for each column:\\n", column_ranges)\n\n# Apply a function to each row\nrow_means = df.apply(np.mean, axis=1) # axis=1 for rows\nprint("\\nMean for each row:\\n", row_means)\n\n# Using .applymap() for element-wise transformation on DataFrame\nformatted_df = df.applymap(lambda x: f"{x:.2f}") # Format to 2 decimal places\nprint("\\nDataFrame formatted to 2 decimal places:\\n", formatted_df)\n\n# Using .map() on a Series\nseries_map_test = pd.Series([1, 2, 3])\nmapped_series = series_map_test.map(lambda x: x*x)\nprint("\\nSeries after mapping x -> x*x:\\n", mapped_series)`}
+/>
+
+### Renaming Columns and Index Labels (`.rename()`)
+<CodeBlock
+  initialCode={`import pandas as pd\n\ndf = pd.DataFrame({'alpha': [1,2,3], 'beta': [4,5,6]}, index=['r1', 'r2', 'r3'])\nprint("Original DataFrame:\\n", df)\n\n# Rename columns\ndf_renamed_cols = df.rename(columns={'alpha': 'A', 'beta': 'B'})\nprint("\\nDataFrame with renamed columns:\\n", df_renamed_cols)\n\n# Rename index labels (using a function, e.g., to uppercase)\ndf_renamed_index = df.rename(index=str.upper)\nprint("\\nDataFrame with uppercased index labels:\\n", df_renamed_index)\n\n# Rename using a dictionary for specific index labels\ndf_renamed_idx_specific = df.rename(index={'r1': 'ROW_ONE'})\nprint("\\nDataFrame with specific index renamed:\\n", df_renamed_idx_specific)\n\n# To modify in place: df.rename(..., inplace=True)`}
+/>
+
+### Create New Columns or Features (Feature Engineering)
+This was also covered in the Pandas introduction (Unit 1). It often involves combining existing columns or applying transformations.
+<CodeBlock
+  initialCode={`import pandas as pd\n\ndf = pd.DataFrame({'Price': [10, 20, 15], 'Quantity': [2, 3, 4]})\nprint("Original DataFrame:\\n", df)\n\n# Create a 'Total_Sales' column\ndf['Total_Sales'] = df['Price'] * df['Quantity']\nprint("\\nDataFrame with 'Total_Sales':\\n", df)\n\n# Create a categorical feature based on a condition\ndf['Is_Expensive'] = df['Price'] > 12\nprint("\\nDataFrame with 'Is_Expensive':\\n", df)`}
+/>

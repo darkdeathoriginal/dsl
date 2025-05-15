@@ -1,0 +1,111 @@
+---
+title: Handling Missing Data (In-Depth)
+---
+import { CodeBlock } from '@/components/CodeBlock';
+
+# 6. Handling Missing Data (In-Depth)
+
+Missing data is a pervasive issue in real-world datasets. How you handle it can significantly impact your analysis and model performance. Pandas provides tools to identify, remove, and impute missing values, which are typically represented as `NaN` (Not a Number).
+
+## Definition
+-   Missing values (NaN, blank, None, 'NA', etc.) are common in datasets and must be handled carefully.
+-   `None` is a Python singleton object often used for missing data in object arrays.
+-   `np.nan` (Not a Number) is a special floating-point value used as the primary marker for missing numerical data in Pandas.
+
+## Why Handle Missing Data?
+-   **Data Quality:** Ensures the integrity and reliability of your dataset.
+-   **Unbiased Results:** Improper handling can introduce bias into analyses and models.
+-   **Effective Model Building:** Many machine learning algorithms cannot handle missing values directly and will error out or produce poor results.
+-   **Correct Interpretations:** Missing data can skew summary statistics and visualizations if not accounted for.
+-   **Algorithm Compatibility:** Some algorithms require complete datasets.
+
+## Techniques for Handling Missing Data
+
+### 1. Deletion Methods
+These methods involve removing data points or features with missing values.
+
+**a. Listwise Deletion (Complete Case Analysis):**
+-   **Action:** Drop entire rows (observations) that contain *any* missing values.
+-   **Pandas:** `df.dropna()` (default behavior).
+-   **Pros:** Simple to implement. Resulting dataset is complete.
+-   **Cons:** Can lead to significant loss of data if many rows have at least one missing value, especially if missingness is widespread. Can introduce bias if the data is not Missing Completely At Random (MCAR). Reduces statistical power.
+
+<CodeBlock
+  initialCode={`import pandas as pd\nimport numpy as np\ndf = pd.DataFrame({'A': [1, 2, np.nan, 4], 'B': [5, np.nan, 7, 8], 'C': [9,10,11,12]})\nprint("Original DataFrame:\\n", df)\n\nlistwise_deleted_df = df.dropna()\nprint("\\nAfter Listwise Deletion (df.dropna()):\\n", listwise_deleted_df)`}
+/>
+
+**b. Pairwise Deletion:**
+-   **Action:** For a specific analysis (e.g., calculating correlation between two variables), use only the observations that have valid (non-missing) values for *that pair* of variables. Different analyses might use different subsets of the data.
+-   **Pandas:** Many Pandas descriptive statistics methods (like `.corr()`, `.cov()`) implement pairwise deletion by default (controlled by `skipna=True`).
+-   **Pros:** Uses more available data compared to listwise deletion for specific calculations.
+-   **Cons:** Can lead to statistics (e.g., covariance matrix) that are not positive semi-definite or are based on different sample sizes, making comparisons tricky.
+
+<CodeBlock
+  initialCode={`import pandas as pd\nimport numpy as np\ndf = pd.DataFrame({'X': [1, 2, np.nan, 4, 5], \n                   'Y': [np.nan, 7, 8, 9, 10],\n                   'Z': [11, 12, 13, np.nan, 15]})\nprint("Original DataFrame:\\n", df)\n\n# Correlation matrix uses pairwise complete observations by default\ncorrelation_matrix = df.corr()\nprint("\\nCorrelation Matrix (uses pairwise deletion by default):\\n", correlation_matrix)\n\n# To see this, let's check counts for a specific pair\nprint(f"Count for X, Y pair (non-NaN): {df[['X','Y']].dropna().shape[0]}")\nprint(f"Count for X, Z pair (non-NaN): {df[['X','Z']].dropna().shape[0]}")`}
+/>
+
+**c. Dropping Entire Columns (Features):**
+-   **Action:** If a column has a very high percentage of missing values and is not deemed critical, it might be dropped.
+-   **Pandas:** `df.dropna(axis=1, thresh=N)` or `df.drop(columns=['col_name'])`.
+-   **Pros:** Simplifies the dataset.
+-   **Cons:** Loss of potential information. Decision should be based on domain knowledge and the proportion of missingness.
+
+### 2. Imputation Methods
+Imputation involves replacing missing values with estimated or substituted values.
+
+**a. Mean/Median/Mode Imputation:**
+-   **Action:** Replace missing numerical values with the mean or median of the observed values in that column. Replace missing categorical values with the mode.
+-   **Pandas:** `df['col'].fillna(df['col'].mean())` or `df['col'].fillna(df['col'].median())` or `df['col'].fillna(df['col'].mode()[0])`. (Note: `.mode()` can return multiple values if there are multiple modes, so `[0]` selects the first).
+-   **Pros:** Simple, preserves sample size. Mean imputation preserves the mean of the variable.
+-   **Cons:** Reduces variance of the variable. Distorts relationships between variables (correlations). Mean imputation is sensitive to outliers (median is more robust). Mode imputation might create an artificial majority category.
+
+<CodeBlock
+  initialCode={`import pandas as pd\nimport numpy as np\ndf = pd.DataFrame({'Score': [80, 90, np.nan, 75, np.nan, 85], \n                   'Category': ['A', 'B', 'A', np.nan, 'B', 'A']})\nprint("Original DataFrame:\\n", df)\n\ndf_imputed = df.copy()\ndf_imputed['Score_Mean'] = df_imputed['Score'].fillna(df_imputed['Score'].mean())\ndf_imputed['Score_Median'] = df_imputed['Score'].fillna(df_imputed['Score'].median())\ndf_imputed['Category_Mode'] = df_imputed['Category'].fillna(df_imputed['Category'].mode()[0])\n\nprint("\\nDataFrame after Mean/Median/Mode Imputation:\\n", df_imputed)`}
+/>
+
+**b. K-Nearest Neighbors (KNN) Imputation:**
+-   **Action:** Impute missing values for an observation using the average (for numerical) or mode (for categorical) of its 'k' nearest neighbors. Neighbors are identified based on other features.
+-   **Libraries:** `sklearn.impute.KNNImputer`.
+-   **Pros:** Can be more accurate than simple mean/median/mode, as it considers relationships between features. Can handle mixed data types.
+-   **Cons:** Computationally more expensive, especially for large datasets. Sensitive to the choice of 'k' and the distance metric. Requires features to be scaled.
+
+**c. Regression Imputation (Model-based Imputation):**
+-   **Action:** Predict the missing value using a regression model (e.g., linear regression, decision tree) trained on other features in the dataset. The feature with missing values becomes the target variable, and other features are predictors.
+-   **Libraries:** `sklearn.linear_model.LinearRegression`, etc. Can be implemented with `IterativeImputer` from `sklearn.impute`.
+-   **Pros:** Can capture complex relationships between variables, potentially leading to more accurate imputations.
+-   **Cons:** Can be complex to implement. Imputed values are perfectly predicted by the model, which might not reflect true uncertainty and can artificially inflate correlations.
+
+**d. Multiple Imputation:**
+-   **Action:** A more advanced technique that creates multiple complete datasets by imputing missing values multiple times (e.g., M times), typically using a model that incorporates randomness. Each of the M datasets is then analyzed separately, and the results are pooled to produce a single overall estimate and standard error that accounts for the uncertainty due to imputation.
+-   **Libraries:** `sklearn.impute.IterativeImputer` (can be used for a form of multiple imputation if run multiple times with different random states), `statsmodels` (has some multiple imputation tools), specialized R packages ported via `rpy2`, or dedicated Python libraries like `fancyimpute` (though its development has slowed).
+-   **Pros:** Generally considered one of the most robust methods as it accounts for the uncertainty of imputation. Often leads to less biased estimates.
+-   **Cons:** More complex to implement and interpret. Computationally intensive.
+
+### 3. Forward/Backward Fill (Time Series / Ordered Data)
+-   **Action:** For ordered data (like time series), missing values can be filled by carrying forward the last known value (`ffill`) or using the next known value to fill backward (`bfill`).
+-   **Pandas:** `df.fillna(method='ffill')` or `df.fillna(method='bfill')`.
+-   **Pros:** Simple, useful when values tend to persist over time.
+-   **Cons:** May not be appropriate if values change rapidly or if the missingness is not related to simple persistence.
+
+<CodeBlock
+  initialCode={`import pandas as pd\nimport numpy as np\ndf_ts = pd.DataFrame({'Time': pd.to_datetime(['2023-01-01', '2023-01-02', '2023-01-03', '2023-01-04']),\n                      'Value': [10, np.nan, np.nan, 15]})\ndf_ts = df_ts.set_index('Time')\nprint("Original Time Series DataFrame:\\n", df_ts)\n\nprint("\\nForward Fill (ffill):\\n", df_ts.fillna(method='ffill'))\nprint("\\nBackward Fill (bfill):\\n", df_ts.fillna(method='bfill'))`}
+/>
+
+### Checking and Handling Example (Recap)
+<CodeBlock
+  initialCode={`import pandas as pd\nimport numpy as np\n\ndf = pd.DataFrame({'colA': [1, np.nan, 3, 4, 5],\n                   'colB': ['x', 'y', np.nan, 'z', 'y']})\nprint("Original:\\n", df)\n\n# Show missing data mask\nprint("\\ndf.isnull():\\n", df.isnull())\n\n# Number of missing values per column\nprint("\\ndf.isnull().sum():\\n", df.isnull().sum())\n\n# Drop rows with any NaN\ndf_dropped = df.dropna()\nprint("\\nAfter df.dropna():\\n", df_dropped)\n\n# Fill NaN in 'colA' with mean, 'colB' with 'Unknown'\ndf_filled = df.copy()\ndf_filled['colA'] = df_filled['colA'].fillna(df['colA'].mean())\ndf_filled['colB'] = df_filled['colB'].fillna('Unknown')\nprint("\\nAfter specific fillna():\\n", df_filled)`}
+/>
+
+### Choosing an Approach
+The best method for handling missing data depends on:
+-   **Amount of missing data:** High percentage might favor deletion of feature or more sophisticated imputation.
+-   **Nature of missingness (MCAR, MAR, MNAR):**
+    -   **MCAR (Missing Completely At Random):** Probability of missingness is unrelated to any observed or unobserved data. Listwise deletion might be okay if not too much data is lost.
+    -   **MAR (Missing At Random):** Probability of missingness depends only on *observed* data. More advanced imputation methods are generally better.
+    -   **MNAR (Missing Not At Random):** Probability of missingness depends on the *unobserved* (missing) data itself. This is the hardest to handle; requires careful modeling or domain knowledge.
+-   **Importance of the variable(s) with missing data to the analysis.**
+-   **Type of data (numerical, categorical).**
+-   **The specific analysis or modeling task.**
+-   **Available computational resources.**
+
+It's often good practice to try multiple methods and compare their impact on the results, or to create an additional binary "was_missing" feature if the fact that data was missing is itself informative.

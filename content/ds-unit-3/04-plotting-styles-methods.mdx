@@ -1,0 +1,94 @@
+---
+title: Plotting Styles and Methods
+---
+import { CodeBlock } from '@/components/CodeBlock';
+
+# 4. Plotting Styles and Methods
+
+Matplotlib provides flexibility in how you create and customize plots. Understanding the different interfaces and common methods is key.
+
+## Pyplot (plt) Interface vs. Object-Oriented (OO) Interface
+
+As mentioned earlier, there are two main ways to interact with Matplotlib:
+
+1.  **Pyplot Interface (e.g., `plt.plot(...)`):**
+    -   A collection of command style functions that make Matplotlib work like MATLAB.
+    -   Each `pyplot` function makes some change to a figure: e.g., creates a figure, creates a plotting area in a figure, plots some lines in a plotting area, decorates the plot with labels, etc.
+    -   It's stateful: it keeps track of the "current" figure and axes.
+    -   Convenient for simple, interactive plotting.
+
+2.  **Object-Oriented Interface (e.g., `ax.plot(...)`):**
+    -   You explicitly create `Figure` and `Axes` objects and then call methods on these objects.
+    -   `fig, ax = plt.subplots()` is a common way to get these objects.
+    -   Offers more control and is generally preferred for complex plots, functions that generate plots, or when embedding plots in applications.
+    -   Leads to more explicit and often more readable code for non-trivial plots.
+
+**We will primarily focus on the Object-Oriented API in examples for better practice, though `pyplot` is often used for setup.**
+
+## Figure Class and Axes Class
+
+-   **`Figure` (`fig`):** The top-level container.
+    -   `fig = plt.figure(figsize=(width, height), dpi=dots_per_inch)`: Creates a new figure.
+    -   `fig.add_subplot(nrows, ncols, index)` or `fig.add_axes([left, bottom, width, height])`: Adds an Axes to the figure.
+    -   `fig.suptitle("Overall Title")`: Adds a centered title to the figure.
+-   **`Axes` (`ax`):** The individual plot. This is where most of the plotting happens.
+    -   **Plotting methods:** `ax.plot()`, `ax.scatter()`, `ax.bar()`, `ax.hist()`, etc.
+    -   **Setting labels and title:** `ax.set_xlabel()`, `ax.set_ylabel()`, `ax.set_title()`.
+    -   **Setting limits:** `ax.set_xlim()`, `ax.set_ylim()`.
+    -   **Setting ticks and tick labels:** `ax.set_xticks()`, `ax.set_yticks()`, `ax.set_xticklabels()`, `ax.set_yticklabels()`.
+    -   **Adding legends:** `ax.legend()`.
+    -   **Adding grids:** `ax.grid(True)`.
+
+<CodeBlock
+  isPlot={true}
+  initialCode={`import matplotlib.pyplot as plt\nimport numpy as np\n\n# Create data\nx = np.linspace(0, 10, 100)\ny1 = np.sin(x)\ny2 = np.cos(x)\n\n# Object-Oriented approach\nfig, ax = plt.subplots(figsize=(8, 4)) # Create a figure and a single axes\n\nax.plot(x, y1, label='sin(x)', color='blue', linestyle='-', linewidth=2)\nax.plot(x, y2, label='cos(x)', color='red', linestyle='--', marker='o', markersize=4)\n\nax.set_title('Sine and Cosine Waves')\nax.set_xlabel('X-axis values')\nax.set_ylabel('Y-axis values')\nax.set_xlim(0, 10)\nax.set_ylim(-1.5, 1.5)\nax.grid(True, linestyle=':', alpha=0.7)\nax.legend(loc='upper right')\n\nfig.suptitle('Demonstrating OO API Plotting', fontsize=14)\n# plt.show() handled by CodeBlock`}
+/>
+
+## `set_*` Methods for Customizing Plots
+Most properties of a plot element (Artist) can be controlled via `set_*` methods. For an `Axes` object `ax`:
+-   `ax.set_title(label, fontsize=12, color='black', ...)`
+-   `ax.set_xlabel(label, fontsize=10, ...)`
+-   `ax.set_ylabel(label, fontsize=10, ...)`
+-   `ax.set_xlim([xmin, xmax])`
+-   `ax.set_ylim([ymin, ymax])`
+-   `ax.set_xticks([tick_val1, tick_val2, ...])`
+-   `ax.set_xticklabels([label1, label2, ...], rotation=45, ha='right')` (ha: horizontal alignment)
+-   `ax.set(title='New Title', xlabel='New X Label')` (A convenient way to set multiple properties)
+
+Lines plotted with `ax.plot()` return a list of `Line2D` objects. You can get the line and use its `set_*` methods:
+```python
+line, = ax.plot(x, y) # The comma unpacks the single-element list
+line.set_color('green')
+line.set_linestyle(':')
+```
+
+Custom Legends
+Provide label argument in plotting commands: ax.plot(x, y, label='My Data').
+Call ax.legend() to display the legend.
+Parameters for ax.legend():
+loc: Location string (e.g., 'upper right', 'best', 'center left') or a 2-tuple (x, y).
+fontsize: Size of the legend text.
+ncol: Number of columns in the legend.
+title: Legend title.
+frameon: Whether to draw a frame around the legend.
+Custom Ticks and Labels
+ax.set_xticks(positions): Set the locations of x-ticks.
+ax.set_xticklabels(labels, rotation=, fontsize=, ...): Set the text labels for x-ticks.
+Similar methods for y-axis: ax.set_yticks(), ax.set_yticklabels().
+ax.tick_params(axis='x', colors='red', labelsize=12, ...): Customize tick appearance.
+For more advanced tick formatting, use matplotlib.ticker.FormatStrFormatter or matplotlib.ticker.FuncFormatter.
+<CodeBlock
+isPlot={true}
+initialCode={`import matplotlib.pyplot as plt\nimport numpy as np\n\nfig, ax = plt.subplots()\nx = np.arange(5)\ny = x**2\n\nax.plot(x, y, marker='s', linestyle='-.', color='purple', label='y = x^2')\n\nax.set_title('Customized Plot Example', fontsize=16)\nax.set_xlabel('Input Value (X)', fontsize=12)\nax.set_ylabel('Squared Value (Y)', fontsize=12)\n\n# Custom ticks and labels\nax.set_xticks([0, 1, 2, 3, 4])\nax.set_xticklabels(['Zero', 'One', 'Two', 'Three', 'Four'], rotation=30, ha='right')\nax.set_yticks(np.arange(0, 21, 5)) # Ticks from 0 to 20, step 5\n\nax.legend(loc='upper left', fontsize=10, title='Legend Title', frameon=False)\nax.grid(axis='y', linestyle=':', color='gray')\n\n# Change spine visibility\nax.spines['top'].set_visible(False)\nax.spines['right'].set_visible(False)\n\n# plt.show()`}
+/>
+Multiple Subplots
+Covered in the next section.
+Image Plotting (ax.imshow())
+Used to display images (2D arrays or PIL Images).
+ax.imshow(Z, cmap='viridis', interpolation='nearest', aspect='auto')
+Z: The image data.
+cmap: Colormap (e.g., 'viridis', 'gray', 'jet').
+interpolation: How to interpolate pixels if image is scaled.
+aspect: Aspect ratio.
+plt.colorbar(image_object, ax=ax): Adds a colorbar.
+This provides a foundation for creating and customizing plots. The key is to get handles to the Figure and Axes objects and then use their respective methods.

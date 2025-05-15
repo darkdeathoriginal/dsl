@@ -1,0 +1,48 @@
+---
+title: Introduction to Seaborn Library
+---
+import { CodeBlock } from '@/components/CodeBlock';
+
+# 8. Introduction to Seaborn Library
+
+While Matplotlib provides a powerful foundation for plotting, creating complex statistical visualizations can sometimes be verbose. **Seaborn** is a Python data visualization library built on top of Matplotlib that provides a high-level interface for drawing attractive and informative statistical graphics.
+
+## What is Seaborn?
+-   **Statistical Data Visualization:** Seaborn's primary goal is to make visualization a central part of exploring and understanding data. It specializes in statistical plotting.
+-   **Built on Matplotlib:** It leverages Matplotlib's capabilities underneath but offers simpler, more abstract function calls for common statistical plot types. You can still use Matplotlib commands to customize Seaborn plots.
+-   **Pandas Integration:** Works very well with Pandas DataFrames. Many Seaborn functions expect data in a "tidy" format (long-form DataFrames).
+-   **Attractive Defaults:** Comes with several built-in themes and color palettes that are generally more aesthetically pleasing and statistically meaningful than Matplotlib's defaults.
+
+## Features of Seaborn
+
+-   **High-level Statistical Plotting Functions:** Functions are designed to quickly create common statistical plots like scatter plots with regression lines, box plots, violin plots, heatmaps, distribution plots, etc., often with just one line of code.
+-   **Beautiful Default Themes and Color Palettes:** Offers visually appealing styles out-of-the-box, making it easier to create publication-quality graphics.
+    -   Themes: `darkgrid` (default), `whitegrid`, `dark`, `white`, `ticks`.
+    -   Color palettes: A wide range of qualitative, sequential, and diverging palettes.
+-   **Built-in Support for Complex Visualizations:** Simplifies tasks like:
+    -   Visualizing relationships between multiple variables (e.g., `pairplot`, `jointplot`).
+    -   Plotting data conditioned on other variables using facets (e.g., `FacetGrid`, `catplot`).
+    -   Estimating and plotting statistical models (e.g., linear regression lines in scatter plots).
+-   **Quick Integration with Pandas DataFrames:** Many functions accept DataFrames directly, and you can specify column names as strings for x, y, hue, size, style, etc.
+-   **User-friendly API, Well-documented:** Generally considered easier to learn for common statistical plots compared to writing equivalent code from scratch in Matplotlib.
+
+## Installation
+
+Like Matplotlib, Seaborn is often included in Anaconda distributions. If not, you can install it via pip:
+```bash
+pip install seaborn
+```
+For our Pyodide environment, Seaborn is pre-loaded.
+
+It's conventional to import Seaborn as `sns`:
+<CodeBlock
+  initialCode={`import seaborn as sns\nimport matplotlib.pyplot as plt # Often imported for further customization\nimport pandas as pd # Seaborn works great with pandas\n\nprint(f"Seaborn version: {sns.__version__}")\n\n# Apply a default Seaborn theme (optional, but common)\nsns.set_theme(style="whitegrid")\nprint("Seaborn theme set to 'whitegrid'")`}
+/>
+
+**Seaborn vs. Matplotlib:**
+-   Think of Seaborn as a complement to Matplotlib, not a replacement.
+-   Use Seaborn for its high-level interface and specialized statistical plots.
+-   Use Matplotlib for fine-grained customization when Seaborn's abstractions aren't enough or for basic, non-statistical plotting.
+-   You can often use Matplotlib functions to tweak Seaborn plots (since Seaborn plots are Matplotlib objects).
+
+Seaborn makes it much easier to create complex, informative, and visually appealing statistical graphics with less code.

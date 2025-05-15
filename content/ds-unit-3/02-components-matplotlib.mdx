@@ -1,0 +1,60 @@
+---
+title: Components of Matplotlib
+---
+import { CodeBlock } from '@/components/CodeBlock';
+
+# 2. Components of Matplotlib
+
+Understanding the main components or the "anatomy" of a Matplotlib plot is key to effectively using the library.
+
+Matplotlib plots are structured hierarchically:
+
+1.  **`Figure` (`matplotlib.figure.Figure`):**
+    -   The **overall window or page** where everything is drawn. It's the top-level container for all plot elements.
+    -   A Figure can contain one or more `Axes` objects (subplots).
+    -   You can think of it as the canvas.
+    -   Key attributes: figure size, DPI, background color, title (suptitle).
+
+2.  **`Axes` (`matplotlib.axes.Axes`):**
+    -   An **individual plot or graph** within a Figure. This is what you typically think of as "a plot."
+    -   It's the region of the image with the data space. An Axes object contains two (or three in 3D) `Axis` objects.
+    -   Each `Axes` has a title, an x-label, and a y-label.
+    -   Most plotting functions (like `plot()`, `scatter()`, `hist()`) are methods of an `Axes` object.
+
+3.  **`Axis` (`matplotlib.axis.Axis`):**
+    -   These are the **number-line-like objects** that define the graph limits.
+    -   They handle the data limits, ticks (the marks on the axis), and tick labels (the text labeling the ticks).
+    -   A 2D plot has an x-axis and a y-axis. A 3D plot also has a z-axis.
+
+4.  **`Artist` (`matplotlib.artist.Artist`):**
+    -   **Everything you see on the figure is an Artist object.**
+    -   This includes `Figure`, `Axes`, and `Axis` objects, as well as simpler objects like text, lines (`Line2D`), collections (e.g., for scatter plots), patches (e.g., for bar charts), images, etc.
+    -   When the figure is rendered, all artists are drawn to the canvas.
+
+5.  **`pyplot` (`matplotlib.pyplot`):**
+    -   A collection of functions that make Matplotlib work like MATLAB. It provides a convenient, **state-based interface** to Matplotlib's object-oriented plotting library.
+    -   `pyplot` keeps track of the "current" figure and axes, and plotting functions are directed to them.
+    -   It's commonly imported as `plt`: `import matplotlib.pyplot as plt`.
+    -   Good for quick, interactive plotting, but for more complex plots or when working within larger applications, the object-oriented API (explicitly creating Figure and Axes objects) is generally preferred for better control and clarity.
+
+### Two Main Ways to Use Matplotlib:
+
+1.  **Pyplot API (State-Based):**
+    -   Relies on global state. `plt.plot()` acts on the "current" Axes.
+    -   Simpler for basic plots.
+
+    <CodeBlock
+      isPlot={true}
+      initialCode={`import matplotlib.pyplot as plt\nimport numpy as np\n\nx = np.linspace(0, 2 * np.pi, 100)\ny = np.sin(x)\n\nplt.plot(x, y) # Plots on the 'current' axes\nplt.title("Simple Sine Wave (Pyplot API)")\nplt.xlabel("X-axis")\nplt.ylabel("Y-axis")\n# plt.show() is handled by CodeBlock`}
+    />
+
+2.  **Object-Oriented (OO) API:**
+    -   Explicitly create and manage Figure and Axes objects.
+    -   Offers more control and is better for complex plots or functions that create plots.
+
+    <CodeBlock
+      isPlot={true}
+      initialCode={`import matplotlib.pyplot as plt\nimport numpy as np\n\nx = np.linspace(0, 2 * np.pi, 100)\ny = np.sin(x)\n\n# Create a Figure and an Axes object\nfig, ax = plt.subplots()\n\nax.plot(x, y) # Call plotting methods directly on the Axes object\nax.set_title("Simple Sine Wave (OO API)")\nax.set_xlabel("X-axis")\nax.set_ylabel("Y-axis")\n# plt.show() is handled by CodeBlock`}
+    />
+
+Most of the time, you'll start by creating a Figure and one or more Axes using `fig, ax = plt.subplots()` or `fig = plt.figure(); ax = fig.add_subplot(1, 1, 1)`, and then call methods on `ax`.

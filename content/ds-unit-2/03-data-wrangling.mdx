@@ -1,0 +1,97 @@
+---
+title: Data Wrangling (Data Munging)
+---
+
+# 3. Data Wrangling
+
+**Data Wrangling** (also known as **Data Munging**) is the process of transforming and mapping raw data from one "raw" form into another format with the intent of making it more appropriate and valuable for a variety of downstream purposes such as analytics and modeling. This is a foundational step in most data projects.
+
+## Definition and Objectives
+
+-   **Process:** Involves discovering, structuring, cleaning, enriching, validating, and publishing data.
+-   **Goal:** To ensure the **quality, consistency, and value** of the data for analysis and modeling.
+-   It aims to convert messy, complex, or disorganized data into a clean, well-structured, and usable format.
+
+## Steps in Data Wrangling
+
+The data wrangling process is often iterative and can be broken down into several key steps:
+
+1.  **Discovery (Understanding Data):**
+    -   Explore the data to understand its content, structure, quality, and limitations.
+    -   Identify potential issues, patterns, and what information is available.
+    -   Often involves initial descriptive statistics and visualizations.
+
+2.  **Structuring (Organization):**
+    -   Organize the data into a suitable format for analysis (e.g., tabular format for DataFrames).
+    -   This might involve parsing data from various sources (like JSON, XML, unstructured text) and arranging it into rows and columns.
+
+3.  **Cleaning:**
+    -   Address data quality issues:
+        -   Handle missing values (impute or remove).
+        -   Correct errors and typos.
+        -   Identify and handle outliers.
+        -   Remove duplicate records.
+        -   Standardize formats (e.g., dates, categories).
+
+4.  **Enrichment (Augmentation):**
+    -   Add or derive new features to improve the dataset's utility.
+    -   This could involve:
+        -   Joining with other datasets to add more columns/information.
+        -   Feature engineering: creating new variables from existing ones (e.g., calculating age from birthdate).
+
+5.  **Validation:**
+    -   Apply rules and checks to ensure data consistency, accuracy, and integrity after cleaning and transformation.
+    -   Verify that the data conforms to expected standards or business rules.
+    -   Example: Checking if all ages are within a valid range, or if product IDs match a known list.
+
+6.  **Publishing (Making Data Available):**
+    -   Store the wrangled data in a suitable location and format for its intended use (e.g., a database, a CSV file, a data warehouse).
+    -   Document the transformations and any assumptions made during the wrangling process.
+    -   Make it accessible for analysis, modeling, or reporting.
+
+## Use Cases
+
+Data wrangling is essential in virtually all data-driven applications:
+
+-   **Fraud Detection:**
+    -   Cleaning and structuring transaction data, logs, and user activity to identify unusual patterns that might indicate fraudulent behavior in transactions, emails, chats, etc.
+-   **Customer Behaviour Analysis:**
+    -   Transforming customer interaction data (purchases, website visits, support calls) into a format suitable for deriving insights swiftly for business decisions (e.g., customer segmentation, churn prediction).
+-   **Healthcare Analytics:**
+    -   Integrating and cleaning patient records from various sources to improve diagnostics, predict disease outbreaks, or personalize treatments.
+-   **Financial Modeling:**
+    -   Aggregating and cleaning market data, economic indicators, and company financials for risk assessment and investment strategies.
+-   **Machine Learning Preprocessing:**
+    -   A significant portion of preparing data for ML models involves wrangling: handling missing values, encoding categorical features, feature scaling, etc.
+
+## Common Data Wrangling Tools
+
+-   **Spreadsheet Software (Excel, Google Sheets, Power Query in Excel):**
+    -   Suitable for manual, small-scale wrangling tasks.
+    -   Power Query provides more advanced data transformation capabilities within Excel.
+-   **OpenRefine (formerly Google Refine):**
+    -   A powerful open-source tool for cleaning messy data, transforming it, and augmenting it with web services.
+    -   Provides a graphical interface and can handle larger datasets than spreadsheets. Some operations might require GREL (General Refine Expression Language) or scripting (Python/Jython).
+-   **Tabula:**
+    -   A tool for extracting tabular data from PDF files.
+-   **Google DataPrep:**
+    -   A cloud-based service for visually exploring, cleaning, and preparing data at scale.
+-   **Trifacta Wrangler / Data Wrangler (various cloud platforms):**
+    -   Interactive tools for data cleaning and transformation, often with intelligent suggestions and visual interfaces.
+-   **Programming Libraries (Python is dominant):**
+    -   **Pandas:** The workhorse for data wrangling in Python. Provides rich data structures (DataFrame, Series) and a vast array of functions for cleaning, transforming, merging, and reshaping data.
+    -   **NumPy:** For numerical operations, often used in conjunction with Pandas.
+    -   **Dask:** For scaling Pandas-like workflows to larger-than-memory datasets.
+    -   (Specialized libraries for text, web scraping, etc.)
+-   **SQL:**
+    -   Essential for wrangling data stored in relational databases. Queries can be used for filtering, joining, aggregating, and transforming data.
+-   **Plotly (and other visualization libraries like Matplotlib, Seaborn):**
+    -   While primarily for visualization, these are crucial during the discovery and validation phases of data wrangling to understand data and verify transformations.
+
+## Benefits of Effective Data Wrangling
+
+-   **Enhanced Data Consistency and Accuracy:** Leads to more reliable analysis and models.
+-   **Improved Analytical Insights:** Clean and well-structured data makes it easier to uncover meaningful patterns.
+-   **More Efficient Model Building:** Machine learning models perform better and train faster with high-quality, properly formatted data.
+-   **Cost- and Resource-Efficient Decision-Making:** Reduces time wasted on analyzing flawed data and leads to better-informed business decisions.
+-   **Increased Trust in Data:** Stakeholders are more likely to trust insights derived from well-wrangled data.

@@ -1,0 +1,69 @@
+
+---
+
+## `content/ds-unit-3/08-major-plot-types-seaborn.mdx`
+
+```mdx
+---
+title: Major Plot Types in Seaborn
+---
+import { CodeBlock } from '@/components/CodeBlock';
+
+# 9. Major Plot Types in Seaborn
+
+Seaborn excels at creating various statistical plots with concise syntax. Here are some of its major plot types. Most Seaborn plotting functions return a Matplotlib `Axes` object, allowing for further customization using Matplotlib methods.
+
+## Scatter Plot (`sns.scatterplot()`)
+-   Visualizes the relationship between two numerical variables.
+-   Can encode additional variables using `hue` (color), `size`, and `style` of markers.
+-   Can automatically include a regression line using `sns.lmplot()` or by adding `kind='reg'` to some relational plots.
+
+<CodeBlock
+  isPlot={true}
+  initialCode={`import seaborn as sns\nimport matplotlib.pyplot as plt\nimport pandas as pd\n\n# Sample data (e.g., from a DataFrame)\ndata = pd.DataFrame({\n    'x_values': [1, 2, 3, 4, 5, 6, 7, 8],\n    'y_values': [2, 5, 3, 8, 10, 9, 6, 7],\n    'category': ['A', 'A', 'B', 'B', 'A', 'B', 'A', 'B'],\n    'size_var': [10, 20, 15, 25, 12, 22, 18, 28]\n})\n\nsns.set_theme(style="whitegrid") # Apply a theme\nplt.figure(figsize=(7,5))\n\nsns.scatterplot(data=data, x='x_values', y='y_values', \n                hue='category', size='size_var', style='category',\n                sizes=(50, 200)) # Control range of marker sizes\n\nplt.title('Seaborn Scatter Plot')\nplt.xlabel('X Values')\nplt.ylabel('Y Values')\n# plt.show() is handled by CodeBlock`}
+/>
+
+## Line Plot (`sns.lineplot()`)
+-   Visualizes the relationship between two variables, often x as time or a continuous quantity.
+-   Can show confidence intervals around an estimate (e.g., mean) if multiple y values exist for an x value, or if bootstrapping is used.
+-   Can also use `hue`, `size`, and `style` for different categories.
+
+<CodeBlock
+  isPlot={true}
+  initialCode={`import seaborn as sns\nimport matplotlib.pyplot as plt\nimport pandas as pd\nimport numpy as np\n\n# Sample time-series like data\nnp.random.seed(42)\nx = np.arange(1, 21)\ndata = pd.DataFrame({\n    'time': np.tile(x, 3), # Repeat x for 3 series\n    'value': np.concatenate([\n        x + np.random.randn(20) * 2, \n        x * 1.2 + np.random.randn(20) * 1.5 + 5,\n        x * 0.8 + np.random.randn(20) * 2 - 3\n    ]),\n    'series_type': np.repeat(['Type A', 'Type B', 'Type C'], 20)\n})\n\nsns.set_theme(style="ticks")\nplt.figure(figsize=(8,5))\n\nsns.lineplot(data=data, x='time', y='value', hue='series_type', style='series_type', markers=True)\n\nplt.title('Seaborn Line Plot with Multiple Series')\nplt.xlabel('Time')\nplt.ylabel('Value')\n# plt.show() handled by CodeBlock`}
+/>
+
+## Histogram (`sns.histplot()`, `sns.displot(kind='hist')`)
+-   Visualizes the distribution of a single numerical variable by dividing data into bins and counting occurrences.
+-   `sns.histplot()` is axes-level, `sns.displot()` is figure-level and more versatile (can create multiple kinds of distribution plots).
+-   Can add a Kernel Density Estimate (KDE) curve with `kde=True`.
+
+<CodeBlock
+  isPlot={true}
+  initialCode={`import seaborn as sns\nimport matplotlib.pyplot as plt\nimport numpy as np\n\n# Sample data\nnp.random.seed(0)\ndata_hist = np.random.normal(loc=0, scale=1, size=200)\n\nsns.set_theme(style="darkgrid")\nplt.figure(figsize=(7,5))\n\nsns.histplot(data_hist, kde=True, bins=20, color='skyblue')\n# kde=True adds a Kernel Density Estimate curve\n# bins specifies the number of bins\n\nplt.title('Seaborn Histogram with KDE')\nplt.xlabel('Value')\nplt.ylabel('Frequency / Density')\n# plt.show() handled by CodeBlock`}
+/>
+
+## Box Plot (`sns.boxplot()`)
+-   Displays the distribution of numerical data based on quartiles (min, Q1, median, Q3, max).
+-   Effective for comparing distributions across different categories and identifying outliers.
+-   Can use `hue` to introduce another categorical variable.
+
+<CodeBlock
+  isPlot={true}
+  initialCode={`import seaborn as sns\nimport matplotlib.pyplot as plt\nimport pandas as pd\n\n# Sample data\ntips = sns.load_dataset('tips') # Seaborn comes with sample datasets\n\nsns.set_theme(style="whitegrid")\nplt.figure(figsize=(8,6))\n\nsns.boxplot(data=tips, x='day', y='total_bill', hue='smoker')\n# x: categorical variable for groups\n# y: numerical variable for distribution\n# hue: another categorical variable for sub-groups within x\n\nplt.title('Box Plot of Total Bill by Day and Smoker Status')\nplt.xlabel('Day of the Week')\nplt.ylabel('Total Bill ($)')\n# plt.show() handled by CodeBlock`}
+/>
+Other related plots for distributions include `sns.violinplot()`, `sns.stripplot()`, `sns.swarmplot()`.
+
+## Pair Plot (`sns.pairplot()`)
+-   Visualizes pairwise relationships between all numerical columns in a DataFrame.
+-   Creates a matrix of axes:
+    -   Diagonal typically shows histograms or KDE plots for each variable.
+    -   Off-diagonal shows scatter plots for each pair of variables.
+-   Can use `hue` to color points by a categorical variable.
+
+<CodeBlock
+  isPlot={true}
+  initialCode={`import seaborn as sns\nimport matplotlib.pyplot as plt\n\n# Load a sample dataset from Seaborn\niris = sns.load_dataset('iris') # Contains numerical and categorical data\n\nsns.set_theme(style="ticks")\n\n# Create a pair plot, colored by the 'species' column\n# This is a figure-level function, so we don't typically assign to 'ax'\ng = sns.pairplot(iris, hue='species', diag_kind='kde',\n                 plot_kws={'alpha': 0.6, 's': 80, 'edgecolor': 'k'},\n                 diag_kws={'fill': True})\n\ng.fig.suptitle('Pair Plot of Iris Dataset by Species', y=1.02) # Adjust title position\n# plt.show() handled by CodeBlock\n# Note: Pairplots can take a moment to render due to multiple subplots.`}
+/>
+
+These are some of the most frequently used plot types in Seaborn. The library offers many more specialized plots for categorical data (`catplot`), regression models (`lmplot`, `regplot`), matrix data (`heatmap`), and complex distributions.

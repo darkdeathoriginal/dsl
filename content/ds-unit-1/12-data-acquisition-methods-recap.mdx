@@ -1,0 +1,74 @@
+---
+title: Data Acquisition Methods (Recap)
+---
+
+# 12. Data Acquisition Methods (Recap)
+
+This section briefly recaps common methods for acquiring data, which were introduced earlier in the Data Science process.
+
+## APIs (Application Programming Interfaces)
+-   **Definition:** A set of rules and protocols that allows different software applications to communicate and exchange data with each other.
+-   **Usage:** Access data from web services (e.g., social media, financial data, weather).
+-   **Common Types:**
+    -   **REST (Representational State Transfer):** Widely used, often returns data in JSON format. Uses standard HTTP methods (GET, POST, PUT, DELETE).
+    -   **SOAP (Simple Object Access Protocol):** An older protocol, typically uses XML for message format.
+-   **Example Interaction (Conceptual):**
+    1.  Client application sends an HTTP request to an API endpoint (URL).
+    2.  The request might include parameters or authentication tokens.
+    3.  The API server processes the request and sends back a response, often containing the requested data (e.g., in JSON).
+    ```python
+    # Conceptual Python example using 'requests' library (not for Pyodide execution without network access)
+    # import requests
+    # import json
+    #
+    # response = requests.get("https://api.example.com/data?param=value", headers={"Authorization": "Bearer YOUR_TOKEN"})
+    # if response.status_code == 200:
+    #     data = response.json() # Parses JSON response into Python dict/list
+    #     print(data)
+    # else:
+    #     print(f"Error: {response.status_code}")
+    ```
+
+## Open Data Sources
+-   **Definition:** Publicly available datasets often provided by governments, research institutions, or non-profit organizations.
+-   **Examples:**
+    -   Government portals: `data.gov` (USA), `data.gov.uk` (UK), Eurostat.
+    -   Machine learning competition platforms: Kaggle Datasets.
+    -   International organizations: World Bank Open Data, WHO Data.
+    -   Academic repositories.
+-   **Formats:** Often available as CSV, Excel, JSON, XML, or via APIs.
+
+## Web Scraping
+-   **Definition:** The process of extracting data from websites automatically when an API is not available or insufficient.
+-   **Process:**
+    1.  Fetch the HTML content of a web page.
+    2.  Parse the HTML structure to locate and extract the desired data elements.
+-   **Python Libraries:**
+    -   **`requests`:** To fetch web page content.
+    -   **`BeautifulSoup` (from `bs4`):** For parsing HTML and XML documents. It creates a parse tree from page source code that can be used to extract data in a hierarchical and more readable manner.
+    -   **`Scrapy`:** A more comprehensive web crawling and scraping framework for larger projects.
+    -   **`Selenium`:** For interacting with web pages that heavily rely on JavaScript to load content (browser automation).
+-   **Ethical Considerations & Legality:**
+    -   **Always check `robots.txt`:** This file on a website specifies rules for web crawlers.
+    -   **Respect Terms of Service:** Do not violate the website's usage policies.
+    -   **Rate Limiting:** Do not overload servers with too many requests in a short period.
+    -   **Privacy:** Be mindful of personal data.
+-   **Conceptual Example (BeautifulSoup):**
+    ```python
+    # Conceptual Python example (not for direct Pyodide execution without fetching capability)
+    # import requests
+    # from bs4 import BeautifulSoup
+    #
+    # url = "http://example.com"
+    # response = requests.get(url)
+    # if response.status_code == 200:
+    #     soup = BeautifulSoup(response.content, 'html.parser')
+    #     # Example: Find all <h1> tags
+    #     headings = soup.find_all('h1')
+    #     for heading in headings:
+    #         print(heading.text)
+    # else:
+    #     print(f"Failed to retrieve page: {response.status_code}")
+    ```
+
+For interactive learning with Pyodide, directly demonstrating web scraping or live API calls that require external network access can be challenging due to browser security restrictions (CORS) and Pyodide's execution environment. These topics are often best explored in a local Python environment with full network capabilities.

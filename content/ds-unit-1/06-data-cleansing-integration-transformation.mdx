@@ -1,0 +1,56 @@
+---
+title: Data Cleansing, Integration & Transformation
+---
+
+# 6. Data Cleansing, Integration & Transformation
+
+This phase, often called **Data Preparation** or **Data Wrangling/Munging**, is crucial and typically consumes a significant portion of a Data Scientist's time. The goal is to convert raw data into a clean, consistent, and usable format for analysis and modeling.
+
+## Data Cleansing
+**Purpose:** Eliminate errors and inconsistencies to produce true, consistent, and reliable data.
+
+**Common Issues to Address:**
+-   **Missing Data:** Values that are not present for some observations/features.
+    -   Strategies: Deletion (rows/columns), Imputation (mean, median, mode, regression-based, k-NN).
+-   **Outliers:** Data points that deviate significantly from other observations.
+    -   Strategies: Identification (boxplot, Z-score, IQR), and then decide whether to remove, cap, or transform them.
+-   **Typos & Inconsistent Formatting:** Spelling mistakes, inconsistent capitalization (e.g., "USA", "U.S.A.", "america"), inconsistent date formats.
+    -   Strategies: Standardization, string manipulation, using lookup tables.
+-   **Impossible/Suspicious Values:** Values that fall outside a realistic or logical range (e.g., age = 200, negative height).
+    -   Strategies: Sanity checks, validation rules, correction if possible, or marking as missing.
+-   **Duplicate Records:** Identical or near-identical rows that can skew analysis.
+    -   Strategies: Identification and removal.
+-   **Extra Spaces/Special Characters:** Unwanted characters that can affect data processing.
+    -   Strategies: String trimming and cleaning functions.
+
+**Sanity Checks:**
+-   Ensure data falls within realistic bounds (e.g., `0 <= percentage <= 100`).
+-   Check for logical consistency (e.g., `date_of_birth < date_of_death`).
+
+## Data Integration
+**Purpose:** Combine data from multiple sources into a unified view.
+
+**Common Tasks:**
+-   **Joining:** Combine records from two or more tables based on shared keys (e.g., `user_ID`, `product_ID`).
+    -   Types: Inner join, left join, right join, full outer join.
+-   **Appending/Stacking (Union):** Add rows from one data source to another when they have the same columns.
+-   **Creating Views:** Virtual tables based on the result-set of a stored query. Can simplify complex joins and avoid data duplication.
+-   Handling schema differences and data type conflicts between sources.
+
+## Data Transformation
+**Purpose:** Convert data into a more suitable format for modeling and analysis.
+
+**Common Tasks:**
+-   **Feature Engineering:** Creating new, more informative features from existing ones.
+    -   Examples: Extracting month from a date, calculating age from birthdate, creating interaction terms.
+-   **Normalization/Standardization (Scaling):** Rescaling numeric features to a common range to prevent features with larger values from dominating distance-based algorithms.
+    -   Normalization (Min-Max Scaling): Scales data to a fixed range, usually [0, 1].
+    -   Standardization (Z-score Scaling): Transforms data to have a mean of 0 and a standard deviation of 1.
+-   **Encoding Categorical Variables:** Converting non-numeric data into a numerical format that models can understand.
+    -   One-Hot Encoding: Creates new binary (0/1) columns for each category.
+    -   Label Encoding: Assigns a unique integer to each category.
+-   **Binning/Discretization:** Converting continuous variables into a smaller number of categorical bins (e.g., age groups from age).
+-   **Aggregation:** Summarizing data at a coarser level (e.g., calculating total sales per month from daily sales).
+-   **Dimensionality Reduction:** Reducing the number of features while preserving important information, to combat the "curse of dimensionality" or simplify models.
+    -   Techniques: Principal Component Analysis (PCA), Feature Selection methods.
+-   **Handling Skewed Data:** Applying transformations (e.g., log, square root) to make the distribution of a variable more symmetric/normal.

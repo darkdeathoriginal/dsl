@@ -1,0 +1,42 @@
+---
+title: Unit 1 Summary - Key NumPy & Pandas Functions
+---
+
+# Unit 1 Summary: Key NumPy & Pandas Functions
+
+This table summarizes some of the key functions and attributes covered in Unit 1 for NumPy and Pandas.
+
+| Purpose                       | NumPy Function / Attribute                     | Pandas Function / Attribute (Series `s`, DataFrame `df`) |
+|-------------------------------|------------------------------------------------|----------------------------------------------------------|
+| **Array/Object Creation**     |                                                |                                                          |
+| Create array/Series/DataFrame | `np.array()`, `np.arange()`, `np.zeros()`, `np.ones()`, `np.full()`, `np.eye()`, `np.identity()`, `np.linspace()` | `pd.Series()`, `pd.DataFrame()`                             |
+| **Inspection**                |                                                |                                                          |
+| Shape                         | `arr.shape`                                    | `s.shape`, `df.shape`, `s.size`, `df.size`                 |
+| Number of dimensions          | `arr.ndim`                                     | `s.ndim`, `df.ndim`                                      |
+| Data type                     | `arr.dtype`                                    | `s.dtype`, `df.dtypes`                                   |
+| Index                         | N/A (implicit integer index)                   | `s.index`, `df.index`                                    |
+| Columns                       | N/A                                            | `df.columns`                                             |
+| Values (as NumPy array)       | `arr` (is already a NumPy array)               | `s.values`, `df.values`                                  |
+| View head/tail                | `arr[:5]`, `arr[-5:]`                          | `s.head()`, `df.head()`, `s.tail()`, `df.tail()`           |
+| **Indexing & Selection**      |                                                |                                                          |
+| Single element                | `arr[i]`, `arr[r, c]`                          | `s[label]`, `s.iloc[pos]`, `df.loc[row_l, col_l]`, `df.iloc[row_p, col_p]`, `df.at[]`, `df.iat[]` |
+| Slicing                       | `arr[start:stop:step]`                         | `s[start_l:stop_l]`, `s.iloc[start_p:stop_p]`, `df.loc[]`, `df.iloc[]` |
+| Boolean indexing              | `arr[condition]`                               | `s[condition]`, `df[condition]`                          |
+| Select column(s)              | N/A                                            | `df['col']`, `df[['col1', 'col2']]`, `df.col`             |
+| **Data Manipulation**         |                                                |                                                          |
+| Reshape                       | `arr.reshape()`, `np.reshape()`                | `stack()`, `unstack()`, `pivot()` (DataFrame)            |
+| Copy                          | `arr.copy()`, `np.copy()`                      | `s.copy()`, `df.copy()`                                  |
+| Iteration                     | `for x in arr:`, `np.nditer()`                 | `for label, value in s.items():`, `for idx, row in df.iterrows():` (use with caution for performance) |
+| Drop entries                  | N/A (use boolean indexing/slicing to exclude)  | `s.drop()`, `df.drop()`                                  |
+| Reindex                       | N/A (create new array)                         | `s.reindex()`, `df.reindex()`                            |
+| Handle Missing (NaN)          | `np.isnan()`, various calculations skip NaN by default with specific `nan*` functions (e.g. `np.nansum()`) | `s.isnull()`, `s.notnull()`, `s.dropna()`, `s.fillna()`, `df.dropna()`, `df.fillna()` |
+| **Operations & Stats**        |                                                |                                                          |
+| Arithmetic Operations         | `+`, `-`, `*`, `/`, `**`, `np.add()`, etc. (element-wise) | `+`, `-`, `*`, `/`, etc. (element-wise, aligns on index) |
+| Aggregation/Stats             | `arr.sum()`, `arr.mean()`, `np.std()`, etc.    | `s.sum()`, `df.mean()`, `s.median()`, `df.std()`, `df.describe()` |
+| Sorting                       | `np.sort(arr)` (returns copy), `arr.sort()` (in-place) | `s.sort_index()`, `df.sort_index()`, `s.sort_values()`, `df.sort_values()` |
+| Ranking                       | N/A (implement manually or use `scipy.stats.rankdata`) | `s.rank()`, `df.rank()`                                  |
+| Group & Aggregate             | N/A (requires manual looping/conditional logic) | `df.groupby().agg_func()` (e.g., `mean()`, `sum()`)     |
+| Set Index                     | N/A                                            | `df.set_index()`, `df.reset_index()`                     |
+
+
+---

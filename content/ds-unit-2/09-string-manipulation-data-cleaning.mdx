@@ -1,0 +1,92 @@
+---
+title: String Manipulation in Data Cleaning
+---
+import { CodeBlock } from '@/components/CodeBlock';
+
+# 8. String Manipulation in Data Cleaning
+
+Text data often requires significant cleaning. Python's built-in string methods and Pandas' Series string methods (accessed via `.str`) are essential.
+
+## Basic String Operations (Python built-in)
+
+-   **Length:** `len(text)`
+-   **Accessing Characters:** `text[0]` (first), `text[-1]` (last)
+-   **Slicing:** `text[start:stop:step]` (e.g., `text[0:5]`)
+-   **Reversing:** `text[::-1]`
+-   **Concatenation:** `str1 + str2`
+-   **Repetition:** `str1 * 3`
+
+<CodeBlock
+  initialCode={`text = " Hello, World! "\n\nprint(f"Original: '{text}'")\nprint(f"Length: {len(text)}")\nprint(f"First char: {text[1]}") # After the leading space\nprint(f"Slice [1:6]: '{text[1:6]}'")\nprint(f"Reversed: '{text[::-1]}'")\n\nstr_a = "Data"\nstr_b = "Science"\nprint(f"Concatenated: {str_a + ' ' + str_b}")\nprint(f"Repeated: {(str_a + ' ') * 3}")`}
+/>
+
+## Case Conversion (Pandas `.str` methods or Python string methods)
+-   `.str.upper()` / `.upper()`: Convert to uppercase.
+-   `.str.lower()` / `.lower()`: Convert to lowercase.
+-   `.str.title()` / `.title()`: Convert to title case (first letter of each word capitalized).
+-   `.str.capitalize()` / `.capitalize()`: Capitalize the first letter of the string.
+-   `.str.swapcase()` / `.swapcase()`: Swap case of letters.
+
+<CodeBlock
+  initialCode={`import pandas as pd\ns = pd.Series(['apple pie', 'BANANA BREAD', 'Cherry Cake'])\nprint("Original Series:\\n", s)\n\nprint("\\n.str.lower():\\n", s.str.lower())\nprint("\\n.str.upper():\\n", s.str.upper())\nprint("\\n.str.title():\\n", s.str.title())\nprint("\\n.str.capitalize():\\n", s.str.capitalize())\n\n# Python built-in example\ntext = "exampleString"\nprint(f"\\nPython .capitalize(): {text.capitalize()}")`}
+/>
+
+## Searching and Replacing
+-   **Substring Check:** `"sub" in text` (Python)
+-   **Finding Substring Index:** `text.find("sub")` (returns first index, or -1 if not found), `text.index("sub")` (raises ValueError if not found).
+    -   Pandas: `s.str.find("sub")`, `s.str.index("sub")`
+-   **Replacing Substring:** `text.replace("old", "new")`
+    -   Pandas: `s.str.replace("old", "new")` (also supports regex by default).
+
+<CodeBlock
+  initialCode={`import pandas as pd\ntext = "The quick brown fox jumps over the lazy dog."\n\nprint(f"'fox' in text: {'fox' in text}")\nprint(f"text.find('fox'): {text.find('fox')}")\nprint(f"text.replace('fox', 'cat'): '{text.replace('fox', 'cat')}'")\n\ns = pd.Series(['alpha beta gamma', 'delta epsilon zeta', 'alpha dog'])\nprint("\\nOriginal Series:\\n", s)\nprint("\\nContains 'alpha'?\\n", s.str.contains('alpha')) # .str.contains is powerful with regex\nprint("\\nReplace 'alpha' with 'OMEGA':\\n", s.str.replace('alpha', 'OMEGA'))`}
+/>
+
+## Splitting and Joining
+-   **Splitting:** `text.split(separator)` (returns a list of strings)
+    -   Pandas: `s.str.split(separator, expand=False)` (returns Series of lists) or `expand=True` (returns DataFrame).
+-   **Joining:** `separator.join([list_of_strings])`
+    -   Pandas: `s.str.join(separator)` (if Series contains lists of strings to join).
+
+<CodeBlock
+  initialCode={`import pandas as pd\n\ntext = "item1,item2,item3"\nitems_list = text.split(',')\nprint(f"Split by ',': {items_list}")\nprint(f"Joined with ';': {';'.join(items_list)}")\n\ns = pd.Series(['first_name.last_name', 'another.name.here'])\nprint("\\nOriginal Series:\\n", s)\n\n# Split into a DataFrame\nsplit_df = s.str.split('.', expand=True)\nsplit_df.columns = ['Part1', 'Part2', 'Part3'] # Assign column names\nprint("\\nSplit into DataFrame:\\n", split_df)\n\n# Split into list of strings within Series\nsplit_series_list = s.str.split('.')\nprint("\\nSplit into list of strings in Series:\\n", split_series_list)`}
+/>
+
+## Removing Whitespace
+-   `text.strip()`: Remove leading and trailing whitespace.
+-   `text.lstrip()`: Remove leading whitespace.
+-   `text.rstrip()`: Remove trailing whitespace.
+-   Pandas: `s.str.strip()`, `s.str.lstrip()`, `s.str.rstrip()`.
+
+<CodeBlock
+  initialCode={`import pandas as pd\n\ntext_with_space = "   lots of space   "\nprint(f"Original: '{text_with_space}'")\nprint(f"Stripped: '{text_with_space.strip()}'")\nprint(f"LStripped: '{text_with_space.lstrip()}'")\nprint(f"RStripped: '{text_with_space.rstrip()}'")\n\ns = pd.Series(["  A  ", " B ", "C"])\nprint("\\nSeries with spaces:\\n", s)\nprint("\\nSeries stripped:\\n", s.str.strip())`}
+/>
+
+## Formatting Strings (Python)
+-   **f-strings (Formatted String Literals):** `f"My name is {name} and age is {age}"` (Python 3.6+) - Most common and readable.
+-   **`.format()` method:** `"My name is {} and age is {}".format(name, age)`
+-   **`%` operator (older style):** `"My name is %s and age is %d" % (name, age)`
+
+<CodeBlock
+  initialCode={`name = "Alice"\nage = 30\n\n# f-string\nprint(f"f-string: My name is {name} and I am {age} years old.")\n\n# .format()\nprint(".format(): My name is {0} and I am {1} years old.".format(name, age))\n\n# % operator\nprint("% operator: My name is %s and I am %d years old." % (name, age))`}
+/>
+
+## String Properties / Checking Character Types (Pandas `.str` methods or Python string methods)
+-   `.str.isalpha()` / `.isalpha()`: True if all characters are alphabetic and at least one character.
+-   `.str.isdigit()` / `.isdigit()`: True if all characters are digits and at least one character.
+-   `.str.isalnum()` / `.isalnum()`: True if all characters are alphanumeric and at least one character.
+-   `.str.islower()` / `.islower()`: True if all cased characters are lowercase and at least one cased character.
+-   `.str.isupper()` / `.isupper()`: True if all cased characters are uppercase and at least one cased character.
+-   `.str.isspace()` / `.isspace()`: True if all characters are whitespace and at least one character.
+-   `.str.istitle()` / `.istitle()`: True if string is titlecased and at least one character.
+
+<CodeBlock
+  initialCode={`import pandas as pd\ns = pd.Series(['word', '123', 'Word123', '  ', 'Title Case'])\nprint("Series s:\\n", s)\n\nprint("\\n.str.isalpha():\\n", s.str.isalpha())\nprint("\\n.str.isdigit():\\n", s.str.isdigit())\nprint("\\n.str.isalnum():\\n", s.str.isalnum())\nprint("\\n.str.isspace():\\n", s.str.isspace())\nprint("\\n.str.istitle():\\n", s.str.istitle())`}
+/>
+
+## Reversing words in a sentence
+<CodeBlock
+  initialCode={`sentence = "this is a sample sentence"\nwords = sentence.split()\nreversed_words_sentence = " ".join(words[::-1]) # Split, reverse list, join\nprint(f"Original: '{sentence}'")\nprint(f"Words reversed: '{reversed_words_sentence}'")\n\n# Reversing each word and then the sentence\nreversed_each_word_then_sentence = " ".join([word[::-1] for word in words[::-1]])\nprint(f"Each word reversed, then sentence reversed: '{reversed_each_word_then_sentence}'")`}
+/>
+
+These string manipulation techniques are vital for cleaning inconsistent text entries, extracting information, and preparing text data for further analysis or NLP tasks.

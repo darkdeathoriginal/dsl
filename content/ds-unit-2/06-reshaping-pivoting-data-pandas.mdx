@@ -1,0 +1,63 @@
+---
+title: Reshaping and Pivoting Data (Pandas)
+---
+import { CodeBlock } from '@/components/CodeBlock';
+
+# 5. Reshaping and Pivoting Data
+
+Reshaping data involves changing the layout of a dataset, often transforming it between "long" and "wide" formats. Pandas provides several tools for this, including `stack()`, `unstack()`, `melt()`, and `pivot()`/`pivot_table()`.
+
+## Hierarchical Indexing and Reshaping (`stack()` and `unstack()`)
+
+We briefly encountered `stack()` and `unstack()` in the MultiIndex section (Unit 1). They are fundamental for reshaping data by moving levels between row and column indexes.
+
+-   **`stack()`:** "Rotates" or "pivots" a level of the column labels to become the innermost level of row labels, often resulting in a Series with a MultiIndex.
+-   **`unstack()`:** "Rotates" or "pivots" a level of the row labels to become the innermost level of column labels.
+
+<CodeBlock
+  initialCode={`import pandas as pd\nimport numpy as np\n\ndf = pd.DataFrame(np.arange(6).reshape((2, 3)),\n                  index=pd.Index(['Ohio', 'Colorado'], name='state'),\n                  columns=pd.Index(['one', 'two', 'three'], name='number'))\nprint("Original DataFrame df:\\n", df)\n\n# Stack: moves column index 'number' to be innermost row index\nresult_stacked = df.stack()\nprint("\\nStacked Series (result_stacked = df.stack()):\\n", result_stacked)\nprint("Type of result_stacked:", type(result_stacked))\n\n# Unstack the Series to get back a DataFrame (moves innermost row index to columns)\n# The innermost row index in 'result_stacked' is 'number'\nprint("\\nUnstacking the Series (result_stacked.unstack()):\\n", result_stacked.unstack())\n\n# Unstack by level name or number from original DataFrame\n# Unstack level 'state' (level 0) from the original Series 'result_stacked'\nprint("\\nUnstacking level 'state' (result_stacked.unstack(level='state')):\\n", result_stacked.unstack(level='state'))\n# or result_stacked.unstack(0)\n\n# Unstacking 'number' level from 'result_stacked' is equivalent to original unstack\nprint("\\nUnstacking level 'number' (result_stacked.unstack(level='number')):\\n", result_stacked.unstack(level='number'))\n# or result_stacked.unstack(1) or result_stacked.unstack(-1) (innermost)`}
+/>
+
+## Pivoting from "Long" to "Wide" Format (`.pivot()`, `.pivot_table()`)
+
+### `.pivot()`
+The `pivot()` method reshapes data (produced by, say, `stack()`) based on column values. It takes three arguments: `index`, `columns`, and `values`.
+-   `index`: Column to use to make new DataFrame's index.
+-   `columns`: Column to use to make new DataFrame's columns.
+-   `values`: Column(s) to use for populating new DataFrame's values.
+-   **Important:** `pivot()` does not handle duplicate entries for a given `index` and `columns` pair. If there are duplicates, it will raise a `ValueError`. Use `pivot_table()` in such cases.
+
+<CodeBlock
+  initialCode={`import pandas as pd\n\n# Sample 'long' format data\ndata_long = pd.DataFrame({'date': pd.to_datetime(['2023-01-01', '2023-01-01', '2023-01-02', '2023-01-02']),\n                          'item': ['A', 'B', 'A', 'B'],\n                          'value': [10, 20, 15, 25]})\nprint("Long format DataFrame:\\n", data_long)\n\n# Pivot to 'wide' format\n# 'date' becomes the index, 'item' becomes new columns, 'value' fills the cells\ndf_pivoted = data_long.pivot(index='date', columns='item', values='value')\nprint("\\nPivoted DataFrame (wide format):\\n", df_pivoted)\n\n# If 'values' is omitted, it will try to pivot all remaining columns, creating hierarchical columns\ndf_pivoted_all_values = data_long.pivot(index='date', columns='item')\nprint("\\nPivoted DataFrame (all remaining columns as values - hierarchical columns):\\n", df_pivoted_all_values)`}
+/>
+
+### `.pivot_table()`
+`pivot_table()` is a more general version of `pivot()`. It can handle duplicate values for a given `index`/`columns` pair by applying an aggregation function (e.g., `mean`, `sum`, `count`).
+-   `values`: Column(s) to aggregate.
+-   `index`: Keys to group by on the pivot table index.
+-   `columns`: Keys to group by on the pivot table columns.
+-   `aggfunc`: Aggregation function or list of functions (default is `'mean'`).
+-   `fill_value`: Value to replace missing values in the result.
+-   `margins`: Add row/column subtotals and grand totals (if `True`).
+
+<CodeBlock
+  initialCode={`import pandas as pd\n\ndata_with_dups = pd.DataFrame({\n    'Date': pd.to_datetime(['2023-01-01', '2023-01-01', '2023-01-01', '2023-01-02', '2023-01-02']),\n    'City': ['NY', 'NY', 'LA', 'NY', 'LA'],\n    'Product': ['A', 'B', 'A', 'A', 'B'],\n    'Sales': [10, 15, 20, 5, 25],\n    'Quantity': [1, 2, 2, 1, 3]\n})\nprint("Original DataFrame (with potential duplicates for pivot):\\n", data_with_dups)\n\n# Pivot table: Sum of Sales by Date and City\npivot_sales_sum = data_with_dups.pivot_table(values='Sales', index='Date', columns='City', aggfunc='sum')\nprint("\\nPivot Table (Sum of Sales by Date and City):\\n", pivot_sales_sum)\n\n# Pivot table: Mean of Sales and Quantity by City and Product, with fill_value and margins\npivot_multi_agg = data_with_dups.pivot_table(\n    values=['Sales', 'Quantity'], \n    index='City', \n    columns='Product', \n    aggfunc={'Sales': 'mean', 'Quantity': ['min', 'max']},\n    fill_value=0, margins=True # margins=True adds All row/column\n)\nprint("\\nPivot Table (Mean Sales, Min/Max Quantity by City and Product):\\n", pivot_multi_agg)`}
+/>
+
+## Pivoting from "Wide" to "Long" Format (`.melt()`)
+`melt()` is the inverse of `pivot()`. It "unpivots" a DataFrame from a wide format to a long format. This is useful when one or more columns are identifier variables (`id_vars`), while other columns are considered "measure" variables (`value_vars`). The measure variables are "unpivoted" to the row axis, leaving two new columns: one for the variable name and one for its value.
+
+-   `id_vars`: Column(s) to use as identifier variables (kept as is).
+-   `value_vars`: Column(s) to unpivot. If not specified, all columns that are not `id_vars` are unpivoted.
+-   `var_name`: Name to use for the new "variable" column (default is `'variable'`).
+-   `value_name`: Name to use for the new "value" column (default is `'value'`).
+
+<CodeBlock
+  initialCode={`import pandas as pd\n\ndf_wide = pd.DataFrame({'student_id': ['S1', 'S2', 'S3'],\n                        'Math_Score': [85, 90, 78],\n                        'Science_Score': [92, 88, 80],\n                        'History_Score': [75, 85, 88]})\nprint("Wide format DataFrame:\\n", df_wide)\n\n# Melt the DataFrame\n# 'student_id' is the identifier, other columns are measure variables\ndf_long_melted = pd.melt(df_wide, \n                         id_vars=['student_id'], \n                         value_vars=['Math_Score', 'Science_Score', 'History_Score'],\n                         var_name='Subject_Combined',\n                         value_name='Score')\nprint("\\nMelted DataFrame (long format):\\n", df_long_melted)\n\n# Example: Splitting the 'Subject_Combined' column if needed\n# This is a common follow-up step after melting\ndf_long_melted[['Subject', 'Type']] = df_long_melted['Subject_Combined'].str.split('_', expand=True)\nprint("\\nMelted DataFrame with 'Subject_Combined' split:\\n", df_long_melted)`}
+/>
+
+**Use Cases for Reshaping:**
+-   Preparing data for specific types of plots that expect data in a certain format (e.g., seaborn often prefers long-form data).
+-   Preparing data for time series analysis or statistical modeling.
+-   Facilitating database storage or certain types of joins/merges.
+-   Making data more human-readable or suitable for reporting.

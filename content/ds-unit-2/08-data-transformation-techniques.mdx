@@ -1,0 +1,96 @@
+---
+title: Data Transformation Techniques
+---
+import { CodeBlock } from '@/components/CodeBlock';
+
+# 7. Data Transformation Techniques
+
+Data transformation is the process of changing the format, structure, or values of data. It's a crucial step to make data more suitable for analysis, visualization, and machine learning modeling.
+
+## Smoothing
+**Purpose:** Remove noise or outliers from data to reveal underlying patterns or trends, especially in time series data or signals.
+
+**Common Techniques:**
+-   **Moving Average:** Replaces each data point with the average of itself and its neighbors within a defined window.
+    -   Simple Moving Average (SMA)
+    -   Exponential Moving Average (EMA) (gives more weight to recent points)
+-   **Binning:** Grouping data into "bins" or intervals. Can smooth data by using bin means or medians. (More on this later).
+-   **Smoothing Functions/Filters:** Applying mathematical functions or filters (e.g., Savitzky-Golay filter, Gaussian filter) to smooth data.
+
+<CodeBlock
+  initialCode={`import pandas as pd\nimport numpy as np\n\n# Example: Simple Moving Average\ndata = pd.Series([10, 12, 11, 15, 16, 14, 18, 20, 19, 22])\nprint("Original Data:\\n", data)\n\n# Calculate 3-period simple moving average\nwindow_size = 3\nsma = data.rolling(window=window_size).mean()\nprint(f"\\n{window_size}-period Simple Moving Average:\\n", sma)\n\n# Note: The first (window_size - 1) values will be NaN`}
+/>
+
+## Attribute Construction (Feature Engineering)
+**Purpose:** Create new, more informative features from existing ones to improve model performance or facilitate easier analysis.
+
+**Examples:**
+-   Extracting components from a date (year, month, day, day of week).
+-   Calculating ratios or differences between numerical features.
+-   Combining categorical features to create interaction terms.
+-   Creating polynomial features from numerical features.
+-   Deriving age from a birthdate.
+
+<CodeBlock
+  initialCode={`import pandas as pd\n\ndf = pd.DataFrame({'BirthDate': pd.to_datetime(['1990-05-15', '1985-10-20']),\n                   'OrderValue': [100, 150],\n                   'ItemCount': [2, 5]})\nprint("Original DataFrame:\\n", df)\n\n# Extract Year from BirthDate\ndf['BirthYear'] = df['BirthDate'].dt.year\n\n# Calculate Average Item Price\ndf['AvgItemPrice'] = df['OrderValue'] / df['ItemCount']\n\nprint("\\nDataFrame with constructed attributes:\\n", df)`}
+/>
+
+## Data Generalization
+**Purpose:** Convert specific data into broader, more general categories or concepts. This can help in reducing complexity and identifying higher-level patterns.
+
+**Techniques:**
+-   **Concept Hierarchy Climbing:** Replacing lower-level concepts with higher-level ones.
+    -   **Attribute Generalization:** A more general value replaces a specific one (e.g., '25 years old' → 'Young Adult', 'New York' → 'USA').
+        -   **Nominal/Categorical:** Grouping distinct values into broader categories (e.g., individual job titles into job sectors).
+        -   **Numeric (Discretization/Binning):** Convert continuous variables into ranges or discrete intervals (e.g., age into age groups like '0-18', '19-35', '36-55', '55+'). We'll detail binning shortly.
+        -   **Text:** Replace specific words with more general concepts or synonyms (often part of text preprocessing in NLP).
+    -   **Hierarchy Usage:** Using predefined hierarchical levels (e.g., for geographical data: City → State → Country; for products: Product SKU → Product Category → Department).
+
+<CodeBlock
+  initialCode={`import pandas as pd\n\ndf = pd.DataFrame({'Age': [22, 35, 48, 60, 15, 29]})\nprint("Original Ages:\\n", df)\n\n# Attribute Generalization (Numeric -> Categorical via Binning)\nbins = [0, 18, 35, 55, 100]\nlabels = ['Child/Teen', 'Young Adult', 'Middle-Aged', 'Senior']\ndf['AgeGroup'] = pd.cut(df['Age'], bins=bins, labels=labels, right=False)\n# right=False means bins are [0,18), [18,35), etc.\n\nprint("\\nAges with AgeGroup (Generalized):\\n", df)`}
+/>
+
+## Data Aggregation
+**Purpose:** Combine and summarize data, typically by grouping records based on certain attributes and then applying an aggregate function (e.g., sum, mean, count) to other attributes.
+-   This is often done using `groupby()` in Pandas, as seen in Unit 1.
+-   Reduces the size of the dataset and can reveal higher-level trends.
+
+<CodeBlock
+  initialCode={`import pandas as pd\n\ndata = {'Department': ['Sales', 'HR', 'Sales', 'IT', 'HR', 'IT'],\n        'Salary': [60000, 50000, 75000, 90000, 55000, 85000]}\ndf_agg = pd.DataFrame(data)\nprint("Original DataFrame:\\n", df_agg)\n\n# Aggregate: Calculate mean and sum of salaries per department\nagg_result = df_agg.groupby('Department')['Salary'].agg(['mean', 'sum', 'count'])\nprint("\\nAggregated Salaries by Department:\\n", agg_result)`}
+/>
+
+## Data Discretization (Binning)
+**Purpose:** Transform continuous numerical variables into discrete intervals or "bins". This is a form of data generalization.
+
+**Common Binning Methods:**
+-   **Equal-width (Uniform) Binning:** Divides the range of the variable into a specified number of bins, each having the same width.
+    -   Prone to issues if data has outliers, as a few extreme values can dominate bin creation.
+-   **Equal-frequency (Quantile) Binning:** Divides the data into bins such that each bin contains approximately the same number of observations.
+    -   Handles outliers better as bin widths adapt to data distribution.
+-   **Custom Binning:** User-defined bin edges based on domain knowledge or specific requirements.
+
+**Pandas `pd.cut()` (for equal-width or custom bins) and `pd.qcut()` (for equal-frequency bins):**
+
+<CodeBlock
+  initialCode={`import pandas as pd\nimport numpy as np\n\ndata = pd.Series(np.random.randint(0, 101, size=20)) # 20 random ages between 0 and 100\nprint("Original Data (Ages):\\n", data.sort_values().values)\n\n# Equal-width binning into 5 bins\nequal_width_bins = pd.cut(data, bins=5)\nprint("\\nEqual-width Bins (5 bins):\\n", equal_width_bins.value_counts().sort_index())\n\n# Equal-frequency binning into 4 quantiles (quartiles)\nequal_freq_bins = pd.qcut(data, q=4)\nprint("\\nEqual-frequency Bins (4 quantiles):\\n", equal_freq_bins.value_counts().sort_index())\n\n# Custom bins\ncustom_bins = [0, 18, 35, 60, 101] # Note: 101 to include 100 if right=True (default)\ncustom_labels = ['Child', 'YoungAdult', 'MiddleAged', 'Senior']\ncustom_binned_data = pd.cut(data, bins=custom_bins, labels=custom_labels, right=False)\n# right=False makes bins like [0,18), [18,35), etc.\nprint("\\nCustom Bins with Labels:\\n", custom_binned_data.value_counts().sort_index())`}
+/>
+
+## Normalization and Standardization
+**Purpose:** Scale numerical features to a common range or distribution. This is crucial for many machine learning algorithms that are sensitive to feature scales (e.g., k-NN, SVM, PCA, gradient descent-based algorithms).
+
+**a. Normalization (Min-Max Scaling):**
+-   Scales features to a fixed range, typically [0, 1] or [-1, 1].
+-   **Formula:** `X_normalized = (X - X_min) / (X_max - X_min)`
+-   Sensitive to outliers (as `X_min` and `X_max` are used).
+
+**b. Standardization (Z-score Scaling):**
+-   Transforms features to have a mean of 0 and a standard deviation of 1.
+-   **Formula:** `X_standardized = (X - mean(X)) / std_dev(X)`
+-   Less sensitive to outliers compared to min-max scaling. Results in a distribution with no specific bounded range.
+
+<CodeBlock
+  initialCode={`import pandas as pd\nimport numpy as np\nfrom sklearn.preprocessing import MinMaxScaler, StandardScaler # For easy implementation\n\ndata_num = pd.DataFrame({'Feature1': np.random.randint(0, 100, 5),\n                         'Feature2': np.random.rand(5) * 10})\nprint("Original Numerical Data:\\n", data_num)\n\n# Min-Max Normalization (to [0,1])\nmin_max_scaler = MinMaxScaler()\ndata_normalized = min_max_scaler.fit_transform(data_num)\ndf_normalized = pd.DataFrame(data_normalized, columns=data_num.columns)\nprint("\\nData after Min-Max Normalization:\\n", df_normalized)\n\n# Standardization (Z-score)\nstandard_scaler = StandardScaler()\ndata_standardized = standard_scaler.fit_transform(data_num)\ndf_standardized = pd.DataFrame(data_standardized, columns=data_num.columns)\nprint("\\nData after Standardization (Z-score):\\n", df_standardized)\n\n# Manual calculation for understanding (Standardization for Feature1)\nmean_f1 = data_num['Feature1'].mean()\nstd_f1 = data_num['Feature1'].std()\nmanual_std_f1 = (data_num['Feature1'] - mean_f1) / std_f1\nprint("\\nManually Standardized Feature1:\\n", manual_std_f1)`}
+/>
+**When to use which?**
+-   **Normalization:** Useful when algorithms require data in a bounded interval (e.g., some neural networks) or when the distribution is not Gaussian.
+-   **Standardization:** Generally preferred if the data follows a Gaussian (normal) distribution or if the algorithm assumes zero mean and unit variance (e.g., PCA, many linear models). More robust to outliers.

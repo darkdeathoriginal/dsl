@@ -1,0 +1,49 @@
+---
+title: The Data Science Process
+---
+
+# 4. The Data Science Process
+
+The Data Science process is an iterative lifecycle of activities to extract insights from data. A common framework includes these steps:
+
+### 1. Setting the Research Goal / Problem Definition
+-   **Define Objective:** Clearly state the problem you're trying to solve or the question you're trying to answer. What constitutes success?
+-   **Deliverables:** What output is expected (e.g., a report, a predictive model, a dashboard)?
+-   **Feasibility:** Is the goal achievable with available data, resources, and time?
+-   **Timeline:** Set realistic deadlines for different phases.
+
+### 2. Retrieving Data / Data Acquisition
+-   Identify and collect necessary data from various sources.
+-   **Sources:** Text files (CSV, TXT), databases (SQL, NoSQL), data lakes, data warehouses, web APIs, web scraping, open datasets.
+-   Data lakes are suitable for all data types (structured, unstructured), while data warehouses are typically for structured data.
+
+### 3. Data Preparation (Cleansing, Integration, Transformation)
+This is often the most time-consuming phase.
+-   **Cleansing:**
+    -   Remove inconsistencies, outliers (extreme values), errors, and missing values.
+    -   Perform sanity checks (e.g., `0 <= age <= 120`).
+-   **Integration:**
+    -   Combine data from multiple sources.
+    -   Handle data type differences (e.g., join/stack tables, create views).
+-   **Transformation:**
+    -   Enrich and transform data for modeling (e.g., creating dummy variables, feature engineering, scaling, normalization).
+    -   Reduce dimensionality where feasible (e.g., Principal Component Analysis - PCA).
+
+### 4. Data Exploration (Exploratory Data Analysis - EDA)
+-   Understand the data's structure, patterns, anomalies, and relationships.
+-   **Visualization:** Use charts (bar charts, histograms, scatter plots, box plots), overlays, brushing/linking techniques.
+-   **Descriptive Statistics:** Calculate basic stats like mean, median, mode, standard deviation, min, max, quartiles, correlations.
+
+### 5. Model Building / Modeling
+-   Select an appropriate modeling technique based on the problem (e.g., regression, classification, clustering).
+    -   Techniques can be statistical (e.g., linear regression) or Machine Learning based (e.g., decision trees, neural networks).
+-   **Feature Selection/Engineering:** Choose the most relevant features or create new ones to improve model performance.
+-   **Iterative Model Development:** Train the model on a portion of the data (training set), tune its parameters, and validate its performance on unseen data (validation/test set).
+-   **Evaluate:** Assess if the model is deployable, maintainable, explainable, and meets the business objectives.
+
+### 6. Model Deployment and Communication / Presentation of Results
+-   **Communicate Findings:** Present insights and model results clearly to stakeholders (technical and non-technical). This often involves storytelling with data and visualizations.
+-   **Model Deployment (if applicable):** Integrate the model into a production environment to make predictions on new data. (This step is often not detailed in introductory syllabi but is a logical next step in a real-world project).
+    -   Example: Deploying a recommendation engine on an e-commerce website.
+
+This process is iterative; you might revisit earlier steps as you learn more about the data or if model performance isn't satisfactory.

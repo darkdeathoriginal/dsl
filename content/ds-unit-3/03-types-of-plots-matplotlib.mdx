@@ -1,0 +1,59 @@
+---
+title: Types of Plots in Matplotlib
+---
+
+# 3. Types of Plots in Matplotlib
+
+Matplotlib offers a wide variety of plot types to visualize data in different ways. Here are some of the most common ones accessible via the `pyplot` interface or as methods on an `Axes` object.
+
+*(Note: Examples will be shown in subsequent sections. This is an overview.)*
+
+-   **Line Graph / Line Plot (`plt.plot()` or `ax.plot()`):**
+    -   Displays data points connected by straight line segments.
+    -   Ideal for showing trends over a continuous interval or time series.
+
+-   **Stem Plot (`plt.stem()` or `ax.stem()`):**
+    -   Plots vertical lines from a baseline to data points, with markers at the data points.
+    -   Useful for visualizing discrete data sequences.
+
+-   **Bar Chart / Bar Graph (`plt.bar()`, `plt.barh()` or `ax.bar()`, `ax.barh()`):**
+    -   Represents categorical data with rectangular bars. Lengths of bars are proportional to the values they represent.
+    -   `bar()` for vertical bars, `barh()` for horizontal bars.
+    -   Used for comparing quantities across different categories.
+
+-   **Histogram (`plt.hist()` or `ax.hist()`):**
+    -   Represents the distribution of numerical data.
+    -   Divides the data range into bins and shows the frequency (or density) of data points falling into each bin.
+    -   Helps understand the underlying frequency distribution, outliers, skewness, etc.
+
+-   **Scatter Plot (`plt.scatter()` or `ax.scatter()`):**
+    -   Displays values for typically two variables as a collection of points.
+    -   Used to observe relationships (e.g., correlation, clusters) between two numerical variables.
+    -   Each point represents an observation.
+
+-   **Stack Plot / Area Plot (`plt.stackplot()` or `ax.stackplot()`, `ax.fill_between()`):**
+    -   Visualizes how different parts contribute to a whole over time or a continuous variable.
+    -   Like a line plot, but the area between the axis and the line is filled with color. Stack plots show multiple such areas stacked on top of each other.
+
+-   **Box Plot / Box-and-Whisker Plot (`plt.boxplot()` or `ax.boxplot()`):**
+    -   Displays the distribution of numerical data based on a five-number summary: minimum, first quartile (Q1), median (Q2), third quartile (Q3), and maximum.
+    -   Useful for comparing distributions across categories and identifying outliers.
+
+-   **Pie Chart (`plt.pie()` or `ax.pie()`):**
+    -   A circular statistical graphic, divided into slices to illustrate numerical proportion.
+    -   Each slice's arc length (and consequently its central angle and area) is proportional to the quantity it represents.
+    -   Best for showing parts of a whole for a small number of categories.
+
+-   **Error Plot / Error Bars (`plt.errorbar()` or `ax.errorbar()`):**
+    -   Visualizes the uncertainty or variability (error) in data points, typically shown as lines extending from a central point.
+
+-   **Violin Plot (`plt.violinplot()` or `ax.violinplot()`):**
+    -   Combines features of a box plot and a kernel density estimation (KDE) plot.
+    -   Shows the probability density of the data at different values, and includes markers for the median and interquartile range (like a box plot).
+
+-   **3D Plots (using `mpl_toolkits.mplot3d`):**
+    -   For visualizing data in three dimensions.
+    -   Includes 3D scatter plots, 3D line plots, 3D surface plots, 3D bar plots, etc.
+    -   Example: `ax = fig.add_subplot(projection='3d'); ax.scatter(xs, ys, zs)`
+
+This is not an exhaustive list, as Matplotlib's flexibility allows for many custom and specialized visualizations. We will explore how to create and customize several of these plots in the upcoming sections.

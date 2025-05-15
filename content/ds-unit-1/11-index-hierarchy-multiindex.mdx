@@ -1,0 +1,53 @@
+---
+title: Index Hierarchy (MultiIndex)
+---
+import { CodeBlock } from '@/components/CodeBlock';
+
+# 11. Index Hierarchy (MultiIndex)
+
+Hierarchical indexing (or MultiIndex) is a powerful feature in Pandas that allows you to have multiple levels of indexes on an axis. It provides a way to work with higher-dimensional data in a lower-dimensional form like a Series (1D) or DataFrame (2D).
+
+## Creating a MultiIndex
+You can create a MultiIndex in several ways, often by passing a list of arrays or tuples to the `index` argument when creating a Series or DataFrame, or by using `MultiIndex.from_arrays()`, `MultiIndex.from_tuples()`, or `MultiIndex.from_product()`.
+
+<CodeBlock
+  initialCode={`import pandas as pd\nimport numpy as np\n\n# From a list of arrays (or tuples)\narrays = [['bar', 'bar', 'baz', 'baz', 'foo', 'foo', 'qux', 'qux'],\n          ['one', 'two', 'one', 'two', 'one', 'two', 'one', 'two']]\nmulti_idx_arrays = pd.MultiIndex.from_arrays(arrays, names=['first', 'second'])\nprint("MultiIndex from arrays:\\n", multi_idx_arrays)\n\ns_multi_arr = pd.Series(np.random.randn(8), index=multi_idx_arrays)\nprint("\\nSeries with MultiIndex from arrays:\\n", s_multi_arr)\n\n# From a list of tuples\ntuples = [('A', 1), ('A', 2), ('B', 1), ('B', 2)]\nmulti_idx_tuples = pd.MultiIndex.from_tuples(tuples, names=['Letter', 'Number'])\nprint("\\nMultiIndex from tuples:\\n", multi_idx_tuples)\n\ndf_multi_tpl_idx = pd.DataFrame({'value': [10, 20, 30, 40]}, index=multi_idx_tuples)\nprint("\\nDataFrame with MultiIndex (rows) from tuples:\\n", df_multi_tpl_idx)\n\n# MultiIndex for columns in a DataFrame\ndf_multi_cols = pd.DataFrame(np.random.randn(4, 4), \n                             index=['R1', 'R2', 'R3', 'R4'], \n                             columns=multi_idx_arrays[:4]) # Using first 4 from above\nprint("\\nDataFrame with MultiIndex for columns:\\n", df_multi_cols)`}
+/>
+
+## Indexing and Slicing with MultiIndex
+
+### Series with MultiIndex
+-   Partial indexing is possible: selecting data by one level of the hierarchy.
+
+<CodeBlock
+  initialCode={`import pandas as pd\nimport numpy as np\n\narrays = [['bar', 'bar', 'baz', 'baz', 'foo', 'foo'],\n          ['one', 'two', 'one', 'two', 'one', 'two']]\nmulti_idx = pd.MultiIndex.from_arrays(arrays, names=['first', 'second'])\ns = pd.Series(np.arange(6), index=multi_idx)\nprint("Series s with MultiIndex:\\n", s)\n\n# Select all data for 'bar' in the first level\nprint("\\ns['bar']:\\n", s['bar'])\n\n# Select data for ('bar', 'two')\nprint("\\ns['bar', 'two']:", s['bar', 'two'])\n\n# Slicing (outer level)\nprint("\\ns['baz':'foo']:\\n", s['baz':'foo'])\n\n# Slicing with inner level (using .loc for clarity and robustness)\nprint("\\ns.loc['baz', 'two']:", s.loc['baz', 'two'])\nprint("\\nAll 'one's from second level: s.loc[:, 'one']\\n", s.loc[:, 'one'])`}
+/>
+
+### DataFrame with MultiIndex (Rows)
+Similar principles apply.
+<CodeBlock
+  initialCode={`import pandas as pd\nimport numpy as np\n\ndata = np.arange(12).reshape((4, 3))\nindex = pd.MultiIndex.from_product([['A', 'B'], ['type1', 'type2']],\n                                     names=['Class', 'Type'])\ndf = pd.DataFrame(data, index=index, columns=['Val1', 'Val2', 'Val3'])\nprint("DataFrame with MultiIndex rows:\\n", df)\n\n# Select all rows for Class 'A'\nprint("\\ndf.loc['A']:\\n", df.loc['A'])\n\n# Select specific row ('A', 'type2')\nprint("\\ndf.loc[('A', 'type2')]:\\n", df.loc[('A', 'type2')])\n\n# Select specific cell\nprint("\\ndf.loc[('B', 'type1'), 'Val2']:", df.loc[('B', 'type1'), 'Val2'])`}
+/>
+
+### DataFrame with MultiIndex (Columns)
+<CodeBlock
+  initialCode={`import pandas as pd\nimport numpy as np\n\ncolumns_mi = pd.MultiIndex.from_product([['Metrics1', 'Metrics2'], ['Mean', 'Std']],\n                                          names=['Group', 'Stat'])\ndf_cols_mi = pd.DataFrame(np.round(np.random.rand(3, 4), 2), \n                            index=['Obs1', 'Obs2', 'Obs3'], \n                            columns=columns_mi)\nprint("DataFrame with MultiIndex columns:\\n", df_cols_mi)\n\n# Select 'Metrics1' group of columns\nprint("\\ndf_cols_mi['Metrics1']:\\n", df_cols_mi['Metrics1'])\n\n# Select 'Metrics1' -> 'Std' column\nprint("\\ndf_cols_mi['Metrics1', 'Std']:\\n", df_cols_mi['Metrics1', 'Std'])\n# Alternative using .loc for columns\nprint("\\ndf_cols_mi.loc[:, ('Metrics2', 'Mean')]:\\n", df_cols_mi.loc[:, ('Metrics2', 'Mean')])`}
+/>
+
+## Stacking and Unstacking
+-   `stack()`: "Pivots" a level of the column labels (innermost by default) to become the innermost level of row labels, producing a Series.
+-   `unstack()`: "Pivots" a level of the row labels (innermost by default) to become the innermost level of column labels, producing a DataFrame (or Series if only one column level remains).
+
+<CodeBlock
+  initialCode={`import pandas as pd\nimport numpy as np\n\narrays = [['bar', 'bar', 'baz', 'baz'], ['one', 'two', 'one', 'two']]\nmulti_idx = pd.MultiIndex.from_arrays(arrays, names=['first', 'second'])\ndf = pd.DataFrame(np.random.randn(4, 2), index=multi_idx, columns=['A', 'B'])\nprint("Original DataFrame df:\\n", df)\n\n# Stack: moves innermost column level ('A', 'B') to be innermost row index\nstacked_series = df.stack()\nprint("\\nStacked Series (df.stack()):\\n", stacked_series)\n\n# Unstack the stacked series (innermost row index, which was the stacked columns)\nprint("\\nUnstacked back to DataFrame (stacked_series.unstack()):\\n", stacked_series.unstack())\n\n# Unstack by specific level name from original df\n# Move 'second' level of row index to become column index level\nprint("\\nUnstacking 'second' level from df (df.unstack('second')):\\n", df.unstack(level='second'))`}
+/>
+
+## Setting and Resetting the Index
+-   `df.set_index(['col1', 'col2'])`: Moves one or more columns to become the index (can create a MultiIndex).
+-   `df.reset_index()`: Moves index levels into columns (opposite of `set_index`).
+
+<CodeBlock
+  initialCode={`import pandas as pd\n\ndf = pd.DataFrame({'A': ['foo', 'foo', 'bar', 'bar'],\n                   'B': ['one', 'two', 'one', 'two'],\n                   'C': range(4), 'D': range(10, 14)})\nprint("Original DataFrame df:\\n", df)\n\n# Set 'A' and 'B' as MultiIndex\ndf_multi = df.set_index(['A', 'B'])\nprint("\\nDataFrame with 'A' and 'B' as index:\\n", df_multi)\n\n# Reset the index (all levels by default)\ndf_reset = df_multi.reset_index()\nprint("\\nDataFrame after resetting index:\\n", df_reset)\n\n# Reset specific level\ndf_reset_level = df_multi.reset_index(level='B')\nprint("\\nDataFrame after resetting only level 'B':\\n", df_reset_level)`}
+/>
+
+Hierarchical indexing is a very flexible way to arrange and manipulate data, particularly for preparing data for analysis or for displaying summary statistics.

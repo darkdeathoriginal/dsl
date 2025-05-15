@@ -1,0 +1,48 @@
+---
+title: Multiple Plots and Grids in Seaborn
+---
+import { CodeBlock } from '@/components/CodeBlock';
+
+# 10. Multiple Plots and Grids in Seaborn
+
+Seaborn provides powerful figure-level functions and objects for creating structured grids of plots, often conditioned on different subsets of your data. `FacetGrid` and `JointGrid`/`jointplot` are key examples.
+
+## `FacetGrid`
+`FacetGrid` is a way to create a grid of plots where each plot shows the same type of relationship but for different subsets of your data. You define the rows and columns of the grid based on categorical variables.
+
+**Steps to use `FacetGrid`:**
+1.  Initialize a `FacetGrid` object, specifying the DataFrame and the variables to use for `row`, `col`, and `hue`.
+2.  Use the `.map()` method to apply a plotting function to each subset of data in the grid. You pass the plotting function (e.g., `plt.scatter`, `sns.histplot`) and the names of the columns to plot.
+3.  Alternatively, use `.map_dataframe()` to pass a function that accepts a DataFrame subset and other keyword arguments.
+
+<CodeBlock
+  isPlot={true}
+  initialCode={`import seaborn as sns\nimport matplotlib.pyplot as plt\nimport pandas as pd\n\n# Load the tips dataset\ntips = sns.load_dataset("tips")\nsns.set_theme(style="whitegrid")\n\n# Example 1: Scatter plot of total_bill vs tip, faceted by 'smoker' (columns)\ng1 = sns.FacetGrid(tips, col="smoker", height=4, aspect=1)\ng1.map(sns.scatterplot, "total_bill", "tip", alpha=.7)\ng1.add_legend()\ng1.fig.suptitle('Total Bill vs Tip, Faceted by Smoker (Cols)', y=1.03)\n\nplt.figure() # Create a new figure for the next plot to avoid overlap in display\n\n# Example 2: Histogram of total_bill, faceted by 'day' (rows) and 'time' (columns)\ng2 = sns.FacetGrid(tips, row="day", col="time", hue="sex", margin_titles=True, height=3, aspect=1.2)\n# margin_titles=True moves row/col titles to the margins\ng2.map(sns.histplot, "total_bill", kde=False, bins=8)\ng2.add_legend()\ng2.fig.suptitle('Histogram of Total Bill by Day, Time, and Sex', y=1.03)\n\n# plt.show() handled by CodeBlock`}
+/>
+**Key `FacetGrid` parameters:**
+-   `data`: The DataFrame.
+-   `row`, `col`: Categorical variables to define the grid structure.
+-   `hue`: Categorical variable for color encoding within each facet.
+-   `height`: Height (in inches) of each facet.
+-   `aspect`: Aspect ratio of each facet (`width = height * aspect`).
+-   `col_wrap`: "Wrap" the column variable at this width, creating rows as needed.
+
+## `JointGrid` and `jointplot()`
+`JointGrid` (and its convenience wrapper `jointplot()`) is used to draw a plot of two variables with bivariate and univariate graphs. It shows their joint distribution (e.g., a scatter plot) along with their marginal distributions (e.g., histograms or KDEs) on the axes.
+
+-   `sns.jointplot()`: A figure-level function that creates a `JointGrid` and draws a default plot.
+-   `JointGrid`: More flexible; allows you to map different plotting functions to the joint and marginal axes.
+
+<CodeBlock
+  isPlot={true}
+  initialCode={`import seaborn as sns\nimport matplotlib.pyplot as plt\nimport pandas as pd\n\n# Load the iris dataset\niris = sns.load_dataset("iris")\nsns.set_theme(style="ticks")\n\n# Example 1: Using sns.jointplot() (convenience function)\n# Default is scatter for joint, hist for marginals\njp1 = sns.jointplot(data=iris, x="sepal_width", y="sepal_length", height=5)\njp1.fig.suptitle('Joint Plot: Sepal Width vs Sepal Length (Defaults)', y=1.02)\n\nplt.figure() # New figure\n\n# Example 2: Jointplot with KDE for joint and marginals, and hue\njp2 = sns.jointplot(data=iris, x="petal_width", y="petal_length", hue="species", \n                    kind="kde", fill=True, height=6)\n# kind can be 'scatter', 'kde', 'hist', 'reg'\njp2.fig.suptitle('Joint Plot with KDE and Hue', y=1.02)\n\nplt.figure() # New figure\n\n# Example 3: Using JointGrid for more customization\njg = sns.JointGrid(data=iris, x="sepal_width", y="sepal_length", hue="species", height=6)\njg.plot_joint(sns.scatterplot, s=70, alpha=.7)\njg.plot_marginals(sns.histplot, kde=True, multiple="stack")\njg.fig.suptitle('Custom JointGrid: Scatter + Stacked Histograms', y=1.02)\n\n# plt.show() handled by CodeBlock`}
+/>
+
+## Using Matplotlib's `GridSpec` with Seaborn (and Matplotlib Subplots)
+For highly custom layouts that don't fit `FacetGrid` or `JointGrid` naturally, you can use Matplotlib's `GridSpec` or `plt.subplots()` and then use Seaborn plotting functions on individual Matplotlib `Axes` objects. Most Seaborn plotting functions have an `ax` parameter to specify which Matplotlib Axes to draw on.
+
+<CodeBlock
+  isPlot={true}
+  initialCode={`import seaborn as sns\nimport matplotlib.pyplot as plt\nimport matplotlib.gridspec as gridspec # For GridSpec\nimport pandas as pd\n\n# Sample data\ntips = sns.load_dataset('tips')\nsns.set_theme(style="whitegrid")\n\nfig = plt.figure(figsize=(12, 8))\n\n# Using plt.subplots() for a 2x2 grid\n# (ax1, ax2), (ax3, ax4) = fig.subplots(2, 2)\n# This is an alternative to GridSpec for regular grids\n\n# Using GridSpec for potentially more complex layouts\ngs = gridspec.GridSpec(2, 2, width_ratios=[2,1], height_ratios=[1,1])\n\nax1 = fig.add_subplot(gs[0, 0])\nsns.histplot(data=tips, x="total_bill", kde=True, ax=ax1)\nax1.set_title('Histogram of Total Bill')\n\nax2 = fig.add_subplot(gs[0, 1])\nsns.boxplot(data=tips, x="day", y="tip", ax=ax2)\nax2.set_title('Tip Amount by Day')\n\nax3 = fig.add_subplot(gs[1, :]) # Spanning the bottom row\nsns.scatterplot(data=tips, x="total_bill", y="tip", hue="smoker", size="size", ax=ax3)\nax3.set_title('Tip vs Total Bill by Smoker & Party Size')\n\nfig.suptitle('Custom Grid with Seaborn Plots', fontsize=16)\nplt.tight_layout(rect=[0,0,1,0.95])\n# plt.show() handled by CodeBlock`}
+/>
+This approach gives you the full power of Matplotlib's layout system combined with the ease of Seaborn's statistical plotting functions.

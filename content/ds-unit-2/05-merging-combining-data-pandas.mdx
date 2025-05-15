@@ -1,0 +1,74 @@
+---
+title: Merging and Combining Data (Pandas)
+---
+import { CodeBlock } from '@/components/CodeBlock';
+
+# 3. Merging and Combining Data in Pandas
+
+Pandas provides various functions for combining Series and DataFrame objects with SQL-like join operations, as well as concatenation.
+
+## Database-style Joins (`pd.merge()`)
+`pd.merge()` connects rows in DataFrames based on one or more keys. This is similar to SQL `JOIN` operations.
+
+**Key Parameters for `pd.merge()`:**
+-   `left`, `right`: The two DataFrames to merge.
+-   `on`: Column name(s) to join on. Must be found in both DataFrames. If `None` and no `left_on`/`right_on`, merges on the intersection of the columns.
+-   `left_on`, `right_on`: Column names to join on in the left and right DataFrame, respectively (if key names differ).
+-   `left_index=True`, `right_index=True`: Use the index of the left/right DataFrame as its join key(s).
+-   `how`: Type of merge to be performed.
+    -   `'inner'` (default): Intersection of keys.
+    -   `'outer'`: Union of keys. Fills with NaN where data is missing.
+    -   `'left'`: Use keys from the left DataFrame only.
+    -   `'right'`: Use keys from the right DataFrame only.
+-   `suffixes`: Tuple of strings to append to overlapping column names (not join keys) from left and right DataFrames (e.g., `('_L', '_R')`).
+
+<CodeBlock
+  initialCode={`import pandas as pd\n\ndf1 = pd.DataFrame({'key': ['A', 'B', 'C', 'D'], 'data1': range(4)})\ndf2 = pd.DataFrame({'key': ['B', 'D', 'E', 'F'], 'data2': range(4)})\n\nprint("df1:\\n", df1)\nprint("\\ndf2:\\n", df2)\n\n# Inner join (default)\ninner_join = pd.merge(df1, df2, on='key')\nprint("\\nInner Join (on 'key'):\\n", inner_join)\n\n# Left join\nleft_join = pd.merge(df1, df2, on='key', how='left')\nprint("\\nLeft Join (on 'key'):\\n", left_join)\n\n# Outer join\nouter_join = pd.merge(df1, df2, on='key', how='outer')\nprint("\\nOuter Join (on 'key'):\\n", outer_join)`}
+/>
+
+**Merging on Multiple Keys:**
+Pass a list of column names to `on`.
+<CodeBlock
+  initialCode={`import pandas as pd\n\nleft = pd.DataFrame({'key1': ['K0', 'K0', 'K1', 'K2'],\n                     'key2': ['K0', 'K1', 'K0', 'K1'],\n                     'A': ['A0', 'A1', 'A2', 'A3'],\n                     'B': ['B0', 'B1', 'B2', 'B3']})\n\nright = pd.DataFrame({'key1': ['K0', 'K1', 'K1', 'K2'],\n                      'key2': ['K0', 'K0', 'K0', 'K0'],\n                      'C': ['C0', 'C1', 'C2', 'C3'],\n                      'D': ['D0', 'D1', 'D2', 'D3']})\n\nprint("Left DataFrame:\\n", left)\nprint("\\nRight DataFrame:\\n", right)\n\n# Merge on key1 and key2 (inner join)\nmerged_multi_key = pd.merge(left, right, on=['key1', 'key2'])\nprint("\\nMerged on key1 and key2 (inner):\\n", merged_multi_key)\n\n# Outer join on multiple keys\nmerged_multi_key_outer = pd.merge(left, right, on=['key1', 'key2'], how='outer')\nprint("\\nMerged on key1 and key2 (outer):\\n", merged_multi_key_outer)`}
+/>
+
+**Merging with Different Key Names and Handling Overlapping Columns:**
+<CodeBlock
+  initialCode={`import pandas as pd\n\ndf_left = pd.DataFrame({'lkey': ['A', 'B', 'C'], 'value_left': [1, 2, 3], 'common': [10,11,12]})\ndf_right = pd.DataFrame({'rkey': ['B', 'C', 'D'], 'value_right': [4, 5, 6], 'common': [20,21,22]})\n\nprint("df_left:\\n", df_left)\nprint("\\ndf_right:\\n", df_right)\n\n# Merge with different key names and suffixes for overlapping 'common' column\nmerged_diff_keys = pd.merge(df_left, df_right, left_on='lkey', right_on='rkey', \n                              how='outer', suffixes=('_dfL', '_dfR'))\nprint("\\nMerged with different keys and suffixes:\\n", merged_diff_keys)`}
+/>
+
+**Merging on Index (`left_index=True`, `right_index=True`):**
+<CodeBlock
+  initialCode={`import pandas as pd\n\nleft_idx = pd.DataFrame({'A': ['A0', 'A1', 'A2']}, index=['K0', 'K1', 'K2'])\nright_idx = pd.DataFrame({'B': ['B0', 'B1', 'B2']}, index=['K0', 'K2', 'K3'])\n\nprint("left_idx:\\n", left_idx)\nprint("\\nright_idx:\\n", right_idx)\n\n# Inner join on index\nmerged_on_idx = pd.merge(left_idx, right_idx, left_index=True, right_index=True, how='inner')\nprint("\\nInner join on index:\\n", merged_on_idx)\n\n# Outer join on index\nmerged_on_idx_outer = pd.merge(left_idx, right_idx, left_index=True, right_index=True, how='outer')\nprint("\\nOuter join on index:\\n", merged_on_idx_outer)`}
+/>
+
+## Concatenating Along an Axis (`pd.concat()`)
+`pd.concat()` glues or stacks together objects along an axis.
+-   Default is `axis=0` (stacking rows).
+-   `axis=1` stacks columns (like a SQL `UNION ALL` if indexes match, or an outer join on index if they don't).
+-   `join`: `'outer'` (default, union of indexes/columns) or `'inner'` (intersection).
+-   `keys`: Can create a hierarchical index on the concatenation axis.
+
+<CodeBlock
+  initialCode={`import pandas as pd\nimport numpy as np\n\ns1 = pd.Series([0, 1], index=['a', 'b'])\ns2 = pd.Series([2, 3, 4], index=['c', 'd', 'e'])\ns3 = pd.Series([5, 6], index=['f', 'g'])\n\nprint("s1:\\n", s1, "\\ns2:\\n", s2, "\\ns3:\\n", s3)\n\n# Concatenate Series (stacks them vertically)\nconcat_series = pd.concat([s1, s2, s3])\nprint("\\nConcatenated Series (axis=0 default):\\n", concat_series)\n\n# Concatenate along axis=1 (forms a DataFrame)\n# Indexes align, NaN where missing\nconcat_series_axis1 = pd.concat([s1, s2, s3], axis=1, keys=['one', 'two', 'three'])\nprint("\\nConcatenated Series as columns of a DataFrame (axis=1):\\n", concat_series_axis1)\n\ndf_c1 = pd.DataFrame(np.arange(6).reshape(3, 2), index=['a', 'b', 'c'], columns=['one', 'two'])\ndf_c2 = pd.DataFrame(5 + np.arange(4).reshape(2, 2), index=['a', 'd'], columns=['three', 'four'])\n\nprint("\\ndf_c1:\\n", df_c1)\nprint("\\ndf_c2:\\n", df_c2)\n\n# Concatenate DataFrames (axis=0, row-wise)\nconcat_df_rows = pd.concat([df_c1, df_c2], sort=False) # sort=False to keep original column order\nprint("\\nConcatenated DataFrames (rows, outer join on columns):\\n", concat_df_rows)\n\n# Concatenate DataFrames (axis=1, column-wise, outer join on index)\nconcat_df_cols = pd.concat([df_c1, df_c2], axis=1, sort=False)\nprint("\\nConcatenated DataFrames (cols, outer join on index):\\n", concat_df_cols)\n\n# Inner join on columns when concatenating rows\nconcat_df_rows_inner = pd.concat([df_c1, df_c2], join='inner', sort=False)\nprint("\\nConcatenated DataFrames (rows, inner join on columns):\\n", concat_df_rows_inner)`}
+/>
+
+## Combining Data with Overlap (`.combine_first()`)
+This method is used to "patch" missing data in one object with values from another. It takes values from the calling object first, and for any `NaN` values, it fills them from the corresponding location in the passed object.
+
+<CodeBlock
+  initialCode={`import pandas as pd\nimport numpy as np\n\ndf_a = pd.DataFrame({'A': [1., np.nan, 3., np.nan],\n                     'B': [np.nan, 2., np.nan, 4.]})\ndf_b = pd.DataFrame({'A': [10., 20., 30., 40.],\n                     'B': [50., 60., 70., 80.],\n                     'C': [100., 200., 300., 400.]})\n\nprint("df_a:\\n", df_a)\nprint("\\ndf_b:\\n", df_b)\n\n# Fill NaN in df_a with values from df_b\ncombined_df = df_a.combine_first(df_b)\nprint("\\ndf_a.combine_first(df_b):\\n", combined_df)\n# Note: Column 'C' from df_b is included as it doesn't exist in df_a.`}
+/>
+
+## `DataFrame.join()` method
+A convenience method for merging DataFrames by index (or on a key column). It's similar to `pd.merge` with `left_index=True` or `right_index=True`, or both.
+
+<CodeBlock
+  initialCode={`import pandas as pd\n\nleft = pd.DataFrame({'A': [1, 2], 'B': [3, 4]}, index=['K0', 'K1'])\nright = pd.DataFrame({'C': [5, 6], 'D': [7, 8]}, index=['K0', 'K2'])\n\nprint("Left:\\n", left)\nprint("\\nRight:\\n", right)\n\n# Default join is left join on index\njoined_df = left.join(right)\nprint("\\nleft.join(right) (left join on index):\\n", joined_df)\n\n# Outer join on index\njoined_outer_df = left.join(right, how='outer')\nprint("\\nleft.join(right, how='outer'):\\n", joined_outer_df)\n\n# Joining on a column (df.join(other_df, on='key_column'))\ndf_key = pd.DataFrame({'key': ['K0', 'K1', 'K0'], 'val_left': [10,20,30]})\nother_indexed = pd.DataFrame({'val_right': [100,200]}, index=['K0', 'K1'])\nprint("\\ndf_key:\\n", df_key)\nprint("\\nother_indexed:\\n", other_indexed)\n\njoined_on_key = df_key.join(other_indexed, on='key')\nprint("\\ndf_key.join(other_indexed, on='key'):\\n", joined_on_key)`}
+/>
+
+**Choosing the Right Method:**
+-   **`pd.merge()`:** Most flexible for SQL-like joins on columns or indexes. Best for complex join logic.
+-   **`pd.concat()`:** Best for stacking/appending data along an axis (rows or columns).
+-   **`df.join()`:** Convenient for index-based merges or joining a DataFrame with an indexed DataFrame on one of its columns.
+-   **`df.combine_first()`:** Specifically for patching missing values from one DataFrame with another.
