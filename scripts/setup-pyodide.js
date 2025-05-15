@@ -9,14 +9,14 @@ const zlib = require('zlib'); // For .bz2, though `tar` might handle it. If not,
 
 // --- Configuration ---
 const PYODIDE_VERSION = '0.27.5'; // Specify the Pyodide version you want
-const PYODIDE_DIST_URL = `https://github.com/pyodide/pyodide/releases/download/${PYODIDE_VERSION}/pyodide-v${PYODIDE_VERSION}.tar.bz2`;
+const PYODIDE_DIST_URL = `https://github.com/pyodide/pyodide/releases/download/${PYODIDE_VERSION}/pyodide-${PYODIDE_VERSION}.tar.bz2`;
 // Check the release page for the exact filename. Some might be -full.tar.bz2
 // For example, v0.25.1 is `pyodide-v0.25.1.tar.bz2`
 // v0.25.0 was `pyodide-v0.25.0-full.tar.bz2`
 
 const PUBLIC_DIR = path.join(__dirname, '..', 'public');
 const PYODIDE_TARGET_DIR = path.join(PUBLIC_DIR, 'pyodide');
-const DOWNLOAD_TARGET_PATH = path.join(__dirname, `pyodide-v${PYODIDE_VERSION}.tar.bz2`); // Temporary download location
+const DOWNLOAD_TARGET_PATH = path.join(__dirname, `pyodide-${PYODIDE_VERSION}.tar.bz2`); // Temporary download location
 
 async function setupPyodide() {
   console.log(`Setting up Pyodide version ${PYODIDE_VERSION}...`);
