@@ -1,0 +1,81 @@
+---
+title: Controlling Axes, Ticks, Labels, Legends
+---
+import { CodeBlock } from '@/components/CodeBlock';
+
+# 6. Controlling Axes, Ticks, Labels, Legends
+
+Fine-tuning the elements of your plot, such as axis limits, tick marks, labels, and legends, is essential for creating clear, readable, and professional-looking visualizations. Matplotlib provides extensive control over these aspects, primarily through methods of the `Axes` object.
+
+## Axes Control
+
+### Setting Axis Limits (`ax.set_xlim()`, `ax.set_ylim()`)
+You can manually set the range (limits) of the x-axis and y-axis.
+-   `ax.set_xlim(left, right)` or `ax.set_xlim([left, right])`
+-   `ax.set_ylim(bottom, top)` or `ax.set_ylim([bottom, top])`
+
+<CodeBlock
+  isPlot={true}
+  initialCode={`import matplotlib.pyplot as plt\nimport numpy as np\n\nfig, ax = plt.subplots()\nx = np.linspace(0, 10, 100)\ny = np.sin(x)\nax.plot(x, y)\n\nax.set_title('Sine Wave with Custom Axis Limits')\nax.set_xlabel('X-Value')\nax.set_ylabel('sin(X)')\n\n# Set custom limits\nax.set_xlim(-1, 11)  # X-axis from -1 to 11\nax.set_ylim(-1.5, 1.5) # Y-axis from -1.5 to 1.5\n\n# plt.show() handled by CodeBlock`}
+/>
+
+### Setting Ticks and Tick Labels (`ax.set_xticks()`, `ax.set_yticks()`, `ax.set_xticklabels()`, `ax.set_yticklabels()`)
+You can control the position and labels of the tick marks on each axis.
+
+-   `ax.set_xticks(tick_positions_list)`: Sets the locations of the x-axis ticks.
+-   `ax.set_xticklabels(labels_list, rotation=None, fontsize=None, ha=None, ...)`: Sets the text labels for the x-axis ticks.
+    -   `rotation`: Angle of rotation for labels.
+    -   `ha`: Horizontal alignment (e.g., `'right'`, `'center'`, `'left'`).
+-   Similar methods `ax.set_yticks()` and `ax.set_yticklabels()` exist for the y-axis.
+
+<CodeBlock
+  isPlot={true}
+  initialCode={`import matplotlib.pyplot as plt\nimport numpy as np\n\nfig, ax = plt.subplots(figsize=(7,4))\nx = np.arange(0, 4 * np.pi, 0.1)\ny = np.cos(x)\nax.plot(x,y)\n\nax.set_title('Cosine Wave with Custom Ticks & Labels')\n\n# Set X-axis ticks at multiples of pi\nx_tick_positions = [0, np.pi, 2*np.pi, 3*np.pi, 4*np.pi]\nx_tick_labels = ['0', 'π', '2π', '3π', '4π']\nax.set_xticks(x_tick_positions)\nax.set_xticklabels(x_tick_labels, fontsize=12)\n\n# Set Y-axis ticks\ny_tick_positions = [-1, -0.5, 0, 0.5, 1]\nax.set_yticks(y_tick_positions)\nax.set_yticklabels(['Min', '-0.5', 'Zero', '0.5', 'Max'], color='blue')\n\nax.grid(True, linestyle=':')\n# plt.show() handled by CodeBlock`}
+/>
+
+### Tick Label Rotation and Formatting
+-   **Rotation:** Use the `rotation` parameter in `set_xticklabels` or `set_yticklabels`.
+-   **Advanced Formatting:** For more complex formatting (e.g., date formats, scientific notation, percentage), you can use `matplotlib.ticker.FormatStrFormatter` or `matplotlib.ticker.FuncFormatter`.
+
+<CodeBlock
+  isPlot={true}
+  initialCode={`import matplotlib.pyplot as plt\nimport matplotlib.ticker as mticker # Import ticker module\nimport numpy as np\n\nfig, ax = plt.subplots()\ncategories = ['Category A', 'Category B', 'Category Long Name C', 'Category D']\nvalues = [10, 24, 15, 19]\nax.bar(categories, values)\n\nax.set_title('Bar Chart with Rotated & Formatted Ticks')\nax.set_ylabel('Values ($)')\n\n# Rotate X-axis tick labels for readability\nax.set_xticklabels(categories, rotation=30, ha='right')\n\n# Format Y-axis ticks as currency (dollar sign)\nformatter = mticker.FormatStrFormatter('$%.0f') # $ sign, 0 decimal places\nax.yaxis.set_major_formatter(formatter)\n\nplt.tight_layout() # Adjust plot to prevent labels from being cut off\n# plt.show() handled by CodeBlock`}
+/>
+
+## Labels and Title
+
+### Setting Plot Title and Axis Labels (`ax.set_title()`, `ax.set_xlabel()`, `ax.set_ylabel()`)
+These methods are fundamental for making your plot understandable.
+-   `ax.set_title(label_string, fontsize=, color=, ...)`
+-   `ax.set_xlabel(label_string, fontsize=, color=, ...)`
+-   `ax.set_ylabel(label_string, fontsize=, color=, ...)`
+
+You can also set all of these at once using `ax.set(...)`:
+`ax.set(title='My Plot', xlabel='X Data', ylabel='Y Data')`
+
+(Examples of these were shown in previous sections when creating basic plots.)
+
+## Legends (`ax.legend()`)
+Legends are crucial when you have multiple lines, scatter groups, or bars on a single plot, each representing different data series or categories.
+
+-   **Provide `label` in plotting commands:** When you call `ax.plot()`, `ax.scatter()`, etc., include the `label='My Series Name'` argument.
+-   **Call `ax.legend()`:** This command will then automatically create and display the legend using the labels you provided.
+
+**Customizing Legends:**
+`ax.legend()` accepts several arguments to customize its appearance and position:
+-   `loc`: The location of the legend.
+    -   Common strings: `'best'`, `'upper right'`, `'upper left'`, `'lower left'`, `'lower right'`, `'right'`, `'center left'`, `'center right'`, `'lower center'`, `'upper center'`, `'center'`.
+    -   Can also be a 2-tuple `(x, y)` specifying coordinates (in axes fraction, 0-1).
+-   `fontsize`: Size of the text in the legend.
+-   `ncol`: Number of columns in the legend.
+-   `title`: A title for the legend box.
+-   `frameon=True/False`: Whether to draw a frame around the legend.
+-   `shadow=True/False`: Whether to draw a shadow behind the legend.
+-   `fancybox=True/False`: Use a rounded box.
+
+<CodeBlock
+  isPlot={true}
+  initialCode={`import matplotlib.pyplot as plt\nimport numpy as np\n\nfig, ax = plt.subplots()\nx = np.linspace(0, 10, 100)\n\nax.plot(x, np.sin(x), label='Sine Wave', color='dodgerblue', linestyle='-')\nax.plot(x, np.cos(x), label='Cosine Wave', color='orangered', linestyle='--')\nax.plot(x, 0.5 * np.sin(x-np.pi/4), label='Shifted Sine', color='green', linestyle=':')\n\nax.set_title('Plot with a Customized Legend')\nax.set_xlabel('Time (s)')\nax.set_ylabel('Amplitude')\n\n# Add and customize the legend\nax.legend(loc='lower left', ncol=3, fontsize='small', \n          title='Wave Types', frameon=True, fancybox=True, shadow=True)\n\nax.grid(True)\n# plt.show() handled by CodeBlock`}
+/>
+
+By mastering these controls, you can tailor your Matplotlib plots to be highly informative and visually appealing, effectively communicating the story within your data.
