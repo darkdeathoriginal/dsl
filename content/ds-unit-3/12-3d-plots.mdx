@@ -11,6 +11,7 @@ Matplotlib provides a toolkit called `mpl_toolkits.mplot3d` for creating basic 3
 To use 3D plotting, you need to import `Axes3D` from `mpl_toolkits.mplot3d`. This registers the `'3d'` projection with Matplotlib.
 ```python
 from mpl_toolkits.mplot3d import Axes3D
+```
 This import is usually done once at the beginning of your script or notebook. For the `CodeBlock` examples, we'll include it within the code.
 
 **Creating a 3D Axes:**
@@ -19,6 +20,7 @@ You create a 3D Axes object by passing `projection='3d'` to `fig.add_subplot()` 
 fig = plt.figure()
 ax = fig.add_subplot(111, projection='3d')
 # or: ax = plt.axes(projection='3d')
+```
 **Types of 3D Plots:**
 Common types include 3D scatter plots, 3D line plots, and 3D surface plots.
 

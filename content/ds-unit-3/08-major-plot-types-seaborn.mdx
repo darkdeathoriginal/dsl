@@ -1,9 +1,3 @@
-
----
-
-## `content/ds-unit-3/08-major-plot-types-seaborn.mdx`
-
-```mdx
 ---
 title: Major Plot Types in Seaborn
 ---
@@ -50,7 +44,15 @@ Seaborn excels at creating various statistical plots with concise syntax. Here a
 
 <CodeBlock
   isPlot={true}
-  initialCode={`import seaborn as sns\nimport matplotlib.pyplot as plt\nimport pandas as pd\n\n# Sample data\ntips = sns.load_dataset('tips') # Seaborn comes with sample datasets\n\nsns.set_theme(style="whitegrid")\nplt.figure(figsize=(8,6))\n\nsns.boxplot(data=tips, x='day', y='total_bill', hue='smoker')\n# x: categorical variable for groups\n# y: numerical variable for distribution\n# hue: another categorical variable for sub-groups within x\n\nplt.title('Box Plot of Total Bill by Day and Smoker Status')\nplt.xlabel('Day of the Week')\nplt.ylabel('Total Bill ($)')\n# plt.show() handled by CodeBlock`}
+  initialCode={`import seaborn as sns\nimport matplotlib.pyplot as plt\nimport pandas as pd\n\n# Sample data\ntips = pd.DataFrame({
+    'total_bill': [16.99, 10.34, 21.01, 23.68, 24.59, 25.29],
+    'tip':        [1.01, 1.66, 3.50, 3.31, 3.61, 4.71],
+    'sex':        ['Female', 'Male', 'Male', 'Male', 'Female', 'Male'],
+    'smoker':     ['No', 'No', 'No', 'No', 'No', 'No'],
+    'day':        ['Sun', 'Sun', 'Sun', 'Sun', 'Sun', 'Sun'],
+    'time':       ['Dinner', 'Dinner', 'Dinner', 'Dinner', 'Dinner', 'Dinner'],
+    'size':       [2, 3, 3, 2, 4, 4]
+})\n\nsns.set_theme(style="whitegrid")\nplt.figure(figsize=(8,6))\n\nsns.boxplot(data=tips, x='day', y='total_bill', hue='smoker')\n# x: categorical variable for groups\n# y: numerical variable for distribution\n# hue: another categorical variable for sub-groups within x\n\nplt.title('Box Plot of Total Bill by Day and Smoker Status')\nplt.xlabel('Day of the Week')\nplt.ylabel('Total Bill ($)')\n# plt.show() handled by CodeBlock`}
 />
 Other related plots for distributions include `sns.violinplot()`, `sns.stripplot()`, `sns.swarmplot()`.
 
@@ -63,7 +65,13 @@ Other related plots for distributions include `sns.violinplot()`, `sns.stripplot
 
 <CodeBlock
   isPlot={true}
-  initialCode={`import seaborn as sns\nimport matplotlib.pyplot as plt\n\n# Load a sample dataset from Seaborn\niris = sns.load_dataset('iris') # Contains numerical and categorical data\n\nsns.set_theme(style="ticks")\n\n# Create a pair plot, colored by the 'species' column\n# This is a figure-level function, so we don't typically assign to 'ax'\ng = sns.pairplot(iris, hue='species', diag_kind='kde',\n                 plot_kws={'alpha': 0.6, 's': 80, 'edgecolor': 'k'},\n                 diag_kws={'fill': True})\n\ng.fig.suptitle('Pair Plot of Iris Dataset by Species', y=1.02) # Adjust title position\n# plt.show() handled by CodeBlock\n# Note: Pairplots can take a moment to render due to multiple subplots.`}
+  initialCode={`import seaborn as sns\nimport matplotlib.pyplot as plt\nimport pandas as pd\n\n# Load a sample dataset from Seaborn\niris = pd.DataFrame({
+    'sepal_length': [5.1, 4.9, 4.7, 6.0, 5.4, 6.9],
+    'sepal_width':  [3.5, 3.0, 3.2, 2.2, 3.9, 3.1],
+    'petal_length': [1.4, 1.4, 1.3, 5.0, 1.7, 5.4],
+    'petal_width':  [0.2, 0.2, 0.2, 1.5, 0.4, 2.1],
+    'species':      ['setosa', 'setosa', 'setosa', 'versicolor', 'setosa', 'virginica']
+}) # Contains numerical and categorical data\n\nsns.set_theme(style="ticks")\n\n# Create a pair plot, colored by the 'species' column\n# This is a figure-level function, so we don't typically assign to 'ax'\ng = sns.pairplot(iris, hue='species', diag_kind='kde',\n                 plot_kws={'alpha': 0.6, 's': 80, 'edgecolor': 'k'},\n                 diag_kws={'fill': True})\n\ng.fig.suptitle('Pair Plot of Iris Dataset by Species', y=1.02) # Adjust title position\n# plt.show() handled by CodeBlock\n# Note: Pairplots can take a moment to render due to multiple subplots.`}
 />
 
 These are some of the most frequently used plot types in Seaborn. The library offers many more specialized plots for categorical data (`catplot`), regression models (`lmplot`, `regplot`), matrix data (`heatmap`), and complex distributions.
