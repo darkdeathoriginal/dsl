@@ -14,26 +14,21 @@ A word cloud (or tag cloud) is a visual representation of text data where the si
 You typically need to install the `wordcloud` library: `pip install wordcloud`.
 (For Pyodide, this would need to be available or installable via `micropip` if a wheel exists for the Pyodide environment. For now, this example is more conceptual for a standard Python environment, as directly running `wordcloud` in our current Pyodide setup might be tricky without ensuring the package is present and Matplotlib integration works seamlessly for image display.)
 
-**Conceptual Example (Standard Python):**
-```python
-# This block is conceptual for a standard Python environment
-# from wordcloud import WordCloud
-# import matplotlib.pyplot as plt
-#
-# text = "python data science machine learning python visualization data analysis python ml"
-# text += " data learning science python machine data data science"
-#
-# # Generate a word cloud image
-# wordcloud_obj = WordCloud(width=800, height=400, background_color='white').generate(text)
-#
-# # Display the generated image:
-# plt.figure(figsize=(10, 5))
-# plt.imshow(wordcloud_obj, interpolation='bilinear') # 'bilinear' makes it look smoother
-# plt.axis("off") # Don't show axes for a word cloud
-# plt.title("Sample Word Cloud")
-# plt.show()
-```
-**Note for Pyodide:** To make this runnable in the `CodeBlock`, the `wordcloud` package would need to be installed via `micropip` and the image output captured similar to Matplotlib plots (e.g., save to `BytesIO`, then base64 encode). This requires a `wordcloud` wheel compatible with Pyodide. If not available, this remains a conceptual example.
+<CodeBlock
+  isPlot={true}
+  initialCode={`from wordcloud import WordCloud
+import matplotlib.pyplot as plt
+
+text = "python data science machine learning python visualization data analysis python ml"
+text += " data learning science python machine data data science"
+
+wordcloud_obj = WordCloud(width=800, height=400, background_color='white').generate(text)
+
+plt.figure(figsize=(10, 5))
+plt.imshow(wordcloud_obj, interpolation='bilinear')
+plt.axis("off") 
+plt.title("Sample Word Cloud")`}
+/>
 
 ## Text Annotations (Matplotlib Recap)
 We covered `ax.text()` and `ax.annotate()` in Matplotlib earlier. These are fundamental for adding specific textual information to plots.
