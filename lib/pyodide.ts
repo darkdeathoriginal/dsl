@@ -59,7 +59,7 @@ const micropip = pyodideInstance.pyimport("micropip");
       console.log("Package loading (micropip):", msg);
     };
   
-    await micropip.install(['numpy', 'pandas', 'matplotlib', 'seaborn'], { successCallback: packageLoadMsgCallback, errorCallback: packageLoadMsgCallback });
+    await micropip.install(['numpy', 'pandas', 'matplotlib', 'seaborn','wordcloud'], { successCallback: packageLoadMsgCallback, errorCallback: packageLoadMsgCallback });
     console.log("Core DS packages installed via micropip.");
     return pyodideInstance;
   }
