@@ -1,6 +1,6 @@
 // components/CodeBlock.tsx
 "use client";
-import React, { useState, useEffect, useRef, useCallback } from "react"; // Added useCallback
+import React, { useState, useEffect, useCallback } from "react"; // Added useCallback
 import { usePyodide } from "./PyodideProvider";
 import { Button } from "@/components/ui/button";
 import {

@@ -39,7 +39,7 @@ export default async function SectionPage({ params }: { params: PageParams }) {
   const filePath = path.join(process.cwd(), 'content', unitSlug, `${sectionSlug}.mdx`);
   if (!fs.existsSync(filePath)) notFound();
   const source = fs.readFileSync(filePath, 'utf8');
-  const { content, frontmatter } = await compileMDX<{ title?: string }>({
+  const { content } = await compileMDX<{ title?: string }>({
     source,
     components: { CodeBlock },
     options: { parseFrontmatter: true, mdxOptions: { remarkPlugins: [remarkGfm] } },

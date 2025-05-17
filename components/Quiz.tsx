@@ -1,15 +1,14 @@
 // components/Quiz.tsx
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import { QuizData, QuizQuestion, QuizOption } from '@/lib/quiz'; // Adjust path
+import React, { useState } from 'react';
+import { QuizData, QuizQuestion } from '@/lib/quiz'; // Adjust path
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { CheckCircle, XCircle, Info } from "lucide-react";
+import {  Info } from "lucide-react";
 
 interface QuizProps {
   quizData: QuizData;
@@ -180,7 +179,7 @@ export const Quiz: React.FC<QuizProps> = ({ quizData, onQuizComplete }) => {
                         <Checkbox
                             id={`${currentQuestion.id}-${opt.id}`}
                             checked={(userAnswers[currentQuestion.id] as string[] || []).includes(opt.id)}
-                            onCheckedChange={(checked) => {
+                            onCheckedChange={() => {
                                 handleOptionChange(currentQuestion.id, opt.id, currentQuestion.type);
                             }}
                         />
