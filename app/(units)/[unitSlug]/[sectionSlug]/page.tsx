@@ -5,6 +5,8 @@ import { compileMDX } from 'next-mdx-remote/rsc';
 import { CodeBlock } from '@/components/CodeBlock'; // Adjust path
 import { notFound } from 'next/navigation';
 import remarkGfm from 'remark-gfm';
+import { Quiz } from '@/components/Quiz';
+import { getQuizData, QuizData } from '@/lib/quiz';
 
 const contentDir = path.join(process.cwd(), 'content');
 
@@ -30,34 +32,36 @@ interface PageParams { // Define an interface for params for clarity
 }
 
 
-export default async function SectionPage({ params }: { params: Promise<PageParams> }) {
-    const { unitSlug, sectionSlug } = await params;
-    const filePath = path.join(contentDir, unitSlug, `${sectionSlug}.mdx`);
-  
-    if (!fs.existsSync(filePath)) {
-      notFound();
-    }
-  
-    const source = fs.readFileSync(filePath, 'utf8');
-  
-    const { content } = await compileMDX<{ title?: string }>({
-      source,
-      components: {
-        CodeBlock,
-      },
-      options: {
-        parseFrontmatter: true,
-        mdxOptions: {
-          remarkPlugins: [remarkGfm], // <--- Use the imported variable
-          rehypePlugins: [], // Keep empty if you don't have any
-        },
-      },
-    });
-  
-    return (
-        <article className="mdx-content max-w-none py-6"> {/* <--- CHANGED/ADDED CLASS */}
+export default async function SectionPage({ params }: { params: PageParams }) {
+  const { unitSlug, sectionSlug } = params;
+
+  // Load MDX content
+  const filePath = path.join(process.cwd(), 'content', unitSlug, `${sectionSlug}.mdx`);
+  if (!fs.existsSync(filePath)) notFound();
+  const source = fs.readFileSync(filePath, 'utf8');
+  const { content, frontmatter } = await compileMDX<{ title?: string }>({
+    source,
+    components: { CodeBlock },
+    options: { parseFrontmatter: true, mdxOptions: { remarkPlugins: [remarkGfm] } },
+  });
+
+  // Load Quiz data (convention: sectionSlug-quiz.json)
+  const quizData: QuizData | null = await getQuizData(unitSlug, sectionSlug);
+
+  return (
+    <>
+      <article className="mdx-content max-w-none py-6">
         {content}
       </article>
-    );
-  }
+
+      {quizData && (
+        <div className="mt-8 border-t pt-6">
+          <h2 className="text-2xl font-semibold mb-4">Test Your Knowledge</h2>
+          <Quiz quizData={quizData} />
+        </div>
+      )}
+    </>
+  );
+}
+
   
