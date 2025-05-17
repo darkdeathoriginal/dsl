@@ -69,7 +69,7 @@ export const CodeBlock: React.FC<CodeBlockProps> = ({
   const [output, setOutput] = useState<string>("");
   const [isRunning, setIsRunning] = useState(false);
   const [error, setError] = useState<string>("");
-  const outputPlotRef = useRef<HTMLImageElement>(null);
+  const [imageSrc, setImageSrc] = useState<string>("");
 
   // Get original stdout/stderr handlers once when Pyodide is available
   useEffect(() => {
@@ -101,7 +101,6 @@ export const CodeBlock: React.FC<CodeBlockProps> = ({
     setIsRunning(true);
     setOutput(""); // Clear previous output for this specific block
     setError(""); // Clear previous error for this specific block
-    if (outputPlotRef.current) outputPlotRef.current.src = "";
 
     // Store current stdout/stderr to restore them
     // These might be console.log/error if originalStdout/Stderr were not set by Pyodide yet
@@ -123,23 +122,26 @@ export const CodeBlock: React.FC<CodeBlockProps> = ({
 import matplotlib.pyplot as plt
 import base64
 from io import BytesIO
+img_str = None
 plt.clf()
 plt.cla()
 plt.close('all')
+def save_plot():
+    global img_str
+    buf = BytesIO()
+    plt.savefig(buf, format='png')
+    buf.seek(0)
+    img_str = base64.b64encode(buf.read()).decode('utf-8')
+plt.show = save_plot
 ${processedCode}
-buf = BytesIO()
-plt.savefig(buf, format="png")
-buf.seek(0)
-img_str = base64.b64encode(buf.read()).decode('utf-8')
-buf.close()
+
 img_str
 `;
-        // console.log("--- Plot Script --- \n", finalPythonScriptForPlot, "\n--- End Plot Script ---");
         const img_str_result = await pyodide.runPythonAsync(
           finalPythonScriptForPlot
         );
-        if (outputPlotRef.current && typeof img_str_result === "string") {
-          outputPlotRef.current.src = `data:image/png;base64,${img_str_result}`;
+        if (typeof img_str_result === "string") {          
+          setImageSrc(`data:image/png;base64,${img_str_result}`)
         }
       } else {
         // console.log("--- Regular Script --- \n", processedCode, "\n--- End Regular Script ---");
@@ -217,13 +219,6 @@ img_str
         </CardTitle>
       </CardHeader>
       <CardContent>
-        {/* <Textarea
-          value={code}
-          onChange={(e) => setCode(e.target.value)}
-          rows={Math.max(5, initialCode.split('\n').length + 1)} // Min 5 rows
-          className="font-mono text-sm p-2 border rounded-md bg-background w-full"
-          placeholder="Enter Python code here..."
-        /> */}
         <Editor
           height={Math.min(Math.max(200, code.split("\n").length * 20), 400)} // Adjust height based on lines
           defaultLanguage="python"
@@ -262,11 +257,11 @@ img_str
                 </pre>
               </div>
             )}
-            {isPlot /* Only show img if isPlot, error for plots will be in 'error' state */ && (
+            {imageSrc&& (
               <div className="w-full mt-2 p-3 border rounded-md bg-muted">
                 <p className="text-xs font-semibold mb-1">Plot Output:</p>
                 <img
-                  ref={outputPlotRef}
+                  src={imageSrc}
                   alt="Matplotlib Plot Output"
                   className="max-w-full h-auto bg-white"
                 />
