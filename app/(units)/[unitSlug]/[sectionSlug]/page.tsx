@@ -1,48 +1,65 @@
 // app/(units)/[unitSlug]/[sectionSlug]/page.tsx
-import fs from 'fs';
-import path from 'path';
-import { compileMDX } from 'next-mdx-remote/rsc';
-import { CodeBlock } from '@/components/CodeBlock'; // Adjust path
-import { notFound } from 'next/navigation';
-import remarkGfm from 'remark-gfm';
-import { Quiz } from '@/components/Quiz';
-import { getQuizData, QuizData } from '@/lib/quiz';
+import { CodeBlock } from "@/components/CodeBlock"; // Adjust path
+import { Quiz } from "@/components/Quiz";
+import { getQuizData, QuizData } from "@/lib/quiz";
+import fs from "fs";
+import { compileMDX } from "next-mdx-remote/rsc";
+import { notFound } from "next/navigation";
+import path from "path";
+import remarkGfm from "remark-gfm";
 
-const contentDir = path.join(process.cwd(), 'content');
+const contentDir = path.join(process.cwd(), "content");
 
 export async function generateStaticParams() {
-  const units = fs.readdirSync(contentDir).filter(item => fs.statSync(path.join(contentDir, item)).isDirectory());
+  const units = fs
+    .readdirSync(contentDir)
+    .filter((item) => fs.statSync(path.join(contentDir, item)).isDirectory());
   const paramsList: { unitSlug: string; sectionSlug: string }[] = []; // Renamed to avoid conflict
 
   for (const unit of units) {
-    const sections = fs.readdirSync(path.join(contentDir, unit)).filter(file => file.endsWith('.mdx'));
+    const sections = fs
+      .readdirSync(path.join(contentDir, unit))
+      .filter((file) => file.endsWith(".mdx"));
     for (const section of sections) {
-      paramsList.push({ // Use renamed variable
+      paramsList.push({
+        // Use renamed variable
         unitSlug: unit,
-        sectionSlug: section.replace('.mdx', ''),
+        sectionSlug: section.replace(".mdx", ""),
       });
     }
   }
   return paramsList; // Use renamed variable
 }
 
-interface PageParams { // Define an interface for params for clarity
+interface PageParams {
+  // Define an interface for params for clarity
   unitSlug: string;
   sectionSlug: string;
 }
 
-
-export default async function SectionPage({ params }: { params: PageParams }) {
-  const { unitSlug, sectionSlug } = params;
+export default async function SectionPage({
+  params,
+}: {
+  params: Promise<PageParams>;
+}) {
+  const { unitSlug, sectionSlug } = await params;
 
   // Load MDX content
-  const filePath = path.join(process.cwd(), 'content', unitSlug, `${sectionSlug}.mdx`);
+  const filePath = path.join(
+    process.cwd(),
+    "content",
+    unitSlug,
+    `${sectionSlug}.mdx`
+  );
   if (!fs.existsSync(filePath)) notFound();
-  const source = fs.readFileSync(filePath, 'utf8');
+  const source = fs.readFileSync(filePath, "utf8");
   const { content } = await compileMDX<{ title?: string }>({
     source,
     components: { CodeBlock },
-    options: { parseFrontmatter: true, mdxOptions: { remarkPlugins: [remarkGfm] } },
+    options: {
+      parseFrontmatter: true,
+      mdxOptions: { remarkPlugins: [remarkGfm] },
+    },
   });
 
   // Load Quiz data (convention: sectionSlug-quiz.json)
@@ -50,9 +67,7 @@ export default async function SectionPage({ params }: { params: PageParams }) {
 
   return (
     <>
-      <article className="mdx-content max-w-none py-6">
-        {content}
-      </article>
+      <article className="mdx-content max-w-none py-6">{content}</article>
 
       {quizData && (
         <div className="mt-8 border-t pt-6">
@@ -63,5 +78,3 @@ export default async function SectionPage({ params }: { params: PageParams }) {
     </>
   );
 }
-
-  
