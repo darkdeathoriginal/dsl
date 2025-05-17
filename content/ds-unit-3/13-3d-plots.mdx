@@ -34,7 +34,7 @@ Displays individual data points in a 3D space.
 
 <CodeBlock
   isPlot={true}
-  initialCode={`import matplotlib.pyplot as plt\nimport numpy as np\nfrom mpl_toolkits.mplot3d import Axes3D # Required for 3D plots\n\nfig = plt.figure(figsize=(7, 6))\nax = fig.add_subplot(111, projection='3d')\n\n# Sample data\nnp.random.seed(42)\nxs = np.random.rand(50) * 10\nys = np.random.rand(50) * 10\nzs = np.random.rand(50) * 10\ncolors = np.random.rand(50) # For color mapping\nsizes = np.random.rand(50) * 100 # For marker sizes\n\nax.scatter(xs, ys, zs, c=colors, s=sizes, marker='o', cmap='viridis', alpha=0.7)\n\nax.set_xlabel('X-axis')\nax.set_ylabel('Y-axis')\nax.set_zlabel('Z-axis')\nax.set_title('3D Scatter Plot')\n\n# plt.show() handled by CodeBlock`}
+  initialCode={`import matplotlib.pyplot as plt\nimport numpy as np\nfrom mpl_toolkits.mplot3d import Axes3D # Required for 3D plots\n\nfig = plt.figure(figsize=(7, 6))\nax = fig.add_subplot(111, projection='3d')\n\n# Sample data\nnp.random.seed(42)\nxs = np.random.rand(50) * 10\nys = np.random.rand(50) * 10\nzs = np.random.rand(50) * 10\ncolors = np.random.rand(50) # For color mapping\nsizes = np.random.rand(50) * 100 # For marker sizes\n\nax.scatter(xs, ys, zs, c=colors, s=sizes, marker='o', cmap='viridis', alpha=0.7)\n\nax.set_xlabel('X-axis')\nax.set_ylabel('Y-axis')\nax.set_zlabel('Z-axis')\nax.set_title('3D Scatter Plot')\n\nplt.show()`}
 />
 
 ## 3D Line Plot (`ax.plot()` or `ax.plot3D()`)
@@ -43,7 +43,7 @@ Plots lines connecting points in 3D space.
 
 <CodeBlock
   isPlot={true}
-  initialCode={`import matplotlib.pyplot as plt\nimport numpy as np\nfrom mpl_toolkits.mplot3d import Axes3D\n\nfig = plt.figure(figsize=(7, 6))\nax = fig.add_subplot(111, projection='3d')\n\n# Data for a 3D helix\nt = np.linspace(0, 4 * np.pi, 100)\nx = np.cos(t)\ny = np.sin(t)\nz = t / (4 * np.pi)\n\nax.plot(x, y, z, color='red', linestyle='--')\n\nax.set_xlabel('X')\nax.set_ylabel('Y')\nax.set_zlabel('Z')\nax.set_title('3D Line Plot (Helix)')\n\n# Set view angle for better visualization (optional)\n# ax.view_init(elev=20., azim=-35)\n\n# plt.show() handled by CodeBlock`}
+  initialCode={`import matplotlib.pyplot as plt\nimport numpy as np\nfrom mpl_toolkits.mplot3d import Axes3D\n\nfig = plt.figure(figsize=(7, 6))\nax = fig.add_subplot(111, projection='3d')\n\n# Data for a 3D helix\nt = np.linspace(0, 4 * np.pi, 100)\nx = np.cos(t)\ny = np.sin(t)\nz = t / (4 * np.pi)\n\nax.plot(x, y, z, color='red', linestyle='--')\n\nax.set_xlabel('X')\nax.set_ylabel('Y')\nax.set_zlabel('Z')\nax.set_title('3D Line Plot (Helix)')\n\n# Set view angle for better visualization (optional)\n# ax.view_init(elev=20., azim=-35)\n\nplt.show()`}
 />
 
 ## 3D Surface Plot (`ax.plot_surface()`)
@@ -57,6 +57,6 @@ Creates a surface from a 2D grid of Z values corresponding to X and Y coordinate
 
 <CodeBlock
   isPlot={true}
-  initialCode={`import matplotlib.pyplot as plt\nimport numpy as np\nfrom mpl_toolkits.mplot3d import Axes3D\n\nfig = plt.figure(figsize=(8, 6))\nax = fig.add_subplot(111, projection='3d')\n\n# Create X, Y grid\nx_surf = np.linspace(-5, 5, 50)\ny_surf = np.linspace(-5, 5, 50)\nX, Y = np.meshgrid(x_surf, y_surf)\n\n# Define Z = f(X, Y) - e.g., a paraboloid or sinc function\nZ = np.sin(np.sqrt(X**2 + Y**2))\n\nsurface = ax.plot_surface(X, Y, Z, cmap='viridis', edgecolor='k', linewidth=0.2, rstride=1, cstride=1)\n# cmap='viridis' is a common colormap\n# edgecolor='k' adds black edges to patches for clarity\n\nax.set_xlabel('X axis')\nax.set_ylabel('Y axis')\nax.set_zlabel('Z axis')\nax.set_title('3D Surface Plot (Sinc Function)')\n\nfig.colorbar(surface, shrink=0.5, aspect=10, pad=0.1) # Add a color bar\n\n# plt.show() handled by CodeBlock`}
+  initialCode={`import matplotlib.pyplot as plt\nimport numpy as np\nfrom mpl_toolkits.mplot3d import Axes3D\n\nfig = plt.figure(figsize=(8, 6))\nax = fig.add_subplot(111, projection='3d')\n\n# Create X, Y grid\nx_surf = np.linspace(-5, 5, 50)\ny_surf = np.linspace(-5, 5, 50)\nX, Y = np.meshgrid(x_surf, y_surf)\n\n# Define Z = f(X, Y) - e.g., a paraboloid or sinc function\nZ = np.sin(np.sqrt(X**2 + Y**2))\n\nsurface = ax.plot_surface(X, Y, Z, cmap='viridis', edgecolor='k', linewidth=0.2, rstride=1, cstride=1)\n# cmap='viridis' is a common colormap\n# edgecolor='k' adds black edges to patches for clarity\n\nax.set_xlabel('X axis')\nax.set_ylabel('Y axis')\nax.set_zlabel('Z axis')\nax.set_title('3D Surface Plot (Sinc Function)')\n\nfig.colorbar(surface, shrink=0.5, aspect=10, pad=0.1) # Add a color bar\n\nplt.show()`}
 />
 Other 3D plot types include wireframe plots (`ax.plot_wireframe()`), contour plots (`ax.contour3D()`, `ax.contourf3D()`), and 3D bar plots (`ax.bar3d()`). Interacting with 3D plots (rotating, zooming) is usually best done in Matplotlib's interactive backends (e.g., in a Jupyter notebook with `%matplotlib widget` or a standalone Matplotlib window).

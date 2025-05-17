@@ -41,7 +41,7 @@ As mentioned earlier, there are two main ways to interact with Matplotlib:
 
 <CodeBlock
   isPlot={true}
-  initialCode={`import matplotlib.pyplot as plt\nimport numpy as np\n\n# Create data\nx = np.linspace(0, 10, 100)\ny1 = np.sin(x)\ny2 = np.cos(x)\n\n# Object-Oriented approach\nfig, ax = plt.subplots(figsize=(8, 4)) # Create a figure and a single axes\n\nax.plot(x, y1, label='sin(x)', color='blue', linestyle='-', linewidth=2)\nax.plot(x, y2, label='cos(x)', color='red', linestyle='--', marker='o', markersize=4)\n\nax.set_title('Sine and Cosine Waves')\nax.set_xlabel('X-axis values')\nax.set_ylabel('Y-axis values')\nax.set_xlim(0, 10)\nax.set_ylim(-1.5, 1.5)\nax.grid(True, linestyle=':', alpha=0.7)\nax.legend(loc='upper right')\n\nfig.suptitle('Demonstrating OO API Plotting', fontsize=14)\n# plt.show() handled by CodeBlock`}
+  initialCode={`import matplotlib.pyplot as plt\nimport numpy as np\n\n# Create data\nx = np.linspace(0, 10, 100)\ny1 = np.sin(x)\ny2 = np.cos(x)\n\n# Object-Oriented approach\nfig, ax = plt.subplots(figsize=(8, 4)) # Create a figure and a single axes\n\nax.plot(x, y1, label='sin(x)', color='blue', linestyle='-', linewidth=2)\nax.plot(x, y2, label='cos(x)', color='red', linestyle='--', marker='o', markersize=4)\n\nax.set_title('Sine and Cosine Waves')\nax.set_xlabel('X-axis values')\nax.set_ylabel('Y-axis values')\nax.set_xlim(0, 10)\nax.set_ylim(-1.5, 1.5)\nax.grid(True, linestyle=':', alpha=0.7)\nax.legend(loc='upper right')\n\nfig.suptitle('Demonstrating OO API Plotting', fontsize=14)\nplt.show()`}
 />
 
 ## `set_*` Methods for Customizing Plots

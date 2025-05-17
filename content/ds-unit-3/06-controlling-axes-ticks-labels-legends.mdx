@@ -16,7 +16,7 @@ You can manually set the range (limits) of the x-axis and y-axis.
 
 <CodeBlock
   isPlot={true}
-  initialCode={`import matplotlib.pyplot as plt\nimport numpy as np\n\nfig, ax = plt.subplots()\nx = np.linspace(0, 10, 100)\ny = np.sin(x)\nax.plot(x, y)\n\nax.set_title('Sine Wave with Custom Axis Limits')\nax.set_xlabel('X-Value')\nax.set_ylabel('sin(X)')\n\n# Set custom limits\nax.set_xlim(-1, 11)  # X-axis from -1 to 11\nax.set_ylim(-1.5, 1.5) # Y-axis from -1.5 to 1.5\n\n# plt.show() handled by CodeBlock`}
+  initialCode={`import matplotlib.pyplot as plt\nimport numpy as np\n\nfig, ax = plt.subplots()\nx = np.linspace(0, 10, 100)\ny = np.sin(x)\nax.plot(x, y)\n\nax.set_title('Sine Wave with Custom Axis Limits')\nax.set_xlabel('X-Value')\nax.set_ylabel('sin(X)')\n\n# Set custom limits\nax.set_xlim(-1, 11)  # X-axis from -1 to 11\nax.set_ylim(-1.5, 1.5) # Y-axis from -1.5 to 1.5\n\nplt.show()`}
 />
 
 ### Setting Ticks and Tick Labels (`ax.set_xticks()`, `ax.set_yticks()`, `ax.set_xticklabels()`, `ax.set_yticklabels()`)
@@ -30,7 +30,7 @@ You can control the position and labels of the tick marks on each axis.
 
 <CodeBlock
   isPlot={true}
-  initialCode={`import matplotlib.pyplot as plt\nimport numpy as np\n\nfig, ax = plt.subplots(figsize=(7,4))\nx = np.arange(0, 4 * np.pi, 0.1)\ny = np.cos(x)\nax.plot(x,y)\n\nax.set_title('Cosine Wave with Custom Ticks & Labels')\n\n# Set X-axis ticks at multiples of pi\nx_tick_positions = [0, np.pi, 2*np.pi, 3*np.pi, 4*np.pi]\nx_tick_labels = ['0', 'π', '2π', '3π', '4π']\nax.set_xticks(x_tick_positions)\nax.set_xticklabels(x_tick_labels, fontsize=12)\n\n# Set Y-axis ticks\ny_tick_positions = [-1, -0.5, 0, 0.5, 1]\nax.set_yticks(y_tick_positions)\nax.set_yticklabels(['Min', '-0.5', 'Zero', '0.5', 'Max'], color='blue')\n\nax.grid(True, linestyle=':')\n# plt.show() handled by CodeBlock`}
+  initialCode={`import matplotlib.pyplot as plt\nimport numpy as np\n\nfig, ax = plt.subplots(figsize=(7,4))\nx = np.arange(0, 4 * np.pi, 0.1)\ny = np.cos(x)\nax.plot(x,y)\n\nax.set_title('Cosine Wave with Custom Ticks & Labels')\n\n# Set X-axis ticks at multiples of pi\nx_tick_positions = [0, np.pi, 2*np.pi, 3*np.pi, 4*np.pi]\nx_tick_labels = ['0', 'π', '2π', '3π', '4π']\nax.set_xticks(x_tick_positions)\nax.set_xticklabels(x_tick_labels, fontsize=12)\n\n# Set Y-axis ticks\ny_tick_positions = [-1, -0.5, 0, 0.5, 1]\nax.set_yticks(y_tick_positions)\nax.set_yticklabels(['Min', '-0.5', 'Zero', '0.5', 'Max'], color='blue')\n\nax.grid(True, linestyle=':')\nplt.show()`}
 />
 
 ### Tick Label Rotation and Formatting
@@ -39,7 +39,7 @@ You can control the position and labels of the tick marks on each axis.
 
 <CodeBlock
   isPlot={true}
-  initialCode={`import matplotlib.pyplot as plt\nimport matplotlib.ticker as mticker # Import ticker module\nimport numpy as np\n\nfig, ax = plt.subplots()\ncategories = ['Category A', 'Category B', 'Category Long Name C', 'Category D']\nvalues = [10, 24, 15, 19]\nax.bar(categories, values)\n\nax.set_title('Bar Chart with Rotated & Formatted Ticks')\nax.set_ylabel('Values ($)')\n\n# Rotate X-axis tick labels for readability\nax.set_xticklabels(categories, rotation=30, ha='right')\n\n# Format Y-axis ticks as currency (dollar sign)\nformatter = mticker.FormatStrFormatter('$%.0f') # $ sign, 0 decimal places\nax.yaxis.set_major_formatter(formatter)\n\nplt.tight_layout() # Adjust plot to prevent labels from being cut off\n# plt.show() handled by CodeBlock`}
+  initialCode={`import matplotlib.pyplot as plt\nimport matplotlib.ticker as mticker # Import ticker module\nimport numpy as np\n\nfig, ax = plt.subplots()\ncategories = ['Category A', 'Category B', 'Category Long Name C', 'Category D']\nvalues = [10, 24, 15, 19]\nax.bar(categories, values)\n\nax.set_title('Bar Chart with Rotated & Formatted Ticks')\nax.set_ylabel('Values ($)')\n\n# Rotate X-axis tick labels for readability\nax.set_xticklabels(categories, rotation=30, ha='right')\n\n# Format Y-axis ticks as currency (dollar sign)\nformatter = mticker.FormatStrFormatter('$%.0f') # $ sign, 0 decimal places\nax.yaxis.set_major_formatter(formatter)\n\nplt.tight_layout() # Adjust plot to prevent labels from being cut off\nplt.show()`}
 />
 
 ## Labels and Title
@@ -75,7 +75,7 @@ Legends are crucial when you have multiple lines, scatter groups, or bars on a s
 
 <CodeBlock
   isPlot={true}
-  initialCode={`import matplotlib.pyplot as plt\nimport numpy as np\n\nfig, ax = plt.subplots()\nx = np.linspace(0, 10, 100)\n\nax.plot(x, np.sin(x), label='Sine Wave', color='dodgerblue', linestyle='-')\nax.plot(x, np.cos(x), label='Cosine Wave', color='orangered', linestyle='--')\nax.plot(x, 0.5 * np.sin(x-np.pi/4), label='Shifted Sine', color='green', linestyle=':')\n\nax.set_title('Plot with a Customized Legend')\nax.set_xlabel('Time (s)')\nax.set_ylabel('Amplitude')\n\n# Add and customize the legend\nax.legend(loc='lower left', ncol=3, fontsize='small', \n          title='Wave Types', frameon=True, fancybox=True, shadow=True)\n\nax.grid(True)\n# plt.show() handled by CodeBlock`}
+  initialCode={`import matplotlib.pyplot as plt\nimport numpy as np\n\nfig, ax = plt.subplots()\nx = np.linspace(0, 10, 100)\n\nax.plot(x, np.sin(x), label='Sine Wave', color='dodgerblue', linestyle='-')\nax.plot(x, np.cos(x), label='Cosine Wave', color='orangered', linestyle='--')\nax.plot(x, 0.5 * np.sin(x-np.pi/4), label='Shifted Sine', color='green', linestyle=':')\n\nax.set_title('Plot with a Customized Legend')\nax.set_xlabel('Time (s)')\nax.set_ylabel('Amplitude')\n\n# Add and customize the legend\nax.legend(loc='lower left', ncol=3, fontsize='small', \n          title='Wave Types', frameon=True, fancybox=True, shadow=True)\n\nax.grid(True)\nplt.show()`}
 />
 
 By mastering these controls, you can tailor your Matplotlib plots to be highly informative and visually appealing, effectively communicating the story within your data.

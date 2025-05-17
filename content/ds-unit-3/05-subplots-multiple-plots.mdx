@@ -17,7 +17,7 @@ Often, you'll want to display multiple plots together in a single figure to comp
 
 <CodeBlock
   isPlot={true}
-  initialCode={`import matplotlib.pyplot as plt\nimport numpy as np\n\nx = np.linspace(0, 2 * np.pi, 50)\n\nplt.figure(figsize=(10, 4)) # Create a figure\n\n# First subplot\nplt.subplot(1, 2, 1) # (1 row, 2 columns, 1st subplot)\nplt.plot(x, np.sin(x), 'r-o')\nplt.title('Sine Wave')\n\n# Second subplot\nplt.subplot(1, 2, 2) # (1 row, 2 columns, 2nd subplot)\nplt.plot(x, np.cos(x), 'g--s')\nplt.title('Cosine Wave')\n\nplt.suptitle('Using plt.subplot()')\nplt.tight_layout() # Adjusts subplot params for a tight layout\n# plt.show() handled by CodeBlock`}
+  initialCode={`import matplotlib.pyplot as plt\nimport numpy as np\n\nx = np.linspace(0, 2 * np.pi, 50)\n\nplt.figure(figsize=(10, 4)) # Create a figure\n\n# First subplot\nplt.subplot(1, 2, 1) # (1 row, 2 columns, 1st subplot)\nplt.plot(x, np.sin(x), 'r-o')\nplt.title('Sine Wave')\n\n# Second subplot\nplt.subplot(1, 2, 2) # (1 row, 2 columns, 2nd subplot)\nplt.plot(x, np.cos(x), 'g--s')\nplt.title('Cosine Wave')\n\nplt.suptitle('Using plt.subplot()')\nplt.tight_layout() # Adjusts subplot params for a tight layout\nplt.show()`}
 />
 
 ### Using `fig.add_subplot()` (Object-Oriented way)
@@ -31,7 +31,7 @@ Often, you'll want to display multiple plots together in a single figure to comp
 
 <CodeBlock
   isPlot={true}
-  initialCode={`import matplotlib.pyplot as plt\nimport numpy as np\n\nx = np.linspace(0, 5, 50)\n\n# Create a figure and a 2x2 grid of subplots\nfig, axes = plt.subplots(nrows=2, ncols=2, figsize=(8, 7))\n\n# axes is a 2D NumPy array: axes[row, col]\naxes[0, 0].plot(x, x, label='y=x', color='blue')\naxes[0, 0].set_title('Linear')\naxes[0, 0].legend()\n\naxes[0, 1].plot(x, x**2, label='y=x^2', color='green')\naxes[0, 1].set_title('Quadratic')\naxes[0, 1].legend()\n\naxes[1, 0].plot(x, np.sqrt(x), label='y=sqrt(x)', color='red')\naxes[1, 0].set_title('Square Root')\naxes[1, 0].legend()\n\naxes[1, 1].plot(x, np.exp(x/2), label='y=e^(x/2)', color='purple')\naxes[1, 1].set_title('Exponential')\naxes[1, 1].legend()\n\n# Add a common title for the entire figure\nfig.suptitle('Using plt.subplots() for a 2x2 Grid', fontsize=16)\n\n# Improve layout\nplt.tight_layout(rect=[0, 0, 1, 0.96]) # rect to make space for suptitle\n# plt.show() handled by CodeBlock`}
+  initialCode={`import matplotlib.pyplot as plt\nimport numpy as np\n\nx = np.linspace(0, 5, 50)\n\n# Create a figure and a 2x2 grid of subplots\nfig, axes = plt.subplots(nrows=2, ncols=2, figsize=(8, 7))\n\n# axes is a 2D NumPy array: axes[row, col]\naxes[0, 0].plot(x, x, label='y=x', color='blue')\naxes[0, 0].set_title('Linear')\naxes[0, 0].legend()\n\naxes[0, 1].plot(x, x**2, label='y=x^2', color='green')\naxes[0, 1].set_title('Quadratic')\naxes[0, 1].legend()\n\naxes[1, 0].plot(x, np.sqrt(x), label='y=sqrt(x)', color='red')\naxes[1, 0].set_title('Square Root')\naxes[1, 0].legend()\n\naxes[1, 1].plot(x, np.exp(x/2), label='y=e^(x/2)', color='purple')\naxes[1, 1].set_title('Exponential')\naxes[1, 1].legend()\n\n# Add a common title for the entire figure\nfig.suptitle('Using plt.subplots() for a 2x2 Grid', fontsize=16)\n\n# Improve layout\nplt.tight_layout(rect=[0, 0, 1, 0.96]) # rect to make space for suptitle\nplt.show()`}
 />
 
 **Accessing Axes in the `axes` array:**
@@ -45,7 +45,7 @@ Often, you'll want to display multiple plots together in a single figure to comp
 When creating subplots with `plt.subplots()`, you can make them share x or y axes. This is useful for linked zooming and panning, and for reducing clutter by only showing tick labels on the outer plots.
 <CodeBlock
   isPlot={true}
-  initialCode={`import matplotlib.pyplot as plt\nimport numpy as np\n\nfig, axes = plt.subplots(2, 1, figsize=(6, 6), sharex=True)\n# sharex=True means both subplots will share the same x-axis\n\nx = np.linspace(0, 10, 100)\naxes[0].plot(x, np.sin(x), color='cyan')\naxes[0].set_title('Sine (Shared X-axis)')\naxes[0].set_ylabel('sin(x)')\n\naxes[1].plot(x, np.cos(x), color='magenta')\naxes[1].set_title('Cosine (Shared X-axis)')\naxes[1].set_ylabel('cos(x)')\naxes[1].set_xlabel('X value') # Only need xlabel on the bottom shared axis\n\nplt.tight_layout()\n# plt.show() handled by CodeBlock`}
+  initialCode={`import matplotlib.pyplot as plt\nimport numpy as np\n\nfig, axes = plt.subplots(2, 1, figsize=(6, 6), sharex=True)\n# sharex=True means both subplots will share the same x-axis\n\nx = np.linspace(0, 10, 100)\naxes[0].plot(x, np.sin(x), color='cyan')\naxes[0].set_title('Sine (Shared X-axis)')\naxes[0].set_ylabel('sin(x)')\n\naxes[1].plot(x, np.cos(x), color='magenta')\naxes[1].set_title('Cosine (Shared X-axis)')\naxes[1].set_ylabel('cos(x)')\naxes[1].set_xlabel('X value') # Only need xlabel on the bottom shared axis\n\nplt.tight_layout()\nplt.show()`}
 />
 
 ### More Complex Layouts with `GridSpec`
@@ -53,7 +53,7 @@ For non-uniform subplot arrangements (e.g., one plot spanning multiple columns/r
 
 <CodeBlock
   isPlot={true}
-  initialCode={`import matplotlib.pyplot as plt\nimport numpy as np\n\nfig = plt.figure(figsize=(8, 5))\ngs = fig.add_gridspec(2, 2, width_ratios=[2, 1], height_ratios=[1, 1])\n# 2x2 grid. First col 2x wider. Rows equal height.\n\nax1 = fig.add_subplot(gs[0, 0]) # Top-left, normal size based on ratios\nax1.text(0.5, 0.5, 'ax1 (gs[0,0])', ha='center', va='center', fontsize=12)\nax1.set_xticks([]); ax1.set_yticks([]) # Remove ticks for cleaner example\n\nax2 = fig.add_subplot(gs[0, 1]) # Top-right\nax2.text(0.5, 0.5, 'ax2 (gs[0,1])', ha='center', va='center', fontsize=12)\nax2.set_xticks([]); ax2.set_yticks([])\n\nax3 = fig.add_subplot(gs[1, :]) # Bottom row, spanning all columns\nax3.text(0.5, 0.5, 'ax3 (gs[1,:]) - Spans 2 columns', ha='center', va='center', fontsize=12)\nax3.set_xticks([]); ax3.set_yticks([])\n\nfig.suptitle('Complex Layout with GridSpec')\nplt.tight_layout(rect=[0,0,1,0.95])\n# plt.show() handled by CodeBlock`}
+  initialCode={`import matplotlib.pyplot as plt\nimport numpy as np\n\nfig = plt.figure(figsize=(8, 5))\ngs = fig.add_gridspec(2, 2, width_ratios=[2, 1], height_ratios=[1, 1])\n# 2x2 grid. First col 2x wider. Rows equal height.\n\nax1 = fig.add_subplot(gs[0, 0]) # Top-left, normal size based on ratios\nax1.text(0.5, 0.5, 'ax1 (gs[0,0])', ha='center', va='center', fontsize=12)\nax1.set_xticks([]); ax1.set_yticks([]) # Remove ticks for cleaner example\n\nax2 = fig.add_subplot(gs[0, 1]) # Top-right\nax2.text(0.5, 0.5, 'ax2 (gs[0,1])', ha='center', va='center', fontsize=12)\nax2.set_xticks([]); ax2.set_yticks([])\n\nax3 = fig.add_subplot(gs[1, :]) # Bottom row, spanning all columns\nax3.text(0.5, 0.5, 'ax3 (gs[1,:]) - Spans 2 columns', ha='center', va='center', fontsize=12)\nax3.set_xticks([]); ax3.set_yticks([])\n\nfig.suptitle('Complex Layout with GridSpec')\nplt.tight_layout(rect=[0,0,1,0.95])\nplt.show()`}
 />
 `GridSpec` allows you to specify the geometry of the grid and then use slicing to define where each subplot goes.
 

@@ -24,7 +24,7 @@ Seaborn excels at creating various statistical plots with concise syntax. Here a
 
 <CodeBlock
   isPlot={true}
-  initialCode={`import seaborn as sns\nimport matplotlib.pyplot as plt\nimport pandas as pd\nimport numpy as np\n\n# Sample time-series like data\nnp.random.seed(42)\nx = np.arange(1, 21)\ndata = pd.DataFrame({\n    'time': np.tile(x, 3), # Repeat x for 3 series\n    'value': np.concatenate([\n        x + np.random.randn(20) * 2, \n        x * 1.2 + np.random.randn(20) * 1.5 + 5,\n        x * 0.8 + np.random.randn(20) * 2 - 3\n    ]),\n    'series_type': np.repeat(['Type A', 'Type B', 'Type C'], 20)\n})\n\nsns.set_theme(style="ticks")\nplt.figure(figsize=(8,5))\n\nsns.lineplot(data=data, x='time', y='value', hue='series_type', style='series_type', markers=True)\n\nplt.title('Seaborn Line Plot with Multiple Series')\nplt.xlabel('Time')\nplt.ylabel('Value')\n# plt.show() handled by CodeBlock`}
+  initialCode={`import seaborn as sns\nimport matplotlib.pyplot as plt\nimport pandas as pd\nimport numpy as np\n\n# Sample time-series like data\nnp.random.seed(42)\nx = np.arange(1, 21)\ndata = pd.DataFrame({\n    'time': np.tile(x, 3), # Repeat x for 3 series\n    'value': np.concatenate([\n        x + np.random.randn(20) * 2, \n        x * 1.2 + np.random.randn(20) * 1.5 + 5,\n        x * 0.8 + np.random.randn(20) * 2 - 3\n    ]),\n    'series_type': np.repeat(['Type A', 'Type B', 'Type C'], 20)\n})\n\nsns.set_theme(style="ticks")\nplt.figure(figsize=(8,5))\n\nsns.lineplot(data=data, x='time', y='value', hue='series_type', style='series_type', markers=True)\n\nplt.title('Seaborn Line Plot with Multiple Series')\nplt.xlabel('Time')\nplt.ylabel('Value')\nplt.show()`}
 />
 
 ## Histogram (`sns.histplot()`, `sns.displot(kind='hist')`)
@@ -34,7 +34,7 @@ Seaborn excels at creating various statistical plots with concise syntax. Here a
 
 <CodeBlock
   isPlot={true}
-  initialCode={`import seaborn as sns\nimport matplotlib.pyplot as plt\nimport numpy as np\n\n# Sample data\nnp.random.seed(0)\ndata_hist = np.random.normal(loc=0, scale=1, size=200)\n\nsns.set_theme(style="darkgrid")\nplt.figure(figsize=(7,5))\n\nsns.histplot(data_hist, kde=True, bins=20, color='skyblue')\n# kde=True adds a Kernel Density Estimate curve\n# bins specifies the number of bins\n\nplt.title('Seaborn Histogram with KDE')\nplt.xlabel('Value')\nplt.ylabel('Frequency / Density')\n# plt.show() handled by CodeBlock`}
+  initialCode={`import seaborn as sns\nimport matplotlib.pyplot as plt\nimport numpy as np\n\n# Sample data\nnp.random.seed(0)\ndata_hist = np.random.normal(loc=0, scale=1, size=200)\n\nsns.set_theme(style="darkgrid")\nplt.figure(figsize=(7,5))\n\nsns.histplot(data_hist, kde=True, bins=20, color='skyblue')\n# kde=True adds a Kernel Density Estimate curve\n# bins specifies the number of bins\n\nplt.title('Seaborn Histogram with KDE')\nplt.xlabel('Value')\nplt.ylabel('Frequency / Density')\nplt.show()`}
 />
 
 ## Box Plot (`sns.boxplot()`)
@@ -52,7 +52,7 @@ Seaborn excels at creating various statistical plots with concise syntax. Here a
     'day':        ['Sun', 'Sun', 'Sun', 'Sun', 'Sun', 'Sun'],
     'time':       ['Dinner', 'Dinner', 'Dinner', 'Dinner', 'Dinner', 'Dinner'],
     'size':       [2, 3, 3, 2, 4, 4]
-})\n\nsns.set_theme(style="whitegrid")\nplt.figure(figsize=(8,6))\n\nsns.boxplot(data=tips, x='day', y='total_bill', hue='smoker')\n# x: categorical variable for groups\n# y: numerical variable for distribution\n# hue: another categorical variable for sub-groups within x\n\nplt.title('Box Plot of Total Bill by Day and Smoker Status')\nplt.xlabel('Day of the Week')\nplt.ylabel('Total Bill ($)')\n# plt.show() handled by CodeBlock`}
+})\n\nsns.set_theme(style="whitegrid")\nplt.figure(figsize=(8,6))\n\nsns.boxplot(data=tips, x='day', y='total_bill', hue='smoker')\n# x: categorical variable for groups\n# y: numerical variable for distribution\n# hue: another categorical variable for sub-groups within x\n\nplt.title('Box Plot of Total Bill by Day and Smoker Status')\nplt.xlabel('Day of the Week')\nplt.ylabel('Total Bill ($)')\nplt.show()`}
 />
 Other related plots for distributions include `sns.violinplot()`, `sns.stripplot()`, `sns.swarmplot()`.
 
@@ -71,7 +71,7 @@ Other related plots for distributions include `sns.violinplot()`, `sns.stripplot
     'petal_length': [1.4, 1.4, 1.3, 5.0, 1.7, 5.4],
     'petal_width':  [0.2, 0.2, 0.2, 1.5, 0.4, 2.1],
     'species':      ['setosa', 'setosa', 'setosa', 'versicolor', 'setosa', 'virginica']
-}) # Contains numerical and categorical data\n\nsns.set_theme(style="ticks")\n\n# Create a pair plot, colored by the 'species' column\n# This is a figure-level function, so we don't typically assign to 'ax'\ng = sns.pairplot(iris, hue='species', diag_kind='kde',\n                 plot_kws={'alpha': 0.6, 's': 80, 'edgecolor': 'k'},\n                 diag_kws={'fill': True})\n\ng.fig.suptitle('Pair Plot of Iris Dataset by Species', y=1.02) # Adjust title position\n# plt.show() handled by CodeBlock\n# Note: Pairplots can take a moment to render due to multiple subplots.`}
+}) # Contains numerical and categorical data\n\nsns.set_theme(style="ticks")\n\n# Create a pair plot, colored by the 'species' column\n# This is a figure-level function, so we don't typically assign to 'ax'\ng = sns.pairplot(iris, hue='species', diag_kind='kde',\n                 plot_kws={'alpha': 0.6, 's': 80, 'edgecolor': 'k'},\n                 diag_kws={'fill': True})\n\ng.fig.suptitle('Pair Plot of Iris Dataset by Species', y=1.02) # Adjust title position\nplt.show()\n# Note: Pairplots can take a moment to render due to multiple subplots.`}
 />
 
 These are some of the most frequently used plot types in Seaborn. The library offers many more specialized plots for categorical data (`catplot`), regression models (`lmplot`, `regplot`), matrix data (`heatmap`), and complex distributions.

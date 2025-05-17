@@ -39,7 +39,7 @@ We covered `ax.text()` and `ax.annotate()` in Matplotlib earlier. These are fund
 **Example: Annotating points in a Seaborn scatter plot using Matplotlib's text function:**
 <CodeBlock
   isPlot={true}
-  initialCode={`import seaborn as sns\nimport matplotlib.pyplot as plt\nimport pandas as pd\n\ndata = pd.DataFrame({'x': [1, 2, 3, 4, 5],\n                     'y': [2, 4, 1, 3, 5],\n                     'label': ['P1', 'P2', 'P3', 'P4', 'P5']})\nsns.set_theme(style="whitegrid")\n\nplt.figure(figsize=(6,4))\nax = sns.scatterplot(data=data, x='x', y='y', s=100)\nax.set_title('Scatter Plot with Text Annotations')\n\n# Add text labels for each point\nfor i in range(data.shape[0]):\n    ax.text(data['x'][i] + 0.05, # x-coordinate for text (slight offset)\n            data['y'][i] + 0.05, # y-coordinate for text (slight offset)\n            data['label'][i],    # The text string\n            fontdict={'size': 9, 'color': 'blue'})\n# plt.show() handled by CodeBlock`}
+  initialCode={`import seaborn as sns\nimport matplotlib.pyplot as plt\nimport pandas as pd\n\ndata = pd.DataFrame({'x': [1, 2, 3, 4, 5],\n                     'y': [2, 4, 1, 3, 5],\n                     'label': ['P1', 'P2', 'P3', 'P4', 'P5']})\nsns.set_theme(style="whitegrid")\n\nplt.figure(figsize=(6,4))\nax = sns.scatterplot(data=data, x='x', y='y', s=100)\nax.set_title('Scatter Plot with Text Annotations')\n\n# Add text labels for each point\nfor i in range(data.shape[0]):\n    ax.text(data['x'][i] + 0.05, # x-coordinate for text (slight offset)\n            data['y'][i] + 0.05, # y-coordinate for text (slight offset)\n            data['label'][i],    # The text string\n            fontdict={'size': 9, 'color': 'blue'})\nplt.show()`}
 />
 
 ## Text as Plot Elements (Advanced Control)
@@ -50,7 +50,7 @@ For absolute control over text placement and appearance, especially when alignin
 
 <CodeBlock
   isPlot={true}
-  initialCode={`import matplotlib.pyplot as plt\nimport numpy as np\n\nfig, ax = plt.subplots(figsize=(6,4))\nax.plot(np.random.rand(10))\nax.set_title("Plot with Transformed Text")\n\n# Text at the center of the Axes\nax.text(0.5, 0.5, "Center of Axes", \n        ha='center', va='center', fontsize=14, color='red',\n        transform=ax.transAxes, # Key: coordinates are relative to Axes\n        bbox=dict(boxstyle='round,pad=0.5', fc='yellow', alpha=0.5))\n\n# Text in the bottom-right of the Figure\nfig.text(0.95, 0.05, "Bottom-Right of Figure",\n         ha='right', va='bottom', fontsize=10, color='green',\n         transform=fig.transFigure) # Key: coordinates are relative to Figure\n\n# plt.show() handled by CodeBlock`}
+  initialCode={`import matplotlib.pyplot as plt\nimport numpy as np\n\nfig, ax = plt.subplots(figsize=(6,4))\nax.plot(np.random.rand(10))\nax.set_title("Plot with Transformed Text")\n\n# Text at the center of the Axes\nax.text(0.5, 0.5, "Center of Axes", \n        ha='center', va='center', fontsize=14, color='red',\n        transform=ax.transAxes, # Key: coordinates are relative to Axes\n        bbox=dict(boxstyle='round,pad=0.5', fc='yellow', alpha=0.5))\n\n# Text in the bottom-right of the Figure\nfig.text(0.95, 0.05, "Bottom-Right of Figure",\n         ha='right', va='bottom', fontsize=10, color='green',\n         transform=fig.transFigure) # Key: coordinates are relative to Figure\n\nplt.show()`}
 />
 
 Mastering text placement and annotation is key to creating self-explanatory and impactful visualizations.
