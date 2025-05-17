@@ -1,0 +1,38 @@
+{
+  "title": "Quiz: Outliers, Noise & Anomalies",
+  "questions": [
+    {
+      "id": "u2s13q1",
+      "type": "multiple-choice-single",
+      "text": "A data point that is unusual only within a specific context (e.g., high temperature in winter) is known as a:",
+      "options": [
+        {"id": "a", "text": "Global Outlier"},
+        {"id": "b", "text": "Contextual Outlier"},
+        {"id": "c", "text": "Collective Outlier"},
+        {"id": "d", "text": "Noise Point"}
+      ],
+      "correctOptionId": "b",
+      "explanation": "Contextual outliers are anomalous given a specific context, but not necessarily globally."
+    },
+    {
+      "id": "u2s13q2",
+      "type": "true-false",
+      "text": "The Z-score method for outlier detection is robust and not affected by extreme values in the dataset.",
+      "correctAnswer": false,
+      "explanation": "The Z-score method uses the mean and standard deviation, both of which are sensitive to extreme values (outliers), making the Z-score itself less robust in such cases."
+    },
+    {
+      "id": "u2s13q3",
+      "type": "multiple-choice-single",
+      "text": "Which of the following is NOT a common strategy for handling identified outliers?",
+      "options": [
+        {"id": "a", "text": "Deletion/Removal of the outlier."},
+        {"id": "b", "text": "Transformation (e.g., log transform)."},
+        {"id": "c", "text": "Ignoring them completely in all analyses."},
+        {"id": "d", "text": "Capping/Winsorizing the outlier values."}
+      ],
+      "correctOptionId": "c",
+      "explanation": "While sometimes outliers might be kept, completely ignoring them without understanding or specific intent is generally not a good strategy as they can significantly skew results. Other options are valid handling techniques depending on the context."
+    }
+  ]
+}

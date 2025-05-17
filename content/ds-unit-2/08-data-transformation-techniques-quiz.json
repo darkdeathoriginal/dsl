@@ -1,0 +1,38 @@
+{
+  "title": "Quiz: Data Transformation Techniques",
+  "questions": [
+    {
+      "id": "u2s8q1",
+      "type": "multiple-choice-single",
+      "text": "What is the primary purpose of 'Normalization (Min-Max Scaling)'?",
+      "options": [
+        {"id": "a", "text": "To transform data to have a mean of 0 and standard deviation of 1."},
+        {"id": "b", "text": "To remove noise from time series data."},
+        {"id": "c", "text": "To scale numerical features to a fixed range, typically [0, 1]."},
+        {"id": "d", "text": "To group continuous data into discrete bins."}
+      ],
+      "correctOptionId": "c",
+      "explanation": "Normalization (Min-Max Scaling) rescales features to a specific range, most commonly [0, 1]."
+    },
+    {
+      "id": "u2s8q2",
+      "type": "true-false",
+      "text": "Standardization (Z-score Scaling) is highly sensitive to outliers.",
+      "correctAnswer": false,
+      "explanation": "Standardization is generally less sensitive to outliers compared to Min-Max scaling because it uses the mean and standard deviation, which are themselves affected by outliers but don't define the bounds of the transformation as min/max values do."
+    },
+    {
+      "id": "u2s8q3",
+      "type": "multiple-choice-multiple",
+      "text": "Which of the following are examples of 'Data Generalization'? (Select all that apply)",
+      "options": [
+        {"id": "a", "text": "Replacing an age of '32' with an 'Adult' category."},
+        {"id": "b", "text": "Calculating the sum of sales for each region."},
+        {"id": "c", "text": "Converting specific city names like 'New York', 'Los Angeles' to a broader 'USA' category."},
+        {"id": "d", "text": "Applying a log transformation to a skewed numerical feature."}
+      ],
+      "correctOptionIds": ["a", "c"],
+      "explanation": "Data generalization involves replacing specific values with broader categories or concepts. Aggregation (like sum of sales) is a summarization, and log transformation is a value transformation, not generalization in this context."
+    }
+  ]
+}

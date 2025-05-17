@@ -1,0 +1,38 @@
+{
+  "title": "Quiz: What is Data Science?",
+  "questions": [
+    {
+      "id": "u1s1q1",
+      "type": "multiple-choice-single",
+      "text": "Which of the following best describes Data Science?",
+      "options": [
+        {"id": "a", "text": "The study of database management systems."},
+        {"id": "b", "text": "An interdisciplinary field to extract knowledge from data."},
+        {"id": "c", "text": "Primarily focused on software development."},
+        {"id": "d", "text": "The art of creating data visualizations."}
+      ],
+      "correctOptionId": "b",
+      "explanation": "Data Science uses scientific methods, processes, algorithms, and systems to extract knowledge and insights from structured and unstructured data."
+    },
+    {
+      "id": "u1s1q2",
+      "type": "true-false",
+      "text": "Data Wrangling is NOT considered a key component of Data Science.",
+      "correctAnswer": false,
+      "explanation": "Data Wrangling (or Data Munging/Preparation) is a crucial component of Data Science, often taking a significant amount of time."
+    },
+    {
+      "id": "u1s1q3",
+      "type": "multiple-choice-multiple",
+      "text": "Which of these are common applications of Data Science? (Select all that apply)",
+      "options": [
+        {"id": "a", "text": "E-commerce recommendation engines"},
+        {"id": "b", "text": "Healthcare predictive modeling"},
+        {"id": "c", "text": "Writing operating systems"},
+        {"id": "d", "text": "Financial fraud detection"}
+      ],
+      "correctOptionIds": ["a", "b", "d"],
+      "explanation": "E-commerce, healthcare, and finance are all major application areas for Data Science. Writing operating systems is primarily software engineering."
+    }
+  ]
+}

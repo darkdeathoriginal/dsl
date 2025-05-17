@@ -1,0 +1,38 @@
+{
+  "title": "Quiz: Data Cleaning and Preparation (Pandas)",
+  "questions": [
+    {
+      "id": "u2s4q1",
+      "type": "multiple-choice-single",
+      "text": "Which Pandas method is used to remove rows or columns with missing values?",
+      "options": [
+        {"id": "a", "text": "fillna()"},
+        {"id": "b", "text": "dropna()"},
+        {"id": "c", "text": "isnull()"},
+        {"id": "d", "text": "drop_duplicates()"}
+      ],
+      "correctOptionId": "b",
+      "explanation": "`dropna()` is used to remove rows or columns containing NaN values based on specified criteria."
+    },
+    {
+      "id": "u2s4q2",
+      "type": "true-false",
+      "text": "The `.astype()` method in Pandas can be used to convert a column to a different data type.",
+      "correctAnswer": true,
+      "explanation": "`.astype()` is the primary method for casting a Pandas object to a specified dtype."
+    },
+    {
+      "id": "u2s4q3",
+      "type": "multiple-choice-single",
+      "text": "What does `df['column'].str.lower()` do?",
+      "options": [
+        {"id": "a", "text": "Converts all values in the column to integers."},
+        {"id": "b", "text": "Finds the lowest value in the string column."},
+        {"id": "c", "text": "Converts all string values in the column to lowercase."},
+        {"id": "d", "text": "Checks if all strings in the column are lowercase."}
+      ],
+      "correctOptionId": "c",
+      "explanation": "The `.str.lower()` accessor method converts string data in a Series to lowercase."
+    }
+  ]
+}

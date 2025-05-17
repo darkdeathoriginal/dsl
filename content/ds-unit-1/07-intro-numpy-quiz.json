@@ -1,0 +1,38 @@
+{
+  "title": "Quiz: Introduction to NumPy",
+  "questions": [
+    {
+      "id": "u1s7q1",
+      "type": "multiple-choice-single",
+      "text": "What is the primary data structure provided by NumPy?",
+      "options": [
+        {"id": "a", "text": "DataFrame"},
+        {"id": "b", "text": "Series"},
+        {"id": "c", "text": "ndarray (N-dimensional array)"},
+        {"id": "d", "text": "List"}
+      ],
+      "correctOptionId": "c",
+      "explanation": "NumPy's core is the ndarray object, which is a powerful N-dimensional array."
+    },
+    {
+      "id": "u1s7q2",
+      "type": "true-false",
+      "text": "NumPy arrays can only store numerical data.",
+      "correctAnswer": false,
+      "explanation": "While primarily used for numerical data, NumPy arrays can store other data types like booleans or even objects, though performance benefits are most significant with homogeneous numerical arrays."
+    },
+    {
+      "id": "u1s7q3",
+      "type": "multiple-choice-single",
+      "text": "What does `arr.shape` return for a NumPy array `arr`?",
+      "options": [
+        {"id": "a", "text": "The total number of elements in the array."},
+        {"id": "b", "text": "A tuple indicating the size of the array in each dimension."},
+        {"id": "c", "text": "The data type of the elements in the array."},
+        {"id": "d", "text": "The number of dimensions of the array."}
+      ],
+      "correctOptionId": "b",
+      "explanation": "`arr.shape` returns a tuple representing the dimensions of the array (e.g., (rows, columns) for a 2D array)."
+    }
+  ]
+}

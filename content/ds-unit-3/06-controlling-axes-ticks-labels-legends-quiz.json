@@ -1,0 +1,38 @@
+{
+  "title": "Quiz: Controlling Axes, Ticks, Labels, Legends",
+  "questions": [
+    {
+      "id": "u3s6q1",
+      "type": "multiple-choice-single",
+      "text": "Which Matplotlib method is used to set the title of an Axes object `ax`?",
+      "options": [
+        {"id": "a", "text": "ax.title('My Title')"},
+        {"id": "b", "text": "ax.set_title('My Title')"},
+        {"id": "c", "text": "ax.figure_title('My Title')"},
+        {"id": "d", "text": "plt.title(ax, 'My Title')"}
+      ],
+      "correctOptionId": "b",
+      "explanation": "`ax.set_title()` is the correct method to set the title for an individual Axes object."
+    },
+    {
+      "id": "u3s6q2",
+      "type": "true-false",
+      "text": "To display a legend in a Matplotlib plot, you only need to call `ax.legend()` without providing `label` arguments in your plotting commands.",
+      "correctAnswer": false,
+      "explanation": "For `ax.legend()` to work effectively, you need to provide the `label` argument in your plotting commands (e.g., `ax.plot(x, y, label='My Data')`)."
+    },
+    {
+      "id": "u3s6q3",
+      "type": "multiple-choice-single",
+      "text": "What does `ax.set_xlim(0, 10)` do?",
+      "options": [
+        {"id": "a", "text": "Sets the number of x-axis ticks to 10."},
+        {"id": "b", "text": "Sets the range of the x-axis from 0 to 10."},
+        {"id": "c", "text": "Labels the x-axis from 0 to 10."},
+        {"id": "d", "text": "Limits the plot to the first 10 data points on the x-axis."}
+      ],
+      "correctOptionId": "b",
+      "explanation": "`ax.set_xlim(left, right)` sets the visible range (limits) of the x-axis."
+    }
+  ]
+}

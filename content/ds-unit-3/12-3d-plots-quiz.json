@@ -1,0 +1,38 @@
+{
+  "title": "Quiz: 3D Plots with Matplotlib",
+  "questions": [
+    {
+      "id": "u3s12q1",
+      "type": "multiple-choice-single",
+      "text": "To create a 3D Axes object in Matplotlib, what argument is passed to `fig.add_subplot()` or `plt.axes()`?",
+      "options": [
+        {"id": "a", "text": "type='3d'"},
+        {"id": "b", "text": "dim=3"},
+        {"id": "c", "text": "projection='3d'"},
+        {"id": "d", "text": "is3D=True"}
+      ],
+      "correctOptionId": "c",
+      "explanation": "You need to pass `projection='3d'` to create a 3D Axes. This requires importing `Axes3D` from `mpl_toolkits.mplot3d`."
+    },
+    {
+      "id": "u3s12q2",
+      "type": "true-false",
+      "text": "`np.meshgrid()` is commonly used to create 1D arrays suitable for 3D surface plots.",
+      "correctAnswer": false,
+      "explanation": "`np.meshgrid()` is used to create 2D grid coordinates (X and Y matrices) from 1D coordinate vectors, which are then used to evaluate Z for surface plots."
+    },
+    {
+      "id": "u3s12q3",
+      "type": "multiple-choice-single",
+      "text": "Which function would you typically use to create a 3D surface plot on a 3D Axes object `ax3d`?",
+      "options": [
+        {"id": "a", "text": "ax3d.scatter3D()"},
+        {"id": "b", "text": "ax3d.plot_surface()"},
+        {"id": "c", "text": "ax3d.contourf3D()"},
+        {"id": "d", "text": "ax3d.imshow3D()"}
+      ],
+      "correctOptionId": "b",
+      "explanation": "`ax3d.plot_surface(X, Y, Z)` is the primary function for creating 3D surface plots."
+    }
+  ]
+}

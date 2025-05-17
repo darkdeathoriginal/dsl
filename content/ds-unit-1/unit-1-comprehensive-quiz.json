@@ -1,0 +1,117 @@
+{
+  "title": "Unit 1 Comprehensive Quiz: Foundations, NumPy & Pandas",
+  "questions": [
+    {
+      "id": "u1compq1",
+      "type": "multiple-choice-single",
+      "text": "Which of the following is NOT a primary characteristic of 'Big Data'?",
+      "options": [
+        {"id": "a", "text": "Volume"},
+        {"id": "b", "text": "Velocity"},
+        {"id": "c", "text": "Simplicity"},
+        {"id": "d", "text": "Variety"}
+      ],
+      "correctOptionId": "c",
+      "explanation": "The common characteristics (V's) of Big Data include Volume, Velocity, Variety, Veracity, and Value. Simplicity is generally not a characteristic; Big Data is often complex."
+    },
+    {
+      "id": "u1compq2",
+      "type": "true-false",
+      "text": "In the Data Science Process, 'Data Exploration (EDA)' typically occurs before 'Data Preparation (Cleansing)'.",
+      "correctAnswer": false,
+      "explanation": "Generally, some level of Data Preparation (like initial cleaning or handling major structural issues) is done before or concurrently with deep Data Exploration. However, EDA also informs further cleaning needs."
+    },
+    {
+      "id": "u1compq3",
+      "type": "multiple-choice-single",
+      "text": "What NumPy function creates an array with regularly incrementing values, similar to Python's built-in `range()`?",
+      "options": [
+        {"id": "a", "text": "np.linspace()"},
+        {"id": "b", "text": "np.array()"},
+        {"id": "c", "text": "np.arange()"},
+        {"id": "d", "text": "np.ones()"}
+      ],
+      "correctOptionId": "c",
+      "explanation": "`np.arange()` creates an array with values spaced by a given step within a defined interval."
+    },
+    {
+      "id": "u1compq4",
+      "type": "multiple-choice-multiple",
+      "text": "Which of the following are valid ways to create a Pandas Series? (Select all that apply)",
+      "options": [
+        {"id": "a", "text": "From a Python list"},
+        {"id": "b", "text": "From a Python dictionary"},
+        {"id": "c", "text": "From a NumPy ndarray"},
+        {"id": "d", "text": "From a scalar value (with an index provided)"}
+      ],
+      "correctOptionIds": ["a", "b", "c", "d"],
+      "explanation": "A Pandas Series can be created from lists, dictionaries, NumPy arrays, and scalar values (if an index is specified)."
+    },
+    {
+      "id": "u1compq5",
+      "type": "multiple-choice-single",
+      "text": "In Pandas, what does `df.iloc[0]` select from a DataFrame `df`?",
+      "options": [
+        {"id": "a", "text": "The column with label '0'."},
+        {"id": "b", "text": "The first row of the DataFrame by its integer position."},
+        {"id": "c", "text": "All rows where the index label is 0."},
+        {"id": "d", "text": "The first column of the DataFrame by its integer position."}
+      ],
+      "correctOptionId": "b",
+      "explanation": "`.iloc[]` is used for integer-location based indexing. `df.iloc[0]` selects the first row (at position 0)."
+    },
+    {
+      "id": "u1compq6",
+      "type": "true-false",
+      "text": "Slicing a NumPy array (e.g., `b = a[1:5]`) creates a deep copy by default.",
+      "correctAnswer": false,
+      "explanation": "Slices on NumPy arrays are views, not copies. Modifying the slice `b` will modify the original array `a`. Use `.copy()` for a deep copy."
+    },
+    {
+      "id": "u1compq7",
+      "type": "multiple-choice-single",
+      "text": "Which Pandas method is used to combine DataFrames based on common columns or index levels, similar to SQL joins?",
+      "options": [
+        {"id": "a", "text": "pd.concat()"},
+        {"id": "b", "text": "df.append()"},
+        {"id": "c", "text": "pd.merge()"},
+        {"id": "d", "text": "df.combine_first()"}
+      ],
+      "correctOptionId": "c",
+      "explanation": "`pd.merge()` is the primary function for database-style join operations on DataFrames."
+    },
+    {
+      "id": "u1compq8",
+      "type": "multiple-choice-single",
+      "text": "What is the default behavior of `df.dropna()` when called on a DataFrame?",
+      "options": [
+        {"id": "a", "text": "Drops columns containing any NaN values."},
+        {"id": "b", "text": "Drops rows containing any NaN values."},
+        {"id": "c", "text": "Fills NaN values with 0."},
+        {"id": "d", "text": "Drops rows only if all values in the row are NaN."}
+      ],
+      "correctOptionId": "b",
+      "explanation": "By default, `df.dropna()` (with `axis=0` and `how='any'`) drops rows that have at least one NaN value."
+    },
+    {
+      "id": "u1compq9",
+      "type": "true-false",
+      "text": "The `.rank()` method in Pandas assigns ranks to data, and by default, it breaks ties by assigning the lowest rank to the first encountered tied value.",
+      "correctAnswer": false,
+      "explanation": "By default (`method='average'`), `.rank()` assigns the average rank to tied values. To use the first encountered, you'd use `method='first'`."
+    },
+    {
+      "id": "u1compq10",
+      "type": "multiple-choice-single",
+      "text": "What does `df.stack()` typically do to a DataFrame with a simple column index?",
+      "options": [
+        {"id": "a", "text": "Rotates the DataFrame by 90 degrees."},
+        {"id": "b", "text": "Pivots the column labels to become the innermost level of a MultiIndex on the rows, usually producing a Series."},
+        {"id": "c", "text": "Adds a new level to the column index."},
+        {"id": "d", "text": "Sorts the DataFrame by its column names."}
+      ],
+      "correctOptionId": "b",
+      "explanation": "`stack()` pivots columns into rows, creating a Series with a MultiIndex if the original DataFrame had more than one row or a non-default row index."
+    }
+  ]
+}

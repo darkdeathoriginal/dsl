@@ -1,0 +1,38 @@
+{
+  "title": "Quiz: Handling Missing Data (In-Depth)",
+  "questions": [
+    {
+      "id": "u2s7q1",
+      "type": "multiple-choice-single",
+      "text": "What does 'MCAR' stand for in the context of missing data?",
+      "options": [
+        {"id": "a", "text": "Missing Completely And Reliably"},
+        {"id": "b", "text": "Mostly Complete And Random"},
+        {"id": "c", "text": "Missing Completely At Random"},
+        {"id": "d", "text": "Model-based Complete And Random"}
+      ],
+      "correctOptionId": "c",
+      "explanation": "MCAR means Missing Completely At Random, implying the probability of missingness is unrelated to any observed or unobserved data."
+    },
+    {
+      "id": "u2s7q2",
+      "type": "multiple-choice-multiple",
+      "text": "Which of the following are imputation methods for handling missing data? (Select all that apply)",
+      "options": [
+        {"id": "a", "text": "Listwise Deletion"},
+        {"id": "b", "text": "Mean Imputation"},
+        {"id": "c", "text": "K-Nearest Neighbors (KNN) Imputation"},
+        {"id": "d", "text": "Dropping the entire feature"}
+      ],
+      "correctOptionIds": ["b", "c"],
+      "explanation": "Mean imputation and KNN imputation are methods of replacing missing values. Listwise deletion and dropping features are deletion methods."
+    },
+    {
+      "id": "u2s7q3",
+      "type": "true-false",
+      "text": "Mean imputation is generally more robust to outliers than median imputation.",
+      "correctAnswer": false,
+      "explanation": "Median imputation is more robust to outliers because the median is less affected by extreme values than the mean."
+    }
+  ]
+}

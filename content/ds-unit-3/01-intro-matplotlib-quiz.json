@@ -1,0 +1,25 @@
+{
+  "title": "Quiz: Introduction to Matplotlib",
+  "questions": [
+    {
+      "id": "u3s1q1",
+      "type": "multiple-choice-single",
+      "text": "Matplotlib is primarily a library for:",
+      "options": [
+        {"id": "a", "text": "Numerical computation"},
+        {"id": "b", "text": "Data manipulation"},
+        {"id": "c", "text": "Creating static, animated, and interactive visualizations"},
+        {"id": "d", "text": "Machine learning model building"}
+      ],
+      "correctOptionId": "c",
+      "explanation": "Matplotlib is a comprehensive library for creating a wide variety of visualizations in Python."
+    },
+    {
+      "id": "u3s1q2",
+      "type": "true-false",
+      "text": "Seaborn is built on top of Matplotlib.",
+      "correctAnswer": true,
+      "explanation": "Seaborn is a higher-level library that uses Matplotlib for its underlying plotting capabilities."
+    }
+  ]
+}

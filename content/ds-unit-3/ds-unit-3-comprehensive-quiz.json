@@ -1,0 +1,84 @@
+{
+  "title": "Unit 3 Comprehensive Quiz: Data Visualization",
+  "questions": [
+    {
+      "id": "u3compq1",
+      "type": "multiple-choice-single",
+      "text": "What is the top-level container for all plot elements in Matplotlib?",
+      "options": [
+        {"id": "a", "text": "Axes"},
+        {"id": "b", "text": "Axis"},
+        {"id": "c", "text": "Figure"},
+        {"id": "d", "text": "Pyplot"}
+      ],
+      "correctOptionId": "c",
+      "explanation": "The `Figure` is the overall window or page where everything is drawn; it's the top-level container."
+    },
+    {
+      "id": "u3compq2",
+      "type": "true-false",
+      "text": "Seaborn functions typically require more lines of code to create common statistical plots compared to Matplotlib.",
+      "correctAnswer": false,
+      "explanation": "Seaborn provides a high-level interface and aims to create informative statistical graphics with *less* code than pure Matplotlib for similar tasks."
+    },
+    {
+      "id": "u3compq3",
+      "type": "multiple-choice-single",
+      "text": "Which command is most commonly used to create a Figure and a grid of subplots (Axes) simultaneously in an object-oriented way in Matplotlib?",
+      "options": [
+        {"id": "a", "text": "plt.figure() and then fig.add_axes() repeatedly"},
+        {"id": "b", "text": "plt.subplot() called multiple times"},
+        {"id": "c", "text": "plt.subplots(nrows, ncols)"},
+        {"id": "d", "text": "fig.create_grid(nrows, ncols)"}
+      ],
+      "correctOptionId": "c",
+      "explanation": "`fig, axes = plt.subplots(nrows, ncols)` is the convenient function to get both the Figure and an array of Axes objects."
+    },
+    {
+      "id": "u3compq4",
+      "type": "multiple-choice-multiple",
+      "text": "Which parameters can be used with `fig.savefig()` to improve the saved plot? (Select all that apply)",
+      "options": [
+        {"id": "a", "text": "dpi (dots per inch)"},
+        {"id": "b", "text": "bbox_inches='tight'"},
+        {"id": "c", "text": "plot_style='publication'"},
+        {"id": "d", "text": "transparent=True"}
+      ],
+      "correctOptionIds": ["a", "b", "d"],
+      "explanation": "`dpi` controls resolution, `bbox_inches='tight'` removes excess whitespace, and `transparent=True` makes the background transparent. `plot_style` is not a direct parameter of `savefig`."
+    },
+    {
+      "id": "u3compq5",
+      "type": "multiple-choice-single",
+      "text": "What is the primary purpose of `sns.FacetGrid()`?",
+      "options": [
+        {"id": "a", "text": "To create a single complex plot with many layers."},
+        {"id": "b", "text": "To draw a plot of two variables with their marginal distributions."},
+        {"id": "c", "text": "To create a grid of plots where each plot shows the same relationship for different subsets of data."},
+        {"id": "d", "text": "To automatically choose the best plot type for the given data."}
+      ],
+      "correctOptionId": "c",
+      "explanation": "`FacetGrid` is used to create a matrix of plots conditioned on different levels of categorical variables in the data."
+    },
+    {
+      "id": "u3compq6",
+      "type": "true-false",
+      "text": "The `ax.annotate()` method in Matplotlib can only be used to add text, not arrows.",
+      "correctAnswer": false,
+      "explanation": "`ax.annotate()` is specifically designed for adding text with optional arrows, using the `arrowprops` argument."
+    },
+    {
+      "id": "u3compq7",
+      "type": "multiple-choice-single",
+      "text": "If you want to display a scatter plot showing the relationship between two variables and also show their individual distributions along the axes, which Seaborn function is most suitable?",
+      "options": [
+        {"id": "a", "text": "sns.pairplot()"},
+        {"id": "b", "text": "sns.scatterplot()"},
+        {"id": "c", "text": "sns.jointplot()"},
+        {"id": "d", "text": "sns.displot()"}
+      ],
+      "correctOptionId": "c",
+      "explanation": "`sns.jointplot()` (or `JointGrid`) is designed to show the joint distribution of two variables along with their marginal distributions."
+    }
+  ]
+}

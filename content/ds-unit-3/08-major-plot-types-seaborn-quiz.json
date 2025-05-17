@@ -1,0 +1,38 @@
+{
+  "title": "Quiz: Major Plot Types in Seaborn",
+  "questions": [
+    {
+      "id": "u3s8q1",
+      "type": "multiple-choice-single",
+      "text": "Which Seaborn function is typically used to visualize the distribution of a single numerical variable using bars?",
+      "options": [
+        {"id": "a", "text": "sns.scatterplot()"},
+        {"id": "b", "text": "sns.lineplot()"},
+        {"id": "c", "text": "sns.histplot()"},
+        {"id": "d", "text": "sns.boxplot()"}
+      ],
+      "correctOptionId": "c",
+      "explanation": "`sns.histplot()` (or `sns.displot(kind='hist')`) is used to create histograms, which show data distribution."
+    },
+    {
+      "id": "u3s8q2",
+      "type": "multiple-choice-single",
+      "text": "What is the primary purpose of `sns.pairplot()`?",
+      "options": [
+        {"id": "a", "text": "To plot a single time series."},
+        {"id": "b", "text": "To create detailed box plots for multiple categories."},
+        {"id": "c", "text": "To visualize pairwise relationships between all numerical columns in a DataFrame."},
+        {"id": "d", "text": "To generate a heatmap of a correlation matrix."}
+      ],
+      "correctOptionId": "c",
+      "explanation": "`sns.pairplot()` creates a matrix of scatter plots for all pairs of numerical variables and histograms/KDEs on the diagonal."
+    },
+    {
+      "id": "u3s8q3",
+      "type": "true-false",
+      "text": "In Seaborn, the `hue` parameter is used to change the overall theme of the plot.",
+      "correctAnswer": false,
+      "explanation": "The `hue` parameter is used to add a third dimension to a plot by coloring points or lines based on the levels of a categorical variable. Themes are set using `sns.set_theme()`."
+    }
+  ]
+}

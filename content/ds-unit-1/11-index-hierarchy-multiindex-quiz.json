@@ -1,0 +1,38 @@
+{
+  "title": "Quiz: Index Hierarchy (MultiIndex)",
+  "questions": [
+    {
+      "id": "u1s11q1",
+      "type": "multiple-choice-single",
+      "text": "What is a MultiIndex in Pandas primarily used for?",
+      "options": [
+        {"id": "a", "text": "Storing multiple data types in a single index level."},
+        {"id": "b", "text": "Creating an index with more than 100 unique labels."},
+        {"id": "c", "text": "Representing multiple levels of labels on an axis (hierarchical indexing)."},
+        {"id": "d", "text": "Speeding up numerical computations on the index."}
+      ],
+      "correctOptionId": "c",
+      "explanation": "A MultiIndex (or hierarchical index) allows you to have multiple levels of indexing on a Series or DataFrame axis, enabling representation of higher-dimensional data in 1D or 2D structures."
+    },
+    {
+      "id": "u1s11q2",
+      "type": "true-false",
+      "text": "The `unstack()` method in Pandas typically converts a level of the row index into column labels.",
+      "correctAnswer": true,
+      "explanation": "`unstack()` pivots a level of a hierarchical row index to become a new level of column index, effectively 'widening' the DataFrame."
+    },
+    {
+      "id": "u1s11q3",
+      "type": "multiple-choice-single",
+      "text": "If `df` is a DataFrame with a MultiIndex on its rows, how might you select all data where the first level of the index is 'A'?",
+      "options": [
+        {"id": "a", "text": "df['A']"},
+        {"id": "b", "text": "df.iloc['A']"},
+        {"id": "c", "text": "df.loc['A']"},
+        {"id": "d", "text": "df.filter(items=['A'], level=0)"}
+      ],
+      "correctOptionId": "c",
+      "explanation": "`df.loc['A']` is used for partial indexing on the outermost level of a MultiIndex. `df['A']` would typically select a column named 'A'."
+    }
+  ]
+}

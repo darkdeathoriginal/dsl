@@ -1,0 +1,38 @@
+{
+  "title": "Quiz: Introduction to Pandas",
+  "questions": [
+    {
+      "id": "u1s8q1",
+      "type": "multiple-choice-multiple",
+      "text": "What are the two primary data structures in Pandas? (Select two)",
+      "options": [
+        {"id": "a", "text": "ndarray"},
+        {"id": "b", "text": "Series"},
+        {"id": "c", "text": "Matrix"},
+        {"id": "d", "text": "DataFrame"}
+      ],
+      "correctOptionIds": ["b", "d"],
+      "explanation": "Pandas introduces the Series (1D labeled array) and DataFrame (2D labeled tabular structure)."
+    },
+    {
+      "id": "u1s8q2",
+      "type": "multiple-choice-single",
+      "text": "How is missing data typically represented in Pandas?",
+      "options": [
+        {"id": "a", "text": "0 (zero)"},
+        {"id": "b", "text": "None (Python object)"},
+        {"id": "c", "text": "NaN (Not a Number)"},
+        {"id": "d", "text": "An empty string ''"}
+      ],
+      "correctOptionId": "c",
+      "explanation": "NaN (Not a Number), a special floating-point value, is the primary marker for missing numerical data in Pandas. `None` can also appear in object arrays."
+    },
+    {
+      "id": "u1s8q3",
+      "type": "true-false",
+      "text": "When performing arithmetic operations between two Pandas Series, data is aligned automatically based on integer position.",
+      "correctAnswer": false,
+      "explanation": "Pandas automatically aligns data by index labels when performing operations between Series, not by integer position. Where labels don't match, NaN is often introduced."
+    }
+  ]
+}

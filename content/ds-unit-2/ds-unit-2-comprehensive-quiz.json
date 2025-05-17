@@ -1,0 +1,84 @@
+{
+  "title": "Unit 2 Comprehensive Quiz: Data Wrangling, Cleaning & Preparation",
+  "questions": [
+    {
+      "id": "u2compq1",
+      "type": "multiple-choice-single",
+      "text": "Which technique for handling large datasets involves processing data one sample at a time as it arrives?",
+      "options": [
+        {"id": "a", "text": "Batch Learning"},
+        {"id": "b", "text": "Mini-batch Learning"},
+        {"id": "c", "text": "Online Learning (Stream Processing)"},
+        {"id": "d", "text": "Divide and Conquer"}
+      ],
+      "correctOptionId": "c",
+      "explanation": "Online Learning processes data incrementally, one sample or a very small batch at a time, making it suitable for streams or very large datasets."
+    },
+    {
+      "id": "u2compq2",
+      "type": "true-false",
+      "text": "The `melt()` function in Pandas is used to transform data from a long format to a wide format.",
+      "correctAnswer": false,
+      "explanation": "`melt()` transforms data from a wide format to a long format. `pivot()` or `pivot_table()` are used to go from long to wide."
+    },
+    {
+      "id": "u2compq3",
+      "type": "multiple-choice-multiple",
+      "text": "Which of the following are common steps in the Data Wrangling process? (Select all that apply)",
+      "options": [
+        {"id": "a", "text": "Discovery (Understanding Data)"},
+        {"id": "b", "text": "Model Deployment"},
+        {"id": "c", "text": "Cleaning"},
+        {"id": "d", "text": "Enrichment"}
+      ],
+      "correctOptionIds": ["a", "c", "d"],
+      "explanation": "Discovery, Cleaning, Structuring, Enrichment, Validation, and Publishing are key steps. Model Deployment is typically part of the broader Data Science process after wrangling."
+    },
+    {
+      "id": "u2compq4",
+      "type": "multiple-choice-single",
+      "text": "What is the primary difference between `.dropna()` and `.fillna()` in Pandas?",
+      "options": [
+        {"id": "a", "text": "`.dropna()` works on Series, `.fillna()` works on DataFrames."},
+        {"id": "b", "text": "`.dropna()` removes missing values, while `.fillna()` replaces them."},
+        {"id": "c", "text": "`.dropna()` is for numerical data, `.fillna()` is for categorical data."},
+        {"id": "d", "text": "`.dropna()` modifies the DataFrame in place, `.fillna()` does not."}
+      ],
+      "correctOptionId": "b",
+      "explanation": "`.dropna()` removes rows/columns with NaNs, while `.fillna()` fills NaNs with specified values or methods."
+    },
+    {
+      "id": "u2compq5",
+      "type": "true-false",
+      "text": "Equal-width binning is generally more robust to outliers than equal-frequency binning.",
+      "correctAnswer": false,
+      "explanation": "Equal-frequency (quantile) binning is more robust to outliers because bin widths adjust to the data distribution, whereas equal-width bins can be skewed by extreme values."
+    },
+    {
+      "id": "u2compq6",
+      "type": "multiple-choice-single",
+      "text": "Which Python string method removes leading and trailing whitespace from a string?",
+      "options": [
+        {"id": "a", "text": ".lstrip()"},
+        {"id": "b", "text": ".rstrip()"},
+        {"id": "c", "text": ".strip()"},
+        {"id": "d", "text": ".clean()"}
+      ],
+      "correctOptionId": "c",
+      "explanation": "`.strip()` removes whitespace from both the beginning and end of a string."
+    },
+    {
+      "id": "u2compq7",
+      "type": "multiple-choice-single",
+      "text": "Standardization (Z-score scaling) transforms features to have:",
+      "options": [
+        {"id": "a", "text": "Values between 0 and 1."},
+        {"id": "b", "text": "A mean of 0 and a standard deviation of 1."},
+        {"id": "c", "text": "A median of 0 and an IQR of 1."},
+        {"id": "d", "text": "All positive values."}
+      ],
+      "correctOptionId": "b",
+      "explanation": "Standardization rescales data so that it has a mean of 0 and a standard deviation of 1."
+    }
+  ]
+}
